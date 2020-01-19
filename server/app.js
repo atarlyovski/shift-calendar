@@ -4,6 +4,7 @@ const bodyParser = require('koa-bodyparser')
 const session = require('koa-session')
 const passport = require('koa-passport')
 const logger = require('koa-logger')
+const koaStatic = require('koa-static')
 const cors = require('@koa/cors');
 const crossOriginHeaders = require('./crossOriginHeaders').crossOriginHeaders;
 
@@ -14,6 +15,7 @@ const PORT = 3001;
 const app = new Koa();
 
 app.use(logger());
+app.use(koaStatic("./public/", {maxage: 3000}));
 app.use(crossOriginHeaders());
 app.use(cors()); // CORS is used for requests made from the React server
 

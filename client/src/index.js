@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
+import "./i18n";
+import 'purecss/build/pure.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

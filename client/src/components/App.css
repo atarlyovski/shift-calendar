@@ -1,5 +1,12 @@
 .App {
+    background-color: #444;
     display: flex;
     flex: 1 1 auto;
+    flex-direction: column;
+}
+
+.innerView {
+    display: flex;
+    flex: 1;
     flex-direction: column;
 }
