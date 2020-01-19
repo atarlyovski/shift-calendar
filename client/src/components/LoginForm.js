@@ -111,38 +111,39 @@ function LoginForm() {
     // ));
 
     return (
-        <form className="LoginForm pure-form">
-            <div className="form-group">
-                <input
-                    type="text"
-                    name="username"
-                    placeholder={t("username")}
-                    onChange={onInputChange}/>
+        <div className="pure-g">
+            <div className="pure-u-0 pure-u-md-1-4 pure-u-lg-1-3"></div>
+            <div className="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                <form className="LoginForm pure-form pure-form-stacked">
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder={t("username")}
+                        onChange={onInputChange}/>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder={t("password")}
+                        onChange={onInputChange}/>
+                    <div className="alert alert-danger">
+                        {validationMessages.username}
+                    </div>
+                    <div className="alert alert-danger">
+                        {validationMessages.password}
+                    </div>
+                    <div className="alert alert-danger">
+                        {validationMessages.common}
+                    </div>
+                    <button
+                        className="btn"
+                        type="submit"
+                        onClick={onLoginClick}
+                        disabled={isInProgress}>
+                            {isInProgress ? t("pleaseWait") : t("login")}
+                    </button>
+                </form>
             </div>
-            <div className="form-group">
-                <input
-                    type="password"
-                    name="password"
-                    placeholder={t("password")}
-                    onChange={onInputChange}/>
-            </div>
-            <div className="alert alert-danger">
-                {validationMessages.username}
-            </div>
-            <div className="alert alert-danger">
-                {validationMessages.password}
-            </div>
-            <div className="alert alert-danger">
-                {validationMessages.common}
-            </div>
-            <button
-                className="btn"
-                type="submit"
-                onClick={onLoginClick}
-                disabled={isInProgress}>
-                    {isInProgress ? t("pleaseWait") : t("login")}
-            </button>
-        </form>
+        </div>
     )
 }
 
