@@ -1,14 +1,19 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useContext } from 'react';
 import Navigator from './Navigator';
 import './App.css';
 import ViewContainer from './ViewContainer';
 import LoginForm from './LoginForm';
 
-function App({ user }) {
+import { observer } from 'mobx-react-lite';
+import { UserStoreContext } from '../mobx/userStore';
+
+const App = observer(() => {
     let loginForm,
         innerView;
+
+    const userStore = useContext(UserStoreContext);
     
-    if (!user) {
+    if (!userStore.user) {
         loginForm = <LoginForm />
     } else {
         innerView = (
@@ -27,6 +32,6 @@ function App({ user }) {
             </Suspense>
         </div>
     );
-}
+})
 
 export default App;

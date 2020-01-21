@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 // import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -8,8 +8,10 @@ import './LoginForm.css';
 
 // import store from '../redux/store';
 // import { setUser } from '../redux/actions';
+// import { observer } from 'mobx-react-lite';
+import { UserStoreContext } from '../mobx/userStore';
 
-function LoginForm() {
+const LoginForm = () => {
     const onLoginClick = async (event) => {
         var loginUrl = "/api/user/login",
             response,
@@ -49,9 +51,9 @@ function LoginForm() {
     
             if (response.ok && result.success) {
                 // store.dispatch(setUser(result.user));
+                userStore.user = result.user;
             } else if (!result.success) {
                 setValidationMessages({
-                    // common: "The user name or password is incorrect."
                     common: t("invalidCredentials")
                 })
             }
@@ -89,6 +91,8 @@ function LoginForm() {
         formData[event.target.getAttribute("name")] = event.target.value;
         setFormData(formData);
     }
+
+    const userStore = useContext(UserStoreContext);
 
     let { t } = useTranslation();
 
@@ -135,7 +139,7 @@ function LoginForm() {
                         {validationMessages.common}
                     </div>
                     <button
-                        className="btn"
+                        className="pure-button"
                         type="submit"
                         onClick={onLoginClick}
                         disabled={isInProgress}>
