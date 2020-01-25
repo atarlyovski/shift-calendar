@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 // import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -10,8 +10,14 @@ import './LoginForm.css';
 // import { setUser } from '../redux/actions';
 // import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../mobx/userStore';
+import { MiscStoreContext } from '../mobx/miscStore';
 
 const LoginForm = () => {
+    const userStore = useContext(UserStoreContext);
+    const miscStore = useContext(MiscStoreContext);
+
+    let { t } = useTranslation();
+
     const onLoginClick = async (event) => {
         var loginUrl = "/api/user/login",
             response,
@@ -35,7 +41,7 @@ const LoginForm = () => {
         setIsInProgress(true);
     
         try {
-            response = await fetch(serverHost + loginUrl, {
+            response = await fetch(miscStore.serverHost + loginUrl, {
                 method: 'POST',
                 credentials: 'include',
                 mode: 'cors',
@@ -92,9 +98,38 @@ const LoginForm = () => {
         setFormData(formData);
     }
 
-    const userStore = useContext(UserStoreContext);
+    useEffect(() => {
+        async function fetchData() {
+            var user,
+                response,
+                userDataUrl = '/api/user/userData';
 
-    let { t } = useTranslation();
+            try {
+                response = await fetch(miscStore.serverHost + userDataUrl, {
+                    credentials: "include",
+                    mode: 'cors'
+                });
+    
+                if (response.ok) {
+                    user = await response.json();
+    
+                    if (!user || !user.username) {
+                        user = null;
+                    }
+                } else {
+                    user = null;
+                }
+            } catch (err) {
+                console.error(err);
+                return;
+            }
+
+            // store.dispatch(setUser(user));
+            userStore.user = user;
+        }
+
+        fetchData();
+    }, [miscStore.serverHost, userStore.user]);
 
     let [isInProgress, setIsInProgress] = useState(false);
 
@@ -109,24 +144,29 @@ const LoginForm = () => {
         common: ""
     });
 
-    let serverHost = "http://localhost:3001";
-    // let serverHost = useSelector(state => (
-    //     state.serverHost
-    // ));
-
     return (
-        <div className="pure-g">
+        <div className="LoginForm pure-g">
             <div className="pure-u-0 pure-u-md-1-4 pure-u-lg-1-3"></div>
             <div className="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
-                <form className="LoginForm pure-form pure-form-stacked">
+                <form className="pure-form pure-form-stacked">
+                    <label
+                        htmlFor="LoginForm-username">
+                        {t("username")}
+                    </label>
                     <input
                         type="text"
                         name="username"
+                        id="LoginForm-username"
                         placeholder={t("username")}
                         onChange={onInputChange}/>
+                    <label
+                        htmlFor="LoginForm-password">
+                        {t("password")}
+                    </label>
                     <input
                         type="password"
                         name="password"
+                        id="LoginForm-password"
                         placeholder={t("password")}
                         onChange={onInputChange}/>
                     <div className="alert alert-danger">

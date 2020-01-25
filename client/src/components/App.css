@@ -1,8 +1,13 @@
 .App {
     background-color: #444;
+    color: #eee;
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
+}
+
+.App input {
+    color: black;
 }
 
 .innerView {

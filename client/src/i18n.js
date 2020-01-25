@@ -30,7 +30,9 @@ i18n
                     "login": "Log in",
                     "pleaseWait": "Please wait...",
                     "username": "User name",
-                    "password": "Password"
+                    "password": "Password",
+                    "logOut": "Log out",
+                    "error": "Error"
                 }
             },
             bg: {
@@ -41,7 +43,9 @@ i18n
                     "login": "Вход",
                     "pleaseWait": "Моля, изчакайте...",
                     "username": "Потребителско име",
-                    "password": "Парола"
+                    "password": "Парола",
+                    "logOut": "Изход",
+                    "error": "Грешка"
                 }
             }
         }

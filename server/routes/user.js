@@ -18,7 +18,7 @@ router.post(ROUTE_PREFIX + '/login',
                 success: true,
                 user: {
                     username: user.username,
-                    privileges: user.privileges
+                    fullName: user.fullName
                 }
             };
 
@@ -40,7 +40,7 @@ router.get(ROUTE_PREFIX + '/userData', ctx => {
 
     ctx.body = {
         username: ctx.state.user.username,
-        privileges: ctx.state.user.privileges
+        fullName: ctx.state.user.fullName
     }
 });
 
