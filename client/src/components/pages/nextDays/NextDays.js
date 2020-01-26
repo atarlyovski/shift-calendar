@@ -4,8 +4,8 @@ import CustomDate from '../../../CustomDate';
 import NextDaysElement from './NextDaysElement';
 
 const NextDays = () => {
-    let dates = [];
     const dateSpan = {from: -1, to: 4};
+    let dates = [];
 
     for (let i = dateSpan.from; i < dateSpan.to; i++) {
         let dateMoment = moment().add(i, "days");

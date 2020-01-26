@@ -2,6 +2,14 @@ import moment from './moment-with-locales.custom';
 
 export default class CustomDate {
     constructor(year, month, day) {
+        if (!year || !month || !day) {
+            let now = moment();
+
+            year = parseInt(now.format("YYYY"));
+            month = parseInt(now.format("M"));
+            day = parseInt(now.format("D"));
+        }
+
         this.year = year;
         this.month = month;
         this.day = day;

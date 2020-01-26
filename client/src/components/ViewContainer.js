@@ -13,7 +13,7 @@ export default observer(function ViewContainer() {
 
     return (
         <div className="ViewContainer">
-            {viewStore.activePage === "day" ? <Day /> : null}
+            {viewStore.activePage === "day" ? <Day date={viewStore.activeDate} /> : null}
             {viewStore.activePage === "nextDays" ? <NextDays /> : null}
             {viewStore.activePage === "month" ? <Month /> : null}
             {viewStore.activePage === "⚙" ? <Settings /> : null}

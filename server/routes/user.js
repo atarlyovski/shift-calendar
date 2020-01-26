@@ -11,15 +11,15 @@ router.post(ROUTE_PREFIX + '/login',
             throw err;
         }
 
+        const userData = Object.assign({}, user);
+        delete userData.password;
+
         if (user === false) {
             ctx.body = { success: false };
         } else {
             ctx.body = {
                 success: true,
-                user: {
-                    username: user.username,
-                    fullName: user.fullName
-                }
+                user: userData
             };
 
             return ctx.login(user)
@@ -38,10 +38,10 @@ router.get(ROUTE_PREFIX + '/userData', ctx => {
         return;
     }
 
-    ctx.body = {
-        username: ctx.state.user.username,
-        fullName: ctx.state.user.fullName
-    }
+    const userData = Object.assign({}, ctx.state.user);
+    delete userData.password;
+
+    ctx.body = userData;
 });
 
 module.exports = router;
