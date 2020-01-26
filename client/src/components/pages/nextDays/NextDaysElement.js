@@ -5,7 +5,7 @@ import { ViewStoreContext } from '../../../mobx/viewStore';
 
 import './NextDaysElement.css';
 
-const NextDaysElement = observer(({date, gridWidth}) => {
+const NextDaysElement = observer(({date, gridWidth, shifts}) => {
     const viewStore = useContext(ViewStoreContext);
 
     const onDayClick = (e, date) => {
@@ -19,6 +19,7 @@ const NextDaysElement = observer(({date, gridWidth}) => {
                 {/* <div>{date.toMoment().calendar()}</div> */}
                 <div>{date.format("dd", navigator.language)}</div>
                 <div>{date.format("D MMM", navigator.language)}</div>
+                <div>{shifts ? shifts.join("+") : "Nope-thing"}</div>
             </div>
         </div>
     )

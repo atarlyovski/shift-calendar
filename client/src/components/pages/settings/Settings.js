@@ -44,6 +44,7 @@ const Settings = observer(() => {
                     {t("logOut")}
                 </button>
             </div>
+            {JSON.stringify(userStore.userShiftData, null, 2)}
         </div>
     )
 });

@@ -54,6 +54,32 @@ exports.authenticateUser = function authenticateUser(username, password) {
     });
 };
 
+exports.getUserPreferences = async function getUserPreferences(userID) {
+    var dbInstance,
+        roomData;
+
+    dbInstance = await db;
+
+    let rooms = await dbInstance.get("users")
+        .find({id: userID})
+        .get("rooms")
+        .value();
+    
+    let activeRoom = rooms.find(r => r.isActive);
+    let roomID = activeRoom ? activeRoom.roomID : null;
+    
+    roomData = await dbInstance.get("rooms")
+        .find({id: roomID})
+        .value();
+    
+    delete roomData.password;
+
+    return {
+        rooms: rooms,
+        activeRoomData: roomData
+    };
+}
+
 exports.fetchUserByID = fetchUserByID;
 
 function fetchUserByID(userID) {

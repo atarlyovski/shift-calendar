@@ -8,7 +8,7 @@ const koaStatic = require('koa-static')
 const cors = require('@koa/cors');
 const crossOriginHeaders = require('./crossOriginHeaders').crossOriginHeaders;
 
-// const dashboardAPI = require('./routes/dashboard');
+const shiftsAPI = require('./routes/shifts');
 const userAPI = require('./routes/user');
 
 const PORT = 3001;
@@ -38,7 +38,7 @@ db.then((db) => {
 
     // Authenticated Routes
     app.use(ensureAuthenticated())
-    // app.use(dashboardAPI.routes())
+    app.use(shiftsAPI.routes())
 
     app.listen(PORT, () => {
         console.log("Server started.");

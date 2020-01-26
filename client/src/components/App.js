@@ -1,4 +1,6 @@
 import React, { Suspense, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import Navigator from './Navigator';
 import './App.css';
 import ViewContainer from './ViewContainer';
@@ -6,12 +8,41 @@ import LoginForm from './LoginForm';
 
 import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../mobx/userStore';
+import { MiscStoreContext } from '../mobx/miscStore';
 
 const App = observer(() => {
     let loginForm,
         innerView;
 
     const userStore = useContext(UserStoreContext);
+    const miscStore = useContext(MiscStoreContext);
+    let { t } = useTranslation();
+
+    const getShiftData = async () => {
+        var userShiftDataURL = '/api/shifts/data',
+            response;
+
+        try {
+            response = await fetch(miscStore.serverHost + userShiftDataURL, {
+                credentials: "include",
+                mode: 'cors'
+            });
+
+            if (response.ok) {
+                let result = await response.json();
+                userStore.userShiftData = result;
+            }
+            else {
+                console.error(response);
+                alert(t("error"));
+            }
+        } catch (err) {
+            console.error(err);
+            return;
+        }
+    };
+
+    getShiftData();
     
     if (!userStore.user) {
         loginForm = <LoginForm />
