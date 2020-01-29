@@ -32,7 +32,8 @@ i18n
                     "username": "User name",
                     "password": "Password",
                     "logOut": "Log out",
-                    "error": "Error"
+                    "error": "Error",
+                    "setShifts": "Set shifts"
                 }
             },
             bg: {
@@ -45,7 +46,8 @@ i18n
                     "username": "Потребителско име",
                     "password": "Парола",
                     "logOut": "Изход",
-                    "error": "Грешка"
+                    "error": "Грешка",
+                    "setShifts": "Задай смени"
                 }
             }
         }
