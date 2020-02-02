@@ -21,7 +21,7 @@ const NextDaysElement = observer(({date, gridWidth}) => {
                 {/* <div>{date.toMoment().calendar()}</div> */}
                 <div>{date.format("dd", navigator.language)}</div>
                 <div>{date.format("D MMM", navigator.language)}</div>
-                <div>{shifts ? shifts.join("+") : ""}</div>
+                <div>{shifts && shifts.length ? shifts.join("+") : "-"}</div>
             </div>
         </div>
     )

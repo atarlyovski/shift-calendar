@@ -5,13 +5,14 @@ const db = require('../../../db');
 exports.hasAccessToRoom = async function hasAccessToRoom(userID, roomID) {
     let dbInstance = await db;
 
-    let rooms = await dbInstance
+    let room = await dbInstance
         .get("users")
         .find({id: userID})
         .get("rooms")
+        .find({roomID: roomID})
         .value();
     
-    return rooms && rooms.includes(roomID) ? true : false;
+    return room ? true : false;
 }
 
 /**

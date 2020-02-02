@@ -20,7 +20,7 @@ exports.setShifts = async function setShifts(roomID, userID, date, shifts) {
 
     await dbInstance.get("rooms")
         .find({id: roomID})
-        .get("shifts")
+        .get("shiftData")
         .remove({
             date: date.toFormattedString(),
             userID: userID
@@ -29,11 +29,13 @@ exports.setShifts = async function setShifts(roomID, userID, date, shifts) {
     
     await dbInstance.get("rooms")
         .find({id: roomID})
-        .get("shifts")
+        .get("shiftData")
         .push({
             date: date.toFormattedString(),
             userID: userID,
             shifts: shifts
         })
         .write();
+
+    return true;
 }

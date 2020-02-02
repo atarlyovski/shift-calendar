@@ -4,11 +4,13 @@ import { createContext } from 'react';
 class ViewStore {
     activePage = 'nextDays';
     activeDate = null;
+    shiftSetterIsActive = false;
 }
 
 decorate(ViewStore, {
     activePage: observable,
-    activeDate: observable
+    activeDate: observable,
+    shiftSetterIsActive: observable
 })
 
 export const ViewStoreContext = createContext(new ViewStore());

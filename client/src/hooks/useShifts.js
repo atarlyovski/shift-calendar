@@ -32,5 +32,5 @@ export const useShifts = (date) => {
     
     shiftData = shiftData || {};
 
-    return shiftData.shifts;
+    return shiftData.shifts || [];
 }

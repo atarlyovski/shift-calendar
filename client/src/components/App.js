@@ -1,4 +1,4 @@
-import React, { Suspense, useContext } from 'react';
+import React, { Suspense, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Navigator from './Navigator';
@@ -18,31 +18,42 @@ const App = observer(() => {
     const miscStore = useContext(MiscStoreContext);
     let { t } = useTranslation();
 
-    const getShiftData = async () => {
-        var userShiftDataURL = '/api/shifts/data',
-            response;
-
-        try {
-            response = await fetch(miscStore.serverHost + userShiftDataURL, {
-                credentials: "include",
-                mode: 'cors'
-            });
-
-            if (response.ok) {
-                let result = await response.json();
-                userStore.userShiftData = result;
-            }
-            else {
-                console.error(response);
-                alert(t("error"));
-            }
-        } catch (err) {
-            console.error(err);
+    useEffect(() => {
+        if (!userStore.user) {
             return;
         }
-    };
 
-    getShiftData();
+        let controller = new AbortController();
+        let signal = controller.signal;
+        let userShiftDataURL = '/api/shifts/data';
+        let response;
+
+        (async () => {
+            try {
+                response = await fetch(miscStore.serverHost + userShiftDataURL, {
+                    credentials: "include",
+                    mode: 'cors',
+                    signal
+                });
+
+                if (response.ok) {
+                    let result = await response.json();
+                    userStore.userShiftData = result;
+                }
+                else {
+                    console.error(response);
+                    alert(t("error"));
+                }
+            } catch (err) {
+                console.error(err);
+                return;
+            }
+        })();
+
+        return () => {
+            controller.abort();
+        };
+    }, [t, miscStore.serverHost, userStore.user]);
     
     if (!userStore.user) {
         loginForm = <LoginForm />

@@ -2,9 +2,9 @@
 let dayModel = require('../models/dayModel')
 let userModel = require('../models/userModel')
 
-let DbDate = require('../../../DbDate')
+let DbDate = require('../../../DbDate').DbDate;
 
-exports.getDayShifts = async function getDayShifts(date, userID, roomID, forUserID) {
+/*exports.getDayShifts = async function getDayShifts(date, userID, roomID, forUserID) {
     let shifts;
 
     if (!(date instanceof DbDate)) {
@@ -16,7 +16,7 @@ exports.getDayShifts = async function getDayShifts(date, userID, roomID, forUser
     }
 
     return shifts;
-}
+}*/
 
 exports.setDayShifts = async function setDayShifts(roomID, userID, date, shifts) {
     let isSuccessful = false;
@@ -24,7 +24,7 @@ exports.setDayShifts = async function setDayShifts(roomID, userID, date, shifts)
     if (!(date instanceof DbDate)) {
         throw new Error("Invalid date (" + typeof(date) + ")")
     }
-
+    
     if (await userModel.hasAccessToRoom(userID, roomID)) {
         isSuccessful = await dayModel.setShifts(roomID, userID, date, shifts)
     }

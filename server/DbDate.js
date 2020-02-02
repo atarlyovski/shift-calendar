@@ -1,4 +1,4 @@
-export default class DbDate {
+module.exports.DbDate = class DbDate {
     constructor(year, month, day) {
         this.year = year;
         this.month = month;
@@ -8,4 +8,4 @@ export default class DbDate {
     toFormattedString() {
         return this.year + "-" + this.month + "-" + this.day;
     }
-}
+};

@@ -33,7 +33,8 @@ i18n
                     "password": "Password",
                     "logOut": "Log out",
                     "error": "Error",
-                    "setShifts": "Set shifts"
+                    "setShifts": "Set shifts",
+                    "close": "Close"
                 }
             },
             bg: {
@@ -47,7 +48,8 @@ i18n
                     "password": "Парола",
                     "logOut": "Изход",
                     "error": "Грешка",
-                    "setShifts": "Задай смени"
+                    "setShifts": "Задай смени",
+                    "close": "Затвори"
                 }
             }
         }
