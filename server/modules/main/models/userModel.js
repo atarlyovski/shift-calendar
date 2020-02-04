@@ -56,8 +56,7 @@ exports.authenticateUser = function authenticateUser(username, password) {
 };
 
 exports.getUserPreferences = async function getUserPreferences(userID) {
-    var dbInstance,
-        roomData;
+    var dbInstance;
 
     dbInstance = await db;
 
@@ -69,15 +68,52 @@ exports.getUserPreferences = async function getUserPreferences(userID) {
     let activeRoom = rooms.find(r => r.isActive);
     let roomID = activeRoom ? activeRoom.roomID : null;
     
-    roomData = await dbInstance.get("rooms")
+    let activeRoomData = await dbInstance.get("rooms")
         .find({id: roomID})
         .value();
     
-    delete roomData.password;
+    delete activeRoomData.password;
 
     return {
-        rooms: rooms,
-        activeRoomData: roomData
+        rooms,
+        activeRoomData
+    };
+}
+
+exports.getTargetUserData = async function getTargetUserData(userID, targetUserID, roomID) {
+    var dbInstance;
+
+    dbInstance = await db;
+
+    let room = await dbInstance
+        .get("users")
+        .find({id: userID})
+        .get("rooms")
+        .find({roomID})
+        .value();
+
+    if (!room) {
+        return {};
+    }
+
+    let targetUserRoom = await dbInstance
+        .get("users")
+        .find({id: targetUserID})
+        .get("rooms")
+        .find({roomID})
+        .value();
+    
+    if (!targetUserRoom) {
+        return {};
+    }
+
+    let targetUserFullName = await dbInstance
+        .get("users")
+        .find({id: targetUserID})
+        .get("fullName");
+
+    return {
+        targetUserFullName
     };
 }
 

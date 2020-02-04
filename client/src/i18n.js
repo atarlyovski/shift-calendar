@@ -34,7 +34,8 @@ i18n
                     "logOut": "Log out",
                     "error": "Error",
                     "setShifts": "Set shifts",
-                    "close": "Close"
+                    "close": "Close",
+                    "viewingUser": "{{name}}'s schedule"
                 }
             },
             bg: {
@@ -49,7 +50,8 @@ i18n
                     "logOut": "Изход",
                     "error": "Грешка",
                     "setShifts": "Задай смени",
-                    "close": "Затвори"
+                    "close": "Затвори",
+                    "viewingUser": "График на {{name}}"
                 }
             }
         }
