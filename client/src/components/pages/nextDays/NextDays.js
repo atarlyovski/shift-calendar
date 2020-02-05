@@ -19,7 +19,7 @@ const NextDays = () => {
 
     return (
         <div className="NextDays">
-            <div className="NextDays-days pure-g">
+            <div className="NextDays-days columns is-mobile">
                 {dates.map((date) => <NextDaysElement
                     gridWidth={dates.length}
                     key={date.toFormattedString()}

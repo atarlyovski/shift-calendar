@@ -80,46 +80,7 @@ exports.getUserPreferences = async function getUserPreferences(userID) {
     };
 }
 
-exports.getTargetUserData = async function getTargetUserData(userID, targetUserID, roomID) {
-    var dbInstance;
-
-    dbInstance = await db;
-
-    // Make sure the user has access to the room
-    let room = await dbInstance
-        .get("users")
-        .find({id: userID})
-        .get("rooms")
-        .find({roomID})
-        .value();
-
-    if (!room) {
-        return {};
-    }
-
-    let targetUserRoom = await dbInstance
-        .get("users")
-        .find({id: targetUserID})
-        .get("rooms")
-        .find({roomID})
-        .value();
-    
-    if (!targetUserRoom) {
-        return {};
-    }
-
-    let targetUserFullName = await dbInstance
-        .get("users")
-        .find({id: targetUserID})
-        .get("fullName")
-        .value();
-
-    return {
-        targetUserFullName
-    };
-}
-
-exports.getUsersForRoom = async function getUsersForRoom(userID, roomID) {
+exports.getUsersForRoom = async function getUsersForRoom(userID, targetUserID, roomID) {
     var dbInstance;
 
     dbInstance = await db;
@@ -147,7 +108,8 @@ exports.getUsersForRoom = async function getUsersForRoom(userID, roomID) {
     roomUsers = roomUsers.map(user => {
         return {
             id: user.id,
-            fullName: user.fullName
+            fullName: user.fullName,
+            isActive: user.id === targetUserID
         }
     });
 

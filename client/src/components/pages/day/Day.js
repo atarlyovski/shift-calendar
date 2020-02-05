@@ -31,7 +31,7 @@ const Day = observer(() => {
             <div>{date.format("D MMMM", navigator.language)}</div>
             {shifts && shifts.length ? shifts.join("+") : "-"}
             <div>
-                <button className="pure-button" onClick={showShiftSetter}>{t("setShifts")}</button>
+                <button className="button is-black" onClick={showShiftSetter}>{t("setShifts")}</button>
             </div>
         </div>
     )

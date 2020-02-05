@@ -1,8 +1,7 @@
 let userModel = require('../models/userModel');
 
 exports.getUserPreferences = async function getUserPreferences(userID) {
-    var targetUserData = {},
-        availableUsers = []; // available for selection in the active room
+    var availableUsers = []; // available for selection in the active room
 
     let preferences = await userModel.getUserPreferences(userID);
     let activeRoomID = (preferences.activeRoomData || {}).id;
@@ -12,17 +11,13 @@ exports.getUserPreferences = async function getUserPreferences(userID) {
         ).viewShiftsForUserID;
     
     if (activeRoomID !== undefined && targetUserID !== undefined) {
-        targetUserDataPromise = userModel.getTargetUserData(userID, targetUserID, activeRoomID);
-        availableUsersPromise = userModel.getUsersForRoom(userID, activeRoomID);
-
-        [availableUsers, targetUserData] =
-            await Promise.all([availableUsersPromise, targetUserDataPromise]);
+        // targetUserDataPromise = userModel.getTargetUserData(userID, targetUserID, activeRoomID);
+        availableUsers = await userModel.getUsersForRoom(userID, targetUserID, activeRoomID);
     }
 
-    console.log(availableUsers);
     preferences.rooms = preferences.rooms.map(r => {
         if (r.isActive) {
-            return Object.assign(r, targetUserData, { availableUsers });
+            return Object.assign(r, { availableUsers });
         }
 
         return r;

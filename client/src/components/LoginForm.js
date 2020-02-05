@@ -145,10 +145,9 @@ const LoginForm = () => {
     });
 
     return (
-        <div className="LoginForm pure-g">
-            <div className="pure-u-0 pure-u-md-1-4 pure-u-lg-1-3"></div>
-            <div className="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
-                <form className="pure-form pure-form-stacked">
+        <div className="LoginForm columns">
+            <div className="column is-one-third is-offset-one-third">
+                <form className="">
                     <label
                         htmlFor="LoginForm-username">
                         {t("username")}
@@ -156,6 +155,7 @@ const LoginForm = () => {
                     <input
                         type="text"
                         name="username"
+                        className="input"
                         id="LoginForm-username"
                         placeholder={t("username")}
                         onChange={onInputChange}/>
@@ -166,6 +166,7 @@ const LoginForm = () => {
                     <input
                         type="password"
                         name="password"
+                        className="input"
                         id="LoginForm-password"
                         placeholder={t("password")}
                         onChange={onInputChange}/>
@@ -179,7 +180,7 @@ const LoginForm = () => {
                         {validationMessages.common}
                     </div>
                     <button
-                        className="pure-button"
+                        className="button is-black"
                         type="submit"
                         onClick={onLoginClick}
                         disabled={isInProgress}>

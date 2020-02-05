@@ -107,13 +107,13 @@ const ShiftSetter = observer(({date}) => {
     }
 
     return (
-        <div className="ShiftSetter pure-form pure-form-stacked">
+        <div className="ShiftSetter">
             {allowedShifts.map(
                 (allowedShift, i) => 
                     <label
                         key={i}
                         htmlFor={"set-shift-" + allowedShift.shiftName}
-                        className="pure-checkbox">
+                        className="checkbox">
                             <input
                                 id={"set-shift-" + allowedShift.shiftName}
                                 data-shift={allowedShift.shiftName}
@@ -124,7 +124,7 @@ const ShiftSetter = observer(({date}) => {
                     </label>
             )}
             <div>
-                <button className="pure-button" onClick={closeShiftSetter}>{t("close")}</button>
+                <button className="button is-black" onClick={closeShiftSetter}>{t("close")}</button>
             </div>
         </div>
     )

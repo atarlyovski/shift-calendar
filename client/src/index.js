@@ -5,9 +5,8 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import "./i18n";
 
-// Pure CSS:
-import 'purecss/build/pure.css';
-import 'purecss/build/grids-responsive-min.css';
+// Bulma
+import 'bulma/css/bulma.min.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

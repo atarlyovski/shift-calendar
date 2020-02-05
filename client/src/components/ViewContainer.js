@@ -16,12 +16,21 @@ export default observer(function ViewContainer() {
     const userStore = useContext(UserStoreContext);
     const { t } = useTranslation();
 
-    const targetUserFullName =
-        (userStore.user.rooms.find(r => r.isActive) || {}).targetUserFullName;
+    const availableUsers =
+        (userStore.user.rooms.find(r => r.isActive) || {}).availableUsers || [];
 
     return (
         <div className="ViewContainer">
-            <h1>{t("viewingUser", {name: targetUserFullName})}</h1>
+            <select className="select">
+                {availableUsers.map(
+                    user => 
+                        <option
+                            value={user.id}
+                            selected={user.isActive}>
+                                {t("viewingUser", {name: user.fullName})}
+                        </option>
+                )}
+            </select>
             {viewStore.activePage === "day" ? <Day date={viewStore.activeDate} /> : null}
             {viewStore.activePage === "nextDays" ? <NextDays /> : null}
             {viewStore.activePage === "month" ? <Month /> : null}

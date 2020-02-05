@@ -39,7 +39,7 @@ const Settings = observer(() => {
             <div className="Settings-username">
                 {userStore.user.fullName}
                 <button
-                    className="pure-button"
+                    className="button is-black"
                     onClick={logOut}>
                     {t("logOut")}
                 </button>
