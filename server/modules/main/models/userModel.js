@@ -85,6 +85,7 @@ exports.getTargetUserData = async function getTargetUserData(userID, targetUserI
 
     dbInstance = await db;
 
+    // Make sure the user has access to the room
     let room = await dbInstance
         .get("users")
         .find({id: userID})
@@ -110,12 +111,48 @@ exports.getTargetUserData = async function getTargetUserData(userID, targetUserI
     let targetUserFullName = await dbInstance
         .get("users")
         .find({id: targetUserID})
-        .get("fullName");
+        .get("fullName")
+        .value();
 
     return {
         targetUserFullName
     };
 }
+
+exports.getUsersForRoom = async function getUsersForRoom(userID, roomID) {
+    var dbInstance;
+
+    dbInstance = await db;
+
+    // Make sure the user has access to the room
+    let room = await dbInstance
+        .get("users")
+        .find({id: userID})
+        .get("rooms")
+        .find({roomID})
+        .value();
+
+    if (!room) {
+        return {};
+    }
+
+    let roomUsers = await dbInstance
+        .get("users")
+        .filter(user =>
+            user.rooms.find(room =>
+                room.roomID === roomID)
+        )
+        .value();
+    
+    roomUsers = roomUsers.map(user => {
+        return {
+            id: user.id,
+            fullName: user.fullName
+        }
+    });
+
+    return roomUsers;
+};
 
 exports.fetchUserByID = fetchUserByID;
 
