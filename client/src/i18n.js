@@ -35,7 +35,8 @@ i18n
                     "error": "Error",
                     "setShifts": "Set shifts",
                     "close": "Close",
-                    "viewingUser": "{{name}}'s schedule"
+                    "viewingUser": "{{name}}'s schedule",
+                    "youCannotSetShiftsForOthers": "You cannot set shifts for others. Select yourself from the dropdown if you want to set your shifts."
                 }
             },
             bg: {
@@ -51,7 +52,8 @@ i18n
                     "error": "Грешка",
                     "setShifts": "Задай смени",
                     "close": "Затвори",
-                    "viewingUser": "График на {{name}}"
+                    "viewingUser": "График на {{name}}",
+                    "youCannotSetShiftsForOthers": "Не можете да задавате смени на други потребители. Изберете себе си от падащото меню, ако искате да зададете вашите смени."
                 }
             }
         }

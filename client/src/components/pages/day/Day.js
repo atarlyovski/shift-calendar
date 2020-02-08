@@ -7,7 +7,7 @@ import { ViewStoreContext } from '../../../mobx/viewStore';
 import { useShifts } from '../../../hooks/useShifts';
 import ShiftSetter from './ShiftSetter';
 
-const Day = observer(() => {
+const Day = observer(({isDisabled}) => {
     const viewStore = useContext(ViewStoreContext);
     const { t } = useTranslation();
 
@@ -26,12 +26,17 @@ const Day = observer(() => {
 
     return (
         <div className="Day">
-            {viewStore.shiftSetterIsActive ? <ShiftSetter date={date} /> : null}
+            <ShiftSetter date={date} isActive={viewStore.shiftSetterIsActive} />
             <div>{date.format("dddd", navigator.language)}</div>
             <div>{date.format("D MMMM", navigator.language)}</div>
             {shifts && shifts.length ? shifts.join("+") : "-"}
             <div>
-                <button className="button is-black" onClick={showShiftSetter}>{t("setShifts")}</button>
+                <button className="button is-black"
+                        disabled={isDisabled}
+                        onClick={showShiftSetter}>
+                    {t("setShifts")}
+                </button>
+                {isDisabled ? <div>{t("youCannotSetShiftsForOthers")}</div> : false}
             </div>
         </div>
     )

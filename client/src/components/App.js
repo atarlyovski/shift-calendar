@@ -39,8 +39,7 @@ const App = observer(() => {
                 if (response.ok) {
                     let result = await response.json();
                     userStore.userShiftData = result;
-                }
-                else {
+                } else {
                     console.error(response);
                     alert(t("error"));
                 }

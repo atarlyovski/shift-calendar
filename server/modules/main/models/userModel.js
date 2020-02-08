@@ -2,7 +2,7 @@
 const bcrypt = require('bcrypt');
 const db = require('../../../db');
 
-exports.hasAccessToRoom = async function hasAccessToRoom(userID, roomID) {
+async function hasAccessToRoom(userID, roomID) {
     let dbInstance = await db;
 
     let room = await dbInstance
@@ -24,7 +24,7 @@ exports.hasAccessToRoom = async function hasAccessToRoom(userID, roomID) {
  *   the password matches or with the value of false which indicates
  *   to the passport middleware that the authentication was unsuccessful.
  */
-exports.authenticateUser = function authenticateUser(username, password) {
+function authenticateUser(username, password) {
     return new Promise(async (resolve, reject) => {
         let isOK = false,
             user;
@@ -55,7 +55,7 @@ exports.authenticateUser = function authenticateUser(username, password) {
     });
 };
 
-exports.getUserPreferences = async function getUserPreferences(userID) {
+async function getUserPreferences(userID) {
     var dbInstance;
 
     dbInstance = await db;
@@ -80,7 +80,7 @@ exports.getUserPreferences = async function getUserPreferences(userID) {
     };
 }
 
-exports.getUsersForRoom = async function getUsersForRoom(userID, targetUserID, roomID) {
+async function getUsersForRoom(userID, targetUserID, roomID) {
     var dbInstance;
 
     dbInstance = await db;
@@ -114,9 +114,19 @@ exports.getUsersForRoom = async function getUsersForRoom(userID, targetUserID, r
     });
 
     return roomUsers;
-};
+}
 
-exports.fetchUserByID = fetchUserByID;
+async function setTargetUserID(userID, roomID, targetUserID) {
+    let dbInstance = await db;
+
+    await dbInstance
+        .get('users')
+        .find({id: userID})
+        .get('rooms')
+        .find({roomID})
+        .set('viewShiftsForUserID', targetUserID)
+        .write();
+}
 
 function fetchUserByID(userID) {
     return new Promise(async (resolve, reject) => {
@@ -178,4 +188,13 @@ async function getHashedPasswordForUser(username) {
     }
 
     return {found: true, password: user[0].password};
+}
+
+module.exports = {
+    hasAccessToRoom,
+    authenticateUser,
+    getUserPreferences,
+    getUsersForRoom,
+    fetchUserByID,
+    setTargetUserID
 }

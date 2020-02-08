@@ -8,7 +8,7 @@ import { MiscStoreContext } from '../../../mobx/miscStore';
 
 import { useShifts } from '../../../hooks/useShifts';
 
-const ShiftSetter = observer(({date}) => {
+const ShiftSetter = observer(({date, isActive}) => {
     let shifts = useShifts(date);
     let userStore = useContext(UserStoreContext);
     let viewStore = useContext(ViewStoreContext);
@@ -107,25 +107,31 @@ const ShiftSetter = observer(({date}) => {
     }
 
     return (
-        <div className="ShiftSetter">
-            {allowedShifts.map(
-                (allowedShift, i) => 
-                    <label
-                        key={i}
-                        htmlFor={"set-shift-" + allowedShift.shiftName}
-                        className="checkbox">
-                            <input
-                                id={"set-shift-" + allowedShift.shiftName}
-                                data-shift={allowedShift.shiftName}
-                                type="checkbox"
-                                onChange={(e) => toggleShift(e)}
-                                checked={shifts.includes(allowedShift.shiftName)} />
-                            {" " + allowedShift.shiftName}
-                    </label>
-            )}
-            <div>
-                <button className="button is-black" onClick={closeShiftSetter}>{t("close")}</button>
+        <div className={"ShiftSetter modal" + (isActive ? " is-active" : "")}>
+            <div className="modal-background"></div>
+            <div className="modal-content">
+                {allowedShifts.map(
+                    (allowedShift, i) => 
+                        <label
+                            key={i}
+                            htmlFor={"set-shift-" + allowedShift.shiftName}
+                            className="checkbox">
+                                <input
+                                    id={"set-shift-" + allowedShift.shiftName}
+                                    data-shift={allowedShift.shiftName}
+                                    type="checkbox"
+                                    onChange={(e) => toggleShift(e)}
+                                    checked={shifts.includes(allowedShift.shiftName)} />
+                                {" " + allowedShift.shiftName}
+                        </label>
+                )}
+                <div>
+                    <button className="button is-black" onClick={closeShiftSetter}>{t("close")}</button>
+                </div>
             </div>
+            <button className="modal-close is-large"
+                    aria-label="close"
+                    onClick={() => {viewStore.shiftSetterIsActive = false}}></button>
         </div>
     )
 });

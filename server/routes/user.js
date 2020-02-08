@@ -4,6 +4,7 @@ const passport = require('koa-passport');
 
 const router = new Router();
 const ROUTE_PREFIX = '/api/user';
+const userController = require('../modules/main/controllers/userController');
 
 router.post(ROUTE_PREFIX + '/login',
     ctx => passport.authenticate('local', (err, user) => {
@@ -42,6 +43,26 @@ router.get(ROUTE_PREFIX + '/userData', ctx => {
     delete userData.password;
 
     ctx.body = userData;
+});
+
+router.post(ROUTE_PREFIX + '/setTargetUserID', async ctx => {
+    let { roomID, targetUserID } = ctx.request.body;
+
+    roomID = parseInt(roomID);
+    targetUserID = parseInt(targetUserID);
+
+    if (isNaN(roomID) || isNaN(targetUserID)) {
+        return ctx.throw(400);
+    }
+
+    try {
+        let userData = await userController
+            .setTargetUserID(ctx.state.user.id, roomID, targetUserID);
+            
+        ctx.body = userData;
+    } catch (err) {
+        ctx.throw(500);
+    }
 });
 
 module.exports = router;
