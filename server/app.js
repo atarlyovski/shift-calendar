@@ -5,6 +5,7 @@ const fs = require('fs');
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser')
 const session = require('koa-session')
+const RedisStore = require('koa-session-redis-store');
 const passport = require('koa-passport')
 const logger = require('koa-logger')
 const koaStatic = require('koa-static')
@@ -17,6 +18,8 @@ const userAPI = require('./routes/user');
 const HTTP_PORT = 3001;
 const HTTPS_PORT = 3002;
 const app = new Koa();
+
+app.keys = ['A secret for development purposes.'];
 
 const httpsOptions = {
     key: fs.readFileSync('./https/a_shift_calendar_self.key'),
@@ -36,7 +39,11 @@ db.then((db) => {
     // Session and authentication
     app.keys = ['A random secret']
     app.use(bodyParser())
-    app.use(session(app))
+
+    app.use(session({
+        store: new RedisStore()
+    }, app));
+
     require('./auth')
     app.use(passport.initialize())
     app.use(passport.session())
