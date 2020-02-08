@@ -51,8 +51,7 @@ db.then(db => {
                     ]
                 }
             ]
-        }],
-        "sessions": []
+        }]
     }).write();
 });
 

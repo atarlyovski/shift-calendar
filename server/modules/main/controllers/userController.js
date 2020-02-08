@@ -1,3 +1,6 @@
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
+
 let userModel = require('../models/userModel');
 
 async function getUserPreferences(userID) {

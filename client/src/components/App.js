@@ -12,7 +12,8 @@ import { MiscStoreContext } from '../mobx/miscStore';
 
 const App = observer(() => {
     let loginForm,
-        innerView;
+        innerView,
+        eventSource;
 
     const userStore = useContext(UserStoreContext);
     const miscStore = useContext(MiscStoreContext);
@@ -53,6 +54,29 @@ const App = observer(() => {
             controller.abort();
         };
     }, [t, miscStore.serverHost, userStore.user]);
+
+    useEffect(() => {
+        function onMessage(message) {
+            console.log(message);
+            document.title = "Message";
+        }
+
+        function onError(err) {
+            console.error(err);
+        }
+
+        if (userStore.user) {
+            eventSource = new EventSource(miscStore.serverHost + '/api/shifts/sse', { withCredentials: true } );
+            eventSource.addEventListener('message', onMessage, false);
+            eventSource.addEventListener('error', onError, false);
+        }
+
+        return function() {
+            if (eventSource instanceof EventSource) {
+                eventSource.close();
+            }
+        }
+    }, [miscStore.serverHost, userStore.user]);
     
     if (!userStore.user) {
         loginForm = <LoginForm />

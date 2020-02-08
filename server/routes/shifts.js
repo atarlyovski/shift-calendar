@@ -41,4 +41,16 @@ router.post(ROUTE_PREFIX + '/shifts', async ctx => {
     ctx.status = isSuccessful ? 204 : 400;
 });
 
+router.get(ROUTE_PREFIX + '/sse', async (ctx, next) => {
+    // ctx.body = "oke";
+
+    ctx.req.setTimeout(24 * 60 * 60 * 1000);
+    ctx.type = 'text/event-stream; charset=utf-8';
+    ctx.set('Cache-Control', 'no-cache');
+    ctx.set('Connection', 'keep-alive');
+    ctx.set("Access-Control-Allow-Origin", "*");
+
+    await next();
+}, dayController.subscribeToEvents);
+
 module.exports = router;
