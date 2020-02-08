@@ -1,4 +1,7 @@
 "use strict";
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser')
 const session = require('koa-session')
@@ -11,8 +14,14 @@ const crossOriginHeaders = require('./crossOriginHeaders').crossOriginHeaders;
 const shiftsAPI = require('./routes/shifts');
 const userAPI = require('./routes/user');
 
-const PORT = 3001;
+const HTTP_PORT = 3001;
+const HTTPS_PORT = 3002;
 const app = new Koa();
+
+const httpsOptions = {
+    key: fs.readFileSync('./https/a_shift_calendar_self.key'),
+    cert: fs.readFileSync('./https/a_shift_calendar_self.pem')
+};
 
 app.use(logger());
 app.use(koaStatic("./public/", {maxage: 3000}));
@@ -40,9 +49,21 @@ db.then((db) => {
     app.use(ensureAuthenticated())
     app.use(shiftsAPI.routes())
 
-    app.listen(PORT, () => {
-        console.log("Server started.");
-    });
+    http.createServer((req, res) => {
+        let host = req.headers.host;
+        let httpsHost = host.replace(/(:[0-9]{1,5})?$/, ":" + HTTPS_PORT);
+
+        res.writeHead(302, {
+            'Location': "https://" + httpsHost + req.url
+        });
+        
+        res.end();
+    }).listen(HTTP_PORT);
+
+    https.createServer(
+        httpsOptions,
+        app.callback()
+    ).listen(HTTPS_PORT);
 
     function ensureAuthenticated() {
         return async function(ctx, next) {

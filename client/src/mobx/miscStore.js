@@ -3,7 +3,7 @@ import { createContext } from 'react';
 
 class MiscStore {
     // serverHost = "http://localhost:3001";
-    serverHost = "http://192.168.27.130:3001";
+    serverHost = "https://192.168.27.130:3002";
 }
 
 decorate(MiscStore, {
