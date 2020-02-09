@@ -17,3 +17,10 @@
     border-bottom: 2px solid white;
     color: white
 }
+
+.Navigator-btn-logo {
+    height: 10vw;
+    width: 10vw;
+    max-height: 64px;
+    max-width: 64px;
+}

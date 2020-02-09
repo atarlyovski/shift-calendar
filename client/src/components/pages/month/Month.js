@@ -2,9 +2,11 @@ import React from 'react';
 import moment from '../../../moment-with-locales.custom';
 import MonthElement from './MonthElement';
 import CustomDate from '../../../CustomDate';
+import './Month.css';
 
 const Month = () => {
-    let weeks;
+    let month,
+        weeks;
 
     const getMonthDays = (currentMoment) => {
         let now = moment(currentMoment);
@@ -22,6 +24,15 @@ const Month = () => {
                 weeks.push([]);
             }
 
+            // Add a placeholder for days from the previous month in the first week
+            if (currentDay === 1) {
+                let dayOfWeek = parseInt(currentDayMoment.format("E"))
+
+                if (dayOfWeek !== 1) {
+                    weeks[0].push({type: "placeholder", colSpan: dayOfWeek - 1})
+                }
+            }
+
             let date = new CustomDate(
                 currentDayMoment.year(),
                 currentDayMoment.month() + 1,
@@ -30,7 +41,7 @@ const Month = () => {
 
             // weeks[weeks.length - 1] = weeks[weeks.length - 1] || [];
 
-            weeks[weeks.length - 1].push(date);
+            weeks[weeks.length - 1].push({type: "day", date});
 
             prevDayMoment = moment(now).date(currentDay);
         }
@@ -39,21 +50,44 @@ const Month = () => {
     }
 
     weeks = getMonthDays(moment());
+    month = moment().format("MMMM", navigator.language);
 
-    weeks = weeks.map((days, i) => {
-        return <div key={i} className="columns">
-            {days.map(day => {
-                return <MonthElement 
-                    className="column"
-                    key={day.toFormattedString()}
-                    date={day} />
-            })}
-        </div>
+    let rows = weeks.map((days, i) => {
+        return (
+            <tr key={i}>
+                {days.map(day => {
+                    return (
+                        day.type === "day" ? <MonthElement 
+                            className="column"
+                            key={day.date.toFormattedString()}
+                            date={day.date} />
+                            :
+                            <td key="placeholder"
+                                className="MonthFirstWeekPlaceholder"
+                                colSpan={day.colSpan}></td>
+                    )
+                })}
+            </tr>
+        )
     })
 
     return (
-        <div>
-            {weeks}
+        <div className="Month">
+            <h2 className="title">{month}</h2>
+            <div className="columns">
+                <div className="column is-8 is-offset-2">
+                    <div className="table-container">
+                        <table className="MonthTable table is-bordered is-fullwidth is-narrow">
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                            <tbody>
+                                {rows}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 };

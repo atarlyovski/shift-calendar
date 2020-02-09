@@ -1,0 +1,23 @@
+.Month {
+    margin: 1rem;
+}
+
+.Month .table-container {
+    padding: 2px;
+}
+
+.Month table.MonthTable {
+    background-color: transparent;
+}
+
+.Month table.MonthTable td {
+    color: white;
+}
+
+.Month table.MonthTable td:not([colspan]) {
+    width: 14.2857%;
+}
+
+.Month table.MonthTable .MonthFirstWeekPlaceholder {
+    border: none;
+}

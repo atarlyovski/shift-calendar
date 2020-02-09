@@ -15,13 +15,13 @@ const MonthElement = observer(({date}) => {
     };
 
     return (
-        <div className={"MonthElement column"}>
+        <td className={"MonthElement"}>
             <div onClick={(e) => onDayClick(e, date)}>
                 {/* <div>{date.toMoment().calendar()}</div> */}
                 <div>{date.format("D", navigator.language)}</div>
                 <div>{shifts && shifts.length ? shifts.join("+") : "-"}</div>
             </div>
-        </div>
+        </td>
     )
 });
 
