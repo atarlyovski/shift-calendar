@@ -41,7 +41,8 @@ db.then((db) => {
     app.use(bodyParser())
 
     app.use(session({
-        store: new RedisStore()
+        store: new RedisStore(),
+        maxAge: 7 * 24 * 60 * 60 * 1000
     }, app));
 
     require('./auth')
