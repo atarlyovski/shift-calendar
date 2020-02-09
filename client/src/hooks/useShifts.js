@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import { UserStoreContext } from '../mobx/userStore';
 
-export const useShifts = (date) => {
+export const useShifts = (date, {format = "html"} = {}) => {
     const userStore = useContext(UserStoreContext);
 
     if (!userStore.userShiftData) {
@@ -32,7 +32,9 @@ export const useShifts = (date) => {
     
     shiftData = shiftData || {};
 
-    return convertShiftsToHtml(shiftData.shifts);
+    return (format === "html") ?
+        convertShiftsToHtml(shiftData.shifts) :
+        shiftData.shifts;
 }
 
 const convertShiftsToHtml = (shifts) => {

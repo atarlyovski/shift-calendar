@@ -9,7 +9,7 @@ import { MiscStoreContext } from '../../../mobx/miscStore';
 import { useShifts } from '../../../hooks/useShifts';
 
 const ShiftSetter = observer(({date, isActive}) => {
-    let shifts = useShifts(date);
+    let shifts = useShifts(date, {format: "array"});
     let userStore = useContext(UserStoreContext);
     let viewStore = useContext(ViewStoreContext);
     let miscStore = useContext(MiscStoreContext);
