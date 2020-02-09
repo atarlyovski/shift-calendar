@@ -6,7 +6,9 @@ import './Month.css';
 
 const Month = () => {
     let month,
-        weeks;
+        weeks,
+        now = moment(),
+        nowFormatted = now.format("YYYY-M-D");
 
     const getMonthDays = (currentMoment) => {
         let now = moment(currentMoment);
@@ -49,8 +51,8 @@ const Month = () => {
         return weeks;
     }
 
-    weeks = getMonthDays(moment());
-    month = moment().format("MMMM", navigator.language);
+    weeks = getMonthDays(now);
+    month = now.format("MMMM", navigator.language);
 
     let rows = weeks.map((days, i) => {
         return (
@@ -60,7 +62,8 @@ const Month = () => {
                         day.type === "day" ? <MonthElement 
                             className="column"
                             key={day.date.toFormattedString()}
-                            date={day.date} />
+                            date={day.date}
+                            isToday={day.date.toFormattedString() === nowFormatted} />
                             :
                             <td key="placeholder"
                                 className="MonthFirstWeekPlaceholder"

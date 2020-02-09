@@ -29,7 +29,7 @@ const Day = observer(({isDisabled}) => {
             <ShiftSetter date={date} isActive={viewStore.shiftSetterIsActive} />
             <div>{date.format("dddd", navigator.language)}</div>
             <div>{date.format("D MMMM", navigator.language)}</div>
-            {shifts && shifts.length ? shifts.join("+") : "-"}
+            {shifts}
             <div>
                 <button className="button is-black"
                         disabled={isDisabled}

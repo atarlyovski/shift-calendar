@@ -96,7 +96,7 @@ export default observer(function ViewContainer() {
             {viewStore.activePage === "day" ? <Day isDisabled={isShiftSettingDisabled} /> : null}
             {viewStore.activePage === "nextDays" ? <NextDays /> : null}
             {viewStore.activePage === "month" ? <Month /> : null}
-            {viewStore.activePage === "⚙" ? <Settings /> : null}
+            {viewStore.activePage === "settings" ? <Settings /> : null}
         </div>
     )
 });

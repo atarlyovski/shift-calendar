@@ -11,6 +11,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+
   display: flex;
 }
 

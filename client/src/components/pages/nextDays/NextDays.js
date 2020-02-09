@@ -6,6 +6,7 @@ import NextDaysElement from './NextDaysElement';
 const NextDays = () => {
     const dateSpan = {from: -1, to: 4};
     let dates = [];
+    let nowFormatted = moment().format("YYYY-M-D");
 
     for (let i = dateSpan.from; i < dateSpan.to; i++) {
         let dateMoment = moment().add(i, "days");
@@ -23,7 +24,8 @@ const NextDays = () => {
                 {dates.map((date) => <NextDaysElement
                     gridWidth={dates.length}
                     key={date.toFormattedString()}
-                    date={date} />)
+                    date={date}
+                    isToday={date.toFormattedString() === nowFormatted} />)
                 }
             </div>
         </div>

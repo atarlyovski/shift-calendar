@@ -14,8 +14,8 @@
 }
 
 .Navigator-btn[data-is-active="1"] {
-    border-bottom: 2px solid white;
-    color: white
+    border-bottom: 2px solid #eee;
+    color: #eee
 }
 
 .Navigator-btn-logo {

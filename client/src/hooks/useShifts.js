@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 
 import { UserStoreContext } from '../mobx/userStore';
 
@@ -32,5 +32,11 @@ export const useShifts = (date) => {
     
     shiftData = shiftData || {};
 
-    return shiftData.shifts || [];
+    return convertShiftsToHtml(shiftData.shifts);
+}
+
+const convertShiftsToHtml = (shifts) => {
+    return (
+        shifts ? <div className="tag">{shifts.join("+")}</div> : "-"
+    )
 }

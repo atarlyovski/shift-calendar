@@ -11,7 +11,7 @@
 }
 
 .Month table.MonthTable td {
-    color: white;
+    color: #eee;
 }
 
 .Month table.MonthTable td:not([colspan]) {
@@ -20,4 +20,8 @@
 
 .Month table.MonthTable .MonthFirstWeekPlaceholder {
     border: none;
+}
+
+.Month .title {
+    color: #eee;
 }

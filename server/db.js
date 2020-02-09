@@ -6,54 +6,73 @@ const db = low(adapter);
 
 db.then(db => {
     db.defaults({
-        "users": [{
+        "users": [
+          {
             "id": 1,
             "username": "alexander",
-            "fullName": "Alexander Tarlyovski",
+            "fullName": "Alexander",
             "password": "$2a$12$TbEVhB7w7cnujvA7PcwYl.zeEW5RPGqBLW4b820Nb4ddIMlSRub0.",
-            "rooms": [{
+            "rooms": [
+              {
                 "roomID": 1,
                 "isActive": true,
-                "viewShiftsForUserID": 1
-            }],
-            "activeRoomID": 1,
-            "allowedShifts": [
-                "Д",
-                "Н",
-                "1",
-                "2"
-            ]
-        }],
-        "rooms": [{
-            "id": 1,
-            "name": "Room 101",
+                "viewShiftsForUserID": 1,
+                "availableUsers": [
+                  {
+                    "id": 1,
+                    "fullName": "Alexander",
+                    "isActive": false
+                  },
+                  {
+                    "id": 2,
+                    "fullName": "Rumyana",
+                    "isActive": true
+                  }
+                ]
+              }
+            ],
+            "allowedShifts": []
+          },
+          {
+            "id": 2,
+            "username": "rumyana",
+            "fullName": "Rumyana",
             "password": "$2a$12$TbEVhB7w7cnujvA7PcwYl.zeEW5RPGqBLW4b820Nb4ddIMlSRub0.",
-            "shiftData": [{
-                    "userID": 1,
-                    "date": "2020-1-29",
-                    "shifts": [
-                        "Д"
-                    ]
-                },
-                {
-                    "userID": 1,
-                    "date": "2020-2-1",
-                    "shifts": [
-                        "Д",
-                        "Н"
-                    ]
-                },
-                {
-                    "userID": 1,
-                    "date": "2020-2-5",
-                    "shifts": [
-                        "1"
-                    ]
-                }
+            "rooms": [
+              {
+                "roomID": 1,
+                "isActive": true,
+                "viewShiftsForUserID": 2
+              }
+            ],
+            "allowedShifts": [
+              {
+                "shiftName": "Д",
+                "order": 1
+              },
+              {
+                "shiftName": "Н",
+                "order": 15
+              },
+              {
+                "shiftName": "1",
+                "order": 2
+              },
+              {
+                "shiftName": "2",
+                "order": 5
+              }
             ]
-        }],
-        "sessions": []
-    }).write();
+          }
+        ],
+        "rooms": [
+          {
+            "id": 1,
+            "name": "Room 1",
+            "shiftData": []
+          }
+        ]
+      }).write();
 });
 
 module.exports = db;

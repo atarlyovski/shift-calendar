@@ -19,12 +19,24 @@ const HTTP_PORT = 3001;
 const HTTPS_PORT = 3002;
 const app = new Koa();
 
+let key,
+    cert;
+
 app.keys = ['A secret for development purposes.'];
 
-const httpsOptions = {
-    key: fs.readFileSync('./https/a_shift_calendar_self.key'),
-    cert: fs.readFileSync('./https/a_shift_calendar_self.pem')
-};
+try {
+    key = fs.readFileSync('./https/questio.key');
+    cert = fs.readFileSync('./https/questio.pem');
+} catch (err) {
+    if (err.code === "ENOENT") {
+        key = fs.readFileSync('./https/a_shift_calendar_self.key');
+        cert = fs.readFileSync('./https/a_shift_calendar_self.pem');
+    } else {
+        console.error(err);
+    }
+}
+
+const httpsOptions = { key, cert };
 
 app.use(logger());
 app.use(koaStatic("./public/", {maxage: 3000}));
