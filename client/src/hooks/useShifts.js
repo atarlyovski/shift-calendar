@@ -34,7 +34,7 @@ export const useShifts = (date, {format = "html"} = {}) => {
 
     return (format === "html") ?
         convertShiftsToHtml(shiftData.shifts) :
-        shiftData.shifts;
+        (shiftData.shifts || []);
 }
 
 const convertShiftsToHtml = (shifts) => {
