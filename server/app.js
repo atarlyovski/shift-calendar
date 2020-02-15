@@ -18,8 +18,8 @@ const userAPI = require('./routes/user');
 
 require('./auth');
 
-const HTTP_PORT = 3001;
-const HTTPS_PORT = process.env.PORT || 3002;
+const HTTP_PORT = process.env.PORT || 3001;
+// const HTTPS_PORT = process.env.PORT || 3002;
 const app = new Koa();
 
 let key,
@@ -67,21 +67,12 @@ app.use(userAPI.routes())
 app.use(ensureAuthenticated())
 app.use(shiftsAPI.routes())
 
-// http.createServer((req, res) => {
-//     let host = req.headers.host;
-//     let httpsHost = host.replace(/(:[0-9]{1,5})?$/, ":" + HTTPS_PORT);
+app.listen(HTTP_PORT)
 
-//     res.writeHead(302, {
-//         'Location': "https://" + httpsHost + req.url
-//     });
-    
-//     res.end();
-// }).listen(HTTP_PORT);
-
-https.createServer(
-    httpsOptions,
-    app.callback()
-).listen(HTTPS_PORT);
+// https.createServer(
+//     httpsOptions,
+//     app.callback()
+// ).listen(HTTPS_PORT);
 
 function ensureAuthenticated() {
     return async function(ctx, next) {
