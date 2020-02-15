@@ -36,7 +36,13 @@ i18n
                     "setShifts": "Set shifts",
                     "close": "Close",
                     "viewingUser": "{{name}}'s schedule",
-                    "youCannotSetShiftsForOthers": "You cannot set shifts for others. Select yourself from the dropdown if you want to set your shifts."
+                    "youCannotSetShiftsForOthers": "You cannot set shifts for others. Select yourself from the dropdown if you want to set your shifts.",
+                    "oldPassword": "Old password",
+                    "newPassword": "New password",
+                    "newPasswordConfirm": "Confirm new password",
+                    "changePassword": "Change password",
+                    "invalidPasswordCombo": "Invalid password combination. Please try again.",
+                    "passwordChangeSuccess": "Your password was changed successfully."
                 }
             },
             bg: {
@@ -53,7 +59,13 @@ i18n
                     "setShifts": "Задай смени",
                     "close": "Затвори",
                     "viewingUser": "График на {{name}}",
-                    "youCannotSetShiftsForOthers": "Не можете да задавате смени на други потребители. Изберете себе си от падащото меню, ако искате да зададете вашите смени."
+                    "youCannotSetShiftsForOthers": "Не можете да задавате смени на други потребители. Изберете себе си от падащото меню, ако искате да зададете вашите смени.",
+                    "oldPassword": "Стара парола",
+                    "newPassword": "Нова парола",
+                    "newPasswordConfirm": "Потвърдете новата парола",
+                    "changePassword": "Смяна на паролата",
+                    "invalidPasswordCombo": "Невалидна комбинация от пароли. Моля, опитайте отново.",
+                    "passwordChangeSuccess": "Паролата ви бе променена успешно."
                 }
             }
         }

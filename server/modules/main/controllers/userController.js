@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt');
+const saltRounds = 12;
+
 let userModel = require('../models/userModel');
 
 async function getUserPreferences(userID) {
@@ -37,7 +40,28 @@ async function setTargetUserID(userID, roomID, targetUserID) {
     return preferences;
 };
 
+async function changePassword(userID, oldPassword, oldHash, newPassword) {
+    let isOK = await bcrypt.compare(oldPassword, oldHash);
+
+    if (!isOK) {
+        return {changed: false, cause: "wrong password"};
+    }
+
+    let salt = await bcrypt.genSalt(saltRounds);
+    let newHash = await bcrypt.hash(newPassword, salt);
+
+    let promises = [
+        userModel.logOutUser(userID),
+        userModel.setPasswordForUser(userID, newHash)
+    ];
+
+    await Promise.all(promises);
+
+    return {changed: true};
+}
+
 module.exports = {
     getUserPreferences,
-    setTargetUserID
+    setTargetUserID,
+    changePassword
 }

@@ -37,6 +37,9 @@ const Navigator = observer(() => {
             case "settings":
                 logo = settingsLogo;
                 break;
+
+            default:
+                break;
         }
 
         navButtons.push(

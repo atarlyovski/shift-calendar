@@ -31,7 +31,16 @@ db.then(db => {
                 ]
               }
             ],
-            "allowedShifts": []
+            "allowedShifts": [
+              {
+                "shiftName": "П",
+                "order": 1
+              },
+              {
+                "shiftName": "Ц",
+                "order": 2
+              }
+            ]
           },
           {
             "id": 2,
@@ -62,6 +71,21 @@ db.then(db => {
                 "shiftName": "2",
                 "order": 5
               }
+            ]
+          },
+          {
+            "id": 3,
+            "username": "yoana",
+            "fullName": "Yoana",
+            "password": "$2a$12$TbEVhB7w7cnujvA7PcwYl.zeEW5RPGqBLW4b820Nb4ddIMlSRub0.",
+            "rooms": [
+              {
+                "roomID": 1,
+                "isActive": true,
+                "viewShiftsForUserID": 2
+              }
+            ],
+            "allowedShifts": [
             ]
           }
         ],

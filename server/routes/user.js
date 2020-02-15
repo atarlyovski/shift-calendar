@@ -46,6 +46,10 @@ router.get(ROUTE_PREFIX + '/userData', ctx => {
 });
 
 router.post(ROUTE_PREFIX + '/setTargetUserID', async ctx => {
+    if (!ctx.state.user) {
+        return ctx.throw(401);
+    }
+
     let { roomID, targetUserID } = ctx.request.body;
 
     roomID = parseInt(roomID);
@@ -61,8 +65,31 @@ router.post(ROUTE_PREFIX + '/setTargetUserID', async ctx => {
             
         ctx.body = userData;
     } catch (err) {
+        console.error(err);
         ctx.throw(500);
     }
 });
+
+router.post(ROUTE_PREFIX + '/changePassword', async ctx => {
+    if (!ctx.state.user) {
+        return ctx.throw(401);
+    }
+
+    let { oldPassword, newPassword } = ctx.request.body;
+    let result;
+
+    if (!oldPassword || !newPassword) {
+        return ctx.throw(400);
+    }
+
+    try {
+        result = await userController.changePassword(ctx.state.user.id, oldPassword, ctx.state.user.password, newPassword);
+    } catch (err) {
+        console.error(err);
+        return ctx.throw(500);
+    }
+
+    ctx.status = (result && result.changed ? 204 : 500);
+})
 
 module.exports = router;

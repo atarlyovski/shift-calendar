@@ -190,11 +190,36 @@ async function getHashedPasswordForUser(username) {
     return {found: true, password: user[0].password};
 }
 
+async function logOutUser(userID) {
+    var dbInstance;
+
+    dbInstance = await db;
+
+    await dbInstance
+        .get("sessions")
+        .remove(({sess}) => {return (sess.passport || {}).user === userID})
+        .write();
+}
+
+async function setPasswordForUser(userID, hash) {
+    var dbInstance;
+
+    dbInstance = await db;
+
+    await dbInstance
+        .get("users")
+        .find({id: userID})
+        .set("password", hash)
+        .write();
+}
+
 module.exports = {
     hasAccessToRoom,
     authenticateUser,
     getUserPreferences,
     getUsersForRoom,
     fetchUserByID,
-    setTargetUserID
+    setTargetUserID,
+    logOutUser,
+    setPasswordForUser
 }
