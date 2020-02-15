@@ -19,7 +19,7 @@ const userAPI = require('./routes/user');
 require('./auth');
 
 const HTTP_PORT = 3001;
-const HTTPS_PORT = 3002;
+const HTTPS_PORT = process.env.PORT || 3002;
 const app = new Koa();
 
 let key,
@@ -28,8 +28,8 @@ let key,
 app.keys = ['A secret for development purposes.'];
 
 try {
-    key = fs.readFileSync('./https/questio.key');
-    cert = fs.readFileSync('./https/questio.pem');
+    key = fs.readFileSync('./https/prod.key');
+    cert = fs.readFileSync('./https/prod.pem');
 } catch (err) {
     if (err.code === "ENOENT") {
         key = fs.readFileSync('./https/a_shift_calendar_self.key');
@@ -42,7 +42,7 @@ try {
 const httpsOptions = { key, cert };
 
 app.use(logger());
-app.use(koaStatic("./public/", {maxage: 3000}));
+app.use(koaStatic("./build/", {maxage: 3000}));
 app.use(crossOriginHeaders());
 app.use(cors()); // CORS is used for requests made from the React server
 
@@ -67,16 +67,16 @@ app.use(userAPI.routes())
 app.use(ensureAuthenticated())
 app.use(shiftsAPI.routes())
 
-http.createServer((req, res) => {
-    let host = req.headers.host;
-    let httpsHost = host.replace(/(:[0-9]{1,5})?$/, ":" + HTTPS_PORT);
+// http.createServer((req, res) => {
+//     let host = req.headers.host;
+//     let httpsHost = host.replace(/(:[0-9]{1,5})?$/, ":" + HTTPS_PORT);
 
-    res.writeHead(302, {
-        'Location': "https://" + httpsHost + req.url
-    });
+//     res.writeHead(302, {
+//         'Location': "https://" + httpsHost + req.url
+//     });
     
-    res.end();
-}).listen(HTTP_PORT);
+//     res.end();
+// }).listen(HTTP_PORT);
 
 https.createServer(
     httpsOptions,

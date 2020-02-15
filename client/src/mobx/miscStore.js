@@ -2,7 +2,8 @@ import { observable, decorate } from 'mobx';
 import { createContext } from 'react';
 
 class MiscStore {
-    serverHost = "https://localhost:3002";
+    // serverHost = "https://localhost:3002";
+    serverHost = "";
     // serverHost = "https://192.168.27.130:3002";
 }
 

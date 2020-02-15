@@ -1,0 +1,20 @@
+{
+  "name": "shift-calendar",
+  "version": "0.0.1",
+  "description": "An app to set your shift schedule so others can view it.",
+  "main": "server/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd server && node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atarlyovski/shift-calendar.git"
+  },
+  "author": "Alexander Tarlyovski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/atarlyovski/shift-calendar/issues"
+  },
+  "homepage": "https://github.com/atarlyovski/shift-calendar#readme"
+}
