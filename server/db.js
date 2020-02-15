@@ -71,7 +71,8 @@ db.then(db => {
             "name": "Room 1",
             "shiftData": []
           }
-        ]
+        ],
+        "sessions": []
       }).write();
 });
 
