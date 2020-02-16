@@ -8,7 +8,8 @@ const Month = () => {
     let month,
         weeks,
         now = moment(),
-        nowFormatted = now.format("YYYY-M-D");
+        nowFormatted = now.format("YYYY-M-D"),
+        daysOfWeek;
 
     const getMonthDays = (currentMoment) => {
         let now = moment(currentMoment);
@@ -51,8 +52,28 @@ const Month = () => {
         return weeks;
     }
 
+    const getDaysOfWeek = (currentMoment) => {
+        let headings = [];
+        let now = moment(currentMoment);
+        let startDay = parseInt(now.startOf("isoWeek").format("E"));
+        let endDay = parseInt(now.endOf("isoWeek").format("E"));
+
+        for (let i = startDay; i <= endDay; i++) {
+            headings.push(
+                <th key={i}>{
+                    now.isoWeekday(i)
+                        .locale(navigator.language)
+                        .format("dd")
+                    }</th>
+            )
+        }
+
+        return headings;
+    }
+
     weeks = getMonthDays(now);
-    month = now.format("MMMM", navigator.language);
+    month = now.locale(navigator.language).format("MMMM");
+    daysOfWeek = getDaysOfWeek(now);
 
     let rows = weeks.map((days, i) => {
         return (
@@ -82,7 +103,9 @@ const Month = () => {
                     <div className="table-container">
                         <table className="MonthTable table is-bordered is-fullwidth is-narrow">
                             <thead>
-                                <tr></tr>
+                                <tr>
+                                    {daysOfWeek}
+                                </tr>
                             </thead>
                             <tbody>
                                 {rows}

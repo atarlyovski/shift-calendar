@@ -10,11 +10,17 @@
     background-color: transparent;
 }
 
-.Month table.MonthTable td {
+.Month table.MonthTable td,
+.Month table.MonthTable th {
     color: #eee;
 }
 
+.Month table.MonthTable th {
+    border: none;
+}
+
 .Month table.MonthTable td:not([colspan]) {
+    cursor: pointer;
     width: 14.2857%;
 }
 

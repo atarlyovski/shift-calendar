@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import './ViewContainer.css';
+import ShiftSetter from './pages/ShiftSetter';
 import Day from './pages/day/Day';
 import NextDays from './pages/nextDays/NextDays';
 import Month from './pages/month/Month';
@@ -11,6 +12,7 @@ import { observer } from 'mobx-react-lite';
 import { ViewStoreContext } from '../mobx/viewStore';
 import { UserStoreContext } from '../mobx/userStore';
 import { MiscStoreContext } from '../mobx/miscStore';
+import CustomDate from '../CustomDate';
 
 export default observer(function ViewContainer() {
     const viewStore = useContext(ViewStoreContext);
@@ -85,7 +87,7 @@ export default observer(function ViewContainer() {
         <div className="ViewContainer">
             <select className="select"
                     onChange={changeTargetUser}
-                    value={targetUserID}>
+                    defaultValue={targetUserID}>
                 {availableUsers && availableUsers.map(
                     user => 
                         <option key = {user.id}
@@ -94,6 +96,10 @@ export default observer(function ViewContainer() {
                         </option>
                 )}
             </select>
+            <ShiftSetter
+                date={viewStore.activeDate || new CustomDate()}
+                isDisabled={isShiftSettingDisabled}
+                isActive={viewStore.shiftSetterIsActive} />
             {viewStore.activePage === "day" ? <Day isDisabled={isShiftSettingDisabled} /> : null}
             {viewStore.activePage === "nextDays" ? <NextDays /> : null}
             {viewStore.activePage === "month" ? <Month /> : null}

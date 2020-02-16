@@ -12,7 +12,8 @@ const MonthElement = observer(({date, isToday}) => {
 
     const onDayClick = (e, date) => {
         viewStore.activeDate = date;
-        viewStore.activePage = "day";
+        // viewStore.activePage = "day";
+        viewStore.shiftSetterIsActive = true;
     };
 
     return (

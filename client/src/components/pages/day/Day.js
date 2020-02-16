@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite';
 import CustomDate from '../../../CustomDate';
 import { ViewStoreContext } from '../../../mobx/viewStore';
 import { useShifts } from '../../../hooks/useShifts';
-import ShiftSetter from './ShiftSetter';
 
 const Day = observer(({isDisabled}) => {
     const viewStore = useContext(ViewStoreContext);
@@ -26,7 +25,6 @@ const Day = observer(({isDisabled}) => {
 
     return (
         <div className="Day">
-            <ShiftSetter date={date} isActive={viewStore.shiftSetterIsActive} />
             <div>{date.format("dddd", navigator.language)}</div>
             <div>{date.format("D MMMM", navigator.language)}</div>
             {shifts}

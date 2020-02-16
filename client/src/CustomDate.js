@@ -13,6 +13,8 @@ export default class CustomDate {
         this.year = year;
         this.month = month;
         this.day = day;
+
+        this.stringFormat = "YYYY-M-D"; // should be the same as the DbDate format on the server
     }
 
     toFormattedString() {
@@ -20,7 +22,7 @@ export default class CustomDate {
     }
 
     toMoment() {
-        return moment(this.year + "-" + this.month + "-" + this.day, "YYYY-M-D");
+        return moment(this.year + "-" + this.month + "-" + this.day, this.stringFormat);
     }
 
     format(targetFormat, locale = "en") {

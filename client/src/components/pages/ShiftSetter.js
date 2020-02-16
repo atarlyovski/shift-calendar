@@ -1,19 +1,24 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import moment from '../../moment-with-locales.custom';
 import { useTranslation } from 'react-i18next';
 
 import { observer } from 'mobx-react-lite';
-import { UserStoreContext } from '../../../mobx/userStore';
-import { ViewStoreContext } from '../../../mobx/viewStore';
-import { MiscStoreContext } from '../../../mobx/miscStore';
+import { UserStoreContext } from '../../mobx/userStore';
+import { ViewStoreContext } from '../../mobx/viewStore';
+import { MiscStoreContext } from '../../mobx/miscStore';
 
-import { useShifts } from '../../../hooks/useShifts';
+import { useShifts } from '../../hooks/useShifts';
 
-const ShiftSetter = observer(({date, isActive}) => {
+import './ShiftSetter.css'
+
+const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     let shifts = useShifts(date, {format: "array"});
     let userStore = useContext(UserStoreContext);
     let viewStore = useContext(ViewStoreContext);
     let miscStore = useContext(MiscStoreContext);
     const { t } = useTranslation();
+
+    let title = date.format("dddd[, ]D[ ]MMMM");
 
     const allowedShifts = userStore.user.allowedShifts || [];
 
@@ -109,29 +114,39 @@ const ShiftSetter = observer(({date, isActive}) => {
     return (
         <div className={"ShiftSetter modal" + (isActive ? " is-active" : "")}>
             <div className="modal-background"></div>
-            <div className="modal-content">
-                {allowedShifts.map(
-                    (allowedShift, i) => 
-                        <label
-                            key={i}
-                            htmlFor={"set-shift-" + allowedShift.shiftName}
-                            className="checkbox">
-                                <input
-                                    id={"set-shift-" + allowedShift.shiftName}
-                                    data-shift={allowedShift.shiftName}
-                                    type="checkbox"
-                                    onChange={(e) => toggleShift(e)}
-                                    checked={shifts.includes(allowedShift.shiftName)} />
-                                {" " + allowedShift.shiftName}
-                        </label>
-                )}
-                <div>
+            <div className="modal-card">
+                <header className="modal-card-head">
+                    <p className="modal-card-title">{title}</p>
+                    <button className="delete" aria-label="close" onClick={() => {viewStore.shiftSetterIsActive = false}}></button>
+                </header>
+                <section className="modal-card-body">
+                    {allowedShifts.map(
+                        (allowedShift, i) => 
+                            <div className="field" key={i}>
+                                <div className="control">
+                                    <label
+                                        htmlFor={"set-shift-" + allowedShift.shiftName}
+                                        className="checkbox">
+                                            <input
+                                                id={"set-shift-" + allowedShift.shiftName}
+                                                data-shift={allowedShift.shiftName}
+                                                type="checkbox"
+                                                disabled={isDisabled}
+                                                onChange={(e) => toggleShift(e)}
+                                                checked={shifts.includes(allowedShift.shiftName)} />
+                                            {" " + allowedShift.shiftName}
+                                    </label>
+                                </div>
+                            </div>
+                    )}
+                    <div className={"notification is-danger " + (!isDisabled ? "is-hidden" : "")}>
+                        {t("youCannotSetShiftsForOthers")}
+                    </div>
+                </section>
+                <footer className="modal-card-foot">
                     <button className="button is-black" onClick={closeShiftSetter}>{t("close")}</button>
-                </div>
+                </footer>
             </div>
-            <button className="modal-close is-large"
-                    aria-label="close"
-                    onClick={() => {viewStore.shiftSetterIsActive = false}}></button>
         </div>
     )
 });
