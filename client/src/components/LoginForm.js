@@ -148,44 +148,50 @@ const LoginForm = () => {
         <div className="LoginForm columns">
             <div className="column is-one-third is-offset-one-third">
                 <form className="">
-                    <label
-                        htmlFor="LoginForm-username">
-                        {t("username")}
-                    </label>
-                    <input
-                        type="text"
-                        name="username"
-                        className="input"
-                        id="LoginForm-username"
-                        placeholder={t("username")}
-                        onChange={onInputChange}/>
-                    <label
-                        htmlFor="LoginForm-password">
-                        {t("password")}
-                    </label>
-                    <input
-                        type="password"
-                        name="password"
-                        className="input"
-                        id="LoginForm-password"
-                        placeholder={t("password")}
-                        onChange={onInputChange}/>
-                    <div className="alert alert-danger">
+                    <div className="field">
+                        <label
+                            htmlFor="LoginForm-username">
+                            {t("username")}
+                        </label>
+                        <input
+                            type="text"
+                            name="username"
+                            className="input"
+                            id="LoginForm-username"
+                            placeholder={t("username")}
+                            onChange={onInputChange}/>
+                    </div>
+                    <div className="field">
+                        <label
+                            htmlFor="LoginForm-password">
+                            {t("password")}
+                        </label>
+                        <input
+                            type="password"
+                            name="password"
+                            className="input"
+                            id="LoginForm-password"
+                            placeholder={t("password")}
+                            onChange={onInputChange}/>
+                    </div>
+                    <div className={"notification is-danger" + (!validationMessages.username ? " is-hidden" : "")}>
                         {validationMessages.username}
                     </div>
-                    <div className="alert alert-danger">
+                    <div className={"notification is-danger" + (!validationMessages.password ? " is-hidden" : "")}>
                         {validationMessages.password}
                     </div>
-                    <div className="alert alert-danger">
+                    <div className={"notification is-danger" + (!validationMessages.common ? " is-hidden" : "")}>
                         {validationMessages.common}
                     </div>
-                    <button
-                        className="button is-black"
-                        type="submit"
-                        onClick={onLoginClick}
-                        disabled={isInProgress}>
-                            {isInProgress ? t("pleaseWait") : t("login")}
-                    </button>
+                    <div className="field">
+                        <button
+                            className="button is-black"
+                            type="submit"
+                            onClick={onLoginClick}
+                            disabled={isInProgress}>
+                                {isInProgress ? t("pleaseWait") : t("login")}
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

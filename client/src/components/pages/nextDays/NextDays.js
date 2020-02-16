@@ -2,6 +2,7 @@ import React from 'react';
 import moment from '../../../moment-with-locales.custom';
 import CustomDate from '../../../CustomDate';
 import NextDaysElement from './NextDaysElement';
+import './NextDays.css';
 
 const NextDays = () => {
     const dateSpan = {from: -1, to: 4};
@@ -19,14 +20,16 @@ const NextDays = () => {
     }
 
     return (
-        <div className="NextDays">
-            <div className="NextDays-days columns is-mobile">
-                {dates.map((date) => <NextDaysElement
-                    gridWidth={dates.length}
-                    key={date.toFormattedString()}
-                    date={date}
-                    isToday={date.toFormattedString() === nowFormatted} />)
-                }
+        <div className="NextDays columns">
+            <div class="column is-half is-offset-one-quarter">
+                <div className="NextDays-days columns is-mobile">
+                    {dates.map((date) => <NextDaysElement
+                        gridWidth={dates.length}
+                        key={date.toFormattedString()}
+                        date={date}
+                        isToday={date.toFormattedString() === nowFormatted} />)
+                    }
+                </div>
             </div>
         </div>
     )

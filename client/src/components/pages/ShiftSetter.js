@@ -18,7 +18,7 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     let miscStore = useContext(MiscStoreContext);
     const { t } = useTranslation();
 
-    let title = date.format("dddd[, ]D[ ]MMMM");
+    let title = date.format("dddd[, ]D[ ]MMMM", navigator.language);
 
     const allowedShifts = userStore.user.allowedShifts || [];
 

@@ -85,17 +85,19 @@ export default observer(function ViewContainer() {
 
     return (
         <div className="ViewContainer">
-            <select className="select"
-                    onChange={changeTargetUser}
-                    defaultValue={targetUserID}>
-                {availableUsers && availableUsers.map(
-                    user => 
-                        <option key = {user.id}
-                                value={user.id}>
-                            {t("viewingUser", {name: user.fullName})}
-                        </option>
-                )}
-            </select>
+            <div className="field">
+                <select className="select"
+                        onChange={changeTargetUser}
+                        defaultValue={targetUserID}>
+                    {availableUsers && availableUsers.map(
+                        user => 
+                            <option key = {user.id}
+                                    value={user.id}>
+                                {t("viewingUser", {name: user.fullName})}
+                            </option>
+                    )}
+                </select>
+            </div>
             <ShiftSetter
                 date={viewStore.activeDate || new CustomDate()}
                 isDisabled={isShiftSettingDisabled}
