@@ -39,6 +39,6 @@ export const useShifts = (date, {format = "html"} = {}) => {
 
 const convertShiftsToHtml = (shifts) => {
     return (
-        shifts ? <div className="tag">{shifts.join("+")}</div> : "-"
+        (shifts && shifts.length > 0) ? <div className="tag">{shifts.join("+")}</div> : "-"
     )
 }

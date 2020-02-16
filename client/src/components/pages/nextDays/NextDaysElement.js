@@ -21,7 +21,7 @@ const NextDaysElement = observer(({date, isToday}) => {
             <div onClick={(e) => onDayClick(e, date)}>
                 {/* <div>{date.toMoment().calendar()}</div> */}
                 <div>{date.format("dd", navigator.language)}</div>
-                <div>{date.format("D MMM", navigator.language)}</div>
+                <div>{date.format("D", navigator.language)}</div>
                 <div>{shifts}</div>
             </div>
         </div>

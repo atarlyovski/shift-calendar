@@ -17,18 +17,6 @@ db.then(db => {
                 "roomID": 1,
                 "isActive": true,
                 "viewShiftsForUserID": 1,
-                "availableUsers": [
-                  {
-                    "id": 1,
-                    "fullName": "Alexander",
-                    "isActive": false
-                  },
-                  {
-                    "id": 2,
-                    "fullName": "Rumyana",
-                    "isActive": true
-                  }
-                ]
               }
             ],
             "allowedShifts": [
@@ -85,8 +73,7 @@ db.then(db => {
                 "viewShiftsForUserID": 2
               }
             ],
-            "allowedShifts": [
-            ]
+            "allowedShifts": []
           }
         ],
         "rooms": [

@@ -22,9 +22,10 @@ export default observer(function ViewContainer() {
     let availableUsers =
         (userStore.user.rooms.find(r => r.isActive) || {}).availableUsers;
     
-    availableUsers = availableUsers || [];
-
-    const [targetUserID, setTargetUserID] = useState(() => availableUsers.find(user => user.isActive).id || null);
+    const [targetUserID, setTargetUserID] = useState(
+        () => 
+            (availableUsers && availableUsers.find(user => user.isActive).id) || null
+    );
     
     const changeTargetUser = async (e) => {
         let targetUserUrl = '/api/user/setTargetUserID';
@@ -85,7 +86,7 @@ export default observer(function ViewContainer() {
             <select className="select"
                     onChange={changeTargetUser}
                     value={targetUserID}>
-                {availableUsers.map(
+                {availableUsers && availableUsers.map(
                     user => 
                         <option key = {user.id}
                                 value={user.id}>
