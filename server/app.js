@@ -18,7 +18,7 @@ const userAPI = require('./routes/user');
 
 require('./auth');
 
-const HTTP_PORT = process.env.PORT || 3001;
+const HTTP_PORT = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3001;
 // const HTTPS_PORT = process.env.PORT || 3002;
 const app = new Koa();
 
