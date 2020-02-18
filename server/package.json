@@ -11,6 +11,7 @@
   "author": "Alexander Tarlyovski",
   "license": "WTFPL",
   "dependencies": {
+    "@google-cloud/storage": "^4.3.1",
     "@koa/cors": "^2.2.3",
     "@koa/router": "^8.0.2",
     "bcrypt": "^3.0.7",

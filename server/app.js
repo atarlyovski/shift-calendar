@@ -18,8 +18,8 @@ const userAPI = require('./routes/user');
 
 require('./auth');
 
-const HTTP_PORT = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3001;
-// const HTTPS_PORT = process.env.PORT || 3002;
+const HTTP_PORT = process.env.PORT || 3001;
+const HTTPS_PORT = 3002;
 const app = new Koa();
 
 let key,
@@ -28,8 +28,10 @@ let key,
 app.keys = ['A secret for development purposes.'];
 
 try {
-    key = fs.readFileSync('./https/prod.key');
-    cert = fs.readFileSync('./https/prod.pem');
+    if (!process.env.PORT) {
+        key = fs.readFileSync('./https/prod.key');
+        cert = fs.readFileSync('./https/prod.pem');
+    }
 } catch (err) {
     if (err.code === "ENOENT") {
         key = fs.readFileSync('./https/a_shift_calendar_self.key');
@@ -69,10 +71,12 @@ app.use(shiftsAPI.routes())
 
 app.listen(HTTP_PORT)
 
-// https.createServer(
-//     httpsOptions,
-//     app.callback()
-// ).listen(HTTPS_PORT);
+if (!process.env.PORT) {
+    https.createServer(
+        httpsOptions,
+        app.callback()
+    ).listen(HTTPS_PORT);
+}
 
 function ensureAuthenticated() {
     return async function(ctx, next) {
