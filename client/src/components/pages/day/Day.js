@@ -6,6 +6,8 @@ import CustomDate from '../../../CustomDate';
 import { ViewStoreContext } from '../../../mobx/viewStore';
 import { useShifts } from '../../../hooks/useShifts';
 
+import './Day.css';
+
 const Day = observer(({isDisabled}) => {
     const viewStore = useContext(ViewStoreContext);
     const { t } = useTranslation();
@@ -24,16 +26,18 @@ const Day = observer(({isDisabled}) => {
     }
 
     return (
-        <div className="Day">
-            <div>{date.format("dddd", navigator.language)}</div>
-            <div>{date.format("D MMMM", navigator.language)}</div>
-            {shifts}
-            <div>
-                <button className="button is-black"
-                        disabled={isDisabled}
-                        onClick={showShiftSetter}>
-                    {t("setShifts")}
-                </button>
+        <div className="Day columns">
+            <div className="Day-box column is-2 is-offset-5">
+                <div>{date.format("dddd", navigator.language)}</div>
+                <div>{date.format("D MMMM", navigator.language)}</div>
+                {shifts}
+                <div>
+                    <button className="button is-black"
+                            disabled={isDisabled}
+                            onClick={showShiftSetter}>
+                        {t("setShifts")}
+                    </button>
+                </div>
                 {isDisabled ? <div>{t("youCannotSetShiftsForOthers")}</div> : false}
             </div>
         </div>

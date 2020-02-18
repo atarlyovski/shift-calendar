@@ -1,5 +1,4 @@
-import React, { useContext, useEffect } from 'react';
-import moment from '../../moment-with-locales.custom';
+import React, { useContext, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { observer } from 'mobx-react-lite';
@@ -16,15 +15,30 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     let userStore = useContext(UserStoreContext);
     let viewStore = useContext(ViewStoreContext);
     let miscStore = useContext(MiscStoreContext);
+    let ajaxControllers = useRef({});
     const { t } = useTranslation();
 
     let title = date.format("dddd[, ]D[ ]MMMM", navigator.language);
 
     const allowedShifts = userStore.user.allowedShifts || [];
 
-    const toggleShift = (e) => {
+    const cancelAjaxRequest = (date) => {
+        const formattedDate = date.toFormattedString();
+
+        if (ajaxControllers.current[formattedDate] instanceof AbortController) {
+            ajaxControllers.current[formattedDate].abort();
+            ajaxControllers.current[formattedDate] = null;
+        }
+    };
+
+    const toggleShift = async (e) => {
+        var controller = new AbortController();
+        var signal = controller.signal;
+
         let shift = e.target.getAttribute("data-shift");
         let newShifts = [...shifts];
+
+        const formattedDate = date.toFormattedString();
 
         if (e.target.checked && !newShifts.includes(shift)) {
             newShifts.push(shift);
@@ -48,7 +62,11 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
         });
 
         updateStoreShifts(viewStore.activeDate, newShifts);
-        postShifts(viewStore.activeDate, newShifts, userStore.userShiftData.activeRoomData.id);
+        cancelAjaxRequest(viewStore.activeDate);
+
+        ajaxControllers.current[formattedDate] = controller;
+
+        await postShifts(viewStore.activeDate, newShifts, userStore.userShiftData.activeRoomData.id, signal);
     }
 
     const updateStoreShifts = (date, shifts) => {
@@ -78,7 +96,7 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
         }
     }
 
-    const postShifts = async (date, shifts, roomID) => {
+    const postShifts = async (date, shifts, roomID, fetchSignal) => {
         let shiftPostUrl = '/api/shifts/shifts';
 
         let data = {
@@ -92,6 +110,7 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
                 method: "post",
                 credentials: "include",
                 mode: 'cors',
+                signal: fetchSignal,
                 headers: {
                     'Content-Type': 'application/json'
                     // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -100,10 +119,15 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
             });
 
             if (!response.ok) {
+                alert(t("error"));
                 console.error("Couldn't set shifts...");
             }
         } catch (err) {
-            console.error(err);
+            if (err.name === 'AbortError') {
+                console.log("fetch aborted");
+            } else {
+                console.error(err);
+            }
         }
     }
 

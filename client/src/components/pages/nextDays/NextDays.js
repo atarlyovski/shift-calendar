@@ -21,7 +21,7 @@ const NextDays = () => {
 
     return (
         <div className="NextDays columns">
-            <div class="column is-half is-offset-one-quarter">
+            <div className="column is-half is-offset-one-quarter">
                 <div className="NextDays-days columns is-mobile">
                     {dates.map((date) => <NextDaysElement
                         gridWidth={dates.length}
