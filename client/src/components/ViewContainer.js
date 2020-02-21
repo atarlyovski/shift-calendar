@@ -20,7 +20,6 @@ export default observer(function ViewContainer() {
     const miscStore = useContext(MiscStoreContext);
     const { t } = useTranslation();
 
-    
     let availableUsers =
         (userStore.user.rooms.find(r => r.isActive) || {}).availableUsers;
     
@@ -28,7 +27,7 @@ export default observer(function ViewContainer() {
         () => 
             (availableUsers && availableUsers.find(user => user.isActive).id) || null
     );
-    
+
     const changeTargetUser = async (e) => {
         let targetUserUrl = '/api/user/setTargetUserID';
         let controller = new AbortController();
@@ -89,12 +88,13 @@ export default observer(function ViewContainer() {
                 <select className="select"
                         onChange={changeTargetUser}
                         defaultValue={targetUserID}>
-                    {availableUsers && availableUsers.map(
-                        user => 
-                            <option key = {user.id}
-                                    value={user.id}>
-                                {t("viewingUser", {name: user.fullName})}
-                            </option>
+                    {userStore.user.rooms.find(r => r.isActive) &&
+                        userStore.user.rooms.find(r => r.isActive).availableUsers.map(
+                            user => 
+                                <option key = {user.id}
+                                        value={user.id}>
+                                    {t("viewingUser", {name: user.fullName})}
+                                </option>
                     )}
                 </select>
             </div>
