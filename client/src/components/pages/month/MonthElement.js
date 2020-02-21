@@ -5,6 +5,7 @@ import { ViewStoreContext } from '../../../mobx/viewStore';
 
 import { useShifts } from '../../../hooks/useShifts';
 import '../../../css/day.css';
+import './MonthElement.css';
 
 const MonthElement = observer(({date, isToday}) => {
     const viewStore = useContext(ViewStoreContext);
@@ -17,7 +18,8 @@ const MonthElement = observer(({date, isToday}) => {
     };
 
     return (
-        <td className={"MonthElement" + (isToday ? " today" : "")}>
+        <td className={"MonthElement" + (isToday ? " today" : "")}
+                data-day-of-week={date.format("E")}>
             <div onClick={(e) => onDayClick(e, date)}>
                 {/* <div>{date.toMoment().calendar()}</div> */}
                 <div>{date.format("D", navigator.language)}</div>

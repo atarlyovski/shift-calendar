@@ -85,7 +85,7 @@ export default observer(function ViewContainer() {
     return (
         <div className="ViewContainer">
             <div className="field">
-                <select className="select"
+                <select className="ViewContainer-userSelect select"
                         onChange={changeTargetUser}
                         defaultValue={targetUserID}>
                     {userStore.user.rooms.find(r => r.isActive) &&

@@ -1,0 +1,4 @@
+.MonthElement[data-day-of-week="6"],
+.MonthElement[data-day-of-week="7"] {
+    background-color: #555;
+}
