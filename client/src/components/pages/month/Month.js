@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from '../../../moment-with-locales.custom';
 import MonthElement from './MonthElement';
 import CustomDate from '../../../CustomDate';
@@ -10,6 +10,8 @@ const Month = () => {
         now = moment(),
         nowFormatted = now.format("YYYY-M-D"),
         daysOfWeek;
+
+    const [monthOffset, setMonthOffset] = useState(0);
 
     const getMonthDays = (currentMoment) => {
         let now = moment(currentMoment);
@@ -71,8 +73,8 @@ const Month = () => {
         return headings;
     }
 
-    weeks = getMonthDays(now);
-    month = now.locale(navigator.language).format("MMMM");
+    weeks = getMonthDays(moment(now).add(monthOffset, "month"));
+    month = moment(now).add(monthOffset, "month").locale(navigator.language).format("MMMM");
     daysOfWeek = getDaysOfWeek(now);
 
     let rows = weeks.map((days, i) => {
@@ -97,7 +99,21 @@ const Month = () => {
 
     return (
         <div className="Month">
-            <h2 className="title">{month}</h2>
+            <div className="month-heading">
+                {monthOffset >= 0 ?
+                    <div className="prev-month"
+                        onClick={() => setMonthOffset(o => o - 1)}>
+                    </div> : false
+                }
+                <h2 className="title">
+                    <span>{month}</span>
+                </h2>
+                {monthOffset <= 0 ?
+                    <div className="next-month"
+                        onClick={() => setMonthOffset(o => o + 1)}>
+                    </div> : false
+                }
+            </div>
             <div className="columns">
                 <div className="column is-8 is-offset-2">
                     <div className="table-container">
