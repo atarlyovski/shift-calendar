@@ -57,7 +57,7 @@ app.use(session({
     store: new LowdbStore(),
     maxAge: 7 * 24 * 60 * 60 * 1000,
     renew: true,
-    secure: true
+    secure: process.env.PORT ? true : false
 }, app));
 
 app.use(passport.initialize())

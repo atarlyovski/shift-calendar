@@ -89,7 +89,7 @@ export default observer(function ViewContainer() {
                         onChange={changeTargetUser}
                         defaultValue={targetUserID}>
                     {userStore.user.rooms.find(r => r.isActive) &&
-                        userStore.user.rooms.find(r => r.isActive).availableUsers.map(
+                        (userStore.user.rooms.find(r => r.isActive).availableUsers || []).map(
                             user => 
                                 <option key = {user.id}
                                         value={user.id}>

@@ -104,6 +104,8 @@ const LoginForm = () => {
                 response,
                 userDataUrl = '/api/user/userData';
 
+            setIsLoading(true);
+
             try {
                 response = await fetch(miscStore.serverHost + userDataUrl, {
                     credentials: "include",
@@ -119,8 +121,12 @@ const LoginForm = () => {
                 } else {
                     user = null;
                 }
+
+                setIsLoading(false);
             } catch (err) {
                 console.error(err);
+                setIsLoading(false);
+
                 return;
             }
 
@@ -131,6 +137,7 @@ const LoginForm = () => {
         fetchData();
     }, [miscStore.serverHost, userStore.user]);
 
+    let [isLoading, setIsLoading] = useState(false);
     let [isInProgress, setIsInProgress] = useState(false);
 
     let [formData, setFormData] = useState({
@@ -145,7 +152,7 @@ const LoginForm = () => {
     });
 
     return (
-        <div className="LoginForm columns">
+        <div className={"LoginForm columns" + (isLoading ? " is-hidden" : "")}>
             <div className="column is-one-third is-offset-one-third">
                 <form className="">
                     <div className="field">
