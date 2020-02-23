@@ -18,37 +18,37 @@ const App = observer(() => {
     const miscStore = useContext(MiscStoreContext);
     let { t } = useTranslation();
 
-    const fetchData = (signal) => {
-        if (!userStore.user) {
-            return;
-        }
-
-        let userShiftDataURL = '/api/shifts/data';
-        let response;
-
-        (async () => {
-            try {
-                response = await fetch(miscStore.serverHost + userShiftDataURL, {
-                    credentials: "include",
-                    mode: 'cors',
-                    signal
-                });
-
-                if (response.ok) {
-                    let result = await response.json();
-                    userStore.userShiftData = result;
-                } else {
-                    console.error(response);
-                    alert(t("error"));
-                }
-            } catch (err) {
-                console.error(err);
+    useEffect(() => {
+        const fetchData = (signal) => {
+            if (!userStore.user) {
                 return;
             }
-        })();
-    };
+    
+            let userShiftDataURL = '/api/shifts/data';
+            let response;
+    
+            (async () => {
+                try {
+                    response = await fetch(miscStore.serverHost + userShiftDataURL, {
+                        credentials: "include",
+                        mode: 'cors',
+                        signal
+                    });
+    
+                    if (response.ok) {
+                        let result = await response.json();
+                        userStore.userShiftData = result;
+                    } else {
+                        console.error(response);
+                        alert(t("error"));
+                    }
+                } catch (err) {
+                    console.error(err);
+                    return;
+                }
+            })();
+        };
 
-    useEffect(() => {
         if (!userStore.user) {
             return;
         }

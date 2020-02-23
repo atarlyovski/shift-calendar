@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 // import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +17,7 @@ const LoginForm = () => {
     const userStore = useContext(UserStoreContext);
     const miscStore = useContext(MiscStoreContext);
 
-    const [{ isLoading, isError }, cancelUserData] =
+    const [{ isLoading }] =
         useUserData(miscStore.serverHost, userStore.user);
 
     let { t } = useTranslation();
