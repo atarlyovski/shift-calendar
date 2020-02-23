@@ -18,13 +18,11 @@ const App = observer(() => {
     const miscStore = useContext(MiscStoreContext);
     let { t } = useTranslation();
 
-    useEffect(() => {
+    const fetchData = (signal) => {
         if (!userStore.user) {
             return;
         }
 
-        let controller = new AbortController();
-        let signal = controller.signal;
         let userShiftDataURL = '/api/shifts/data';
         let response;
 
@@ -48,9 +46,23 @@ const App = observer(() => {
                 return;
             }
         })();
+    };
+
+    useEffect(() => {
+        if (!userStore.user) {
+            return;
+        }
+
+        let controller = new AbortController();
+        let signal = controller.signal;
+
+        fetchData(signal);
+
+        let fetchDataInterval = setInterval(fetchData, 1 * 60 * 60 * 1000);
 
         return () => {
             controller.abort();
+            clearInterval(fetchDataInterval);
         };
     }, [t, miscStore.serverHost, userStore.user]);
     

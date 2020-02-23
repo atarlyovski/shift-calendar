@@ -11,10 +11,14 @@ import './LoginForm.css';
 // import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../mobx/userStore';
 import { MiscStoreContext } from '../mobx/miscStore';
+import { useUserData } from '../hooks/useUserData';
 
 const LoginForm = () => {
     const userStore = useContext(UserStoreContext);
     const miscStore = useContext(MiscStoreContext);
+
+    const [{ isLoading, isError }, cancelUserData] =
+        useUserData(miscStore.serverHost, userStore.user);
 
     let { t } = useTranslation();
 
@@ -98,46 +102,6 @@ const LoginForm = () => {
         setFormData(formData);
     }
 
-    useEffect(() => {
-        async function fetchData() {
-            var user,
-                response,
-                userDataUrl = '/api/user/userData';
-
-            setIsLoading(true);
-
-            try {
-                response = await fetch(miscStore.serverHost + userDataUrl, {
-                    credentials: "include",
-                    mode: 'cors'
-                });
-    
-                if (response.ok) {
-                    user = await response.json();
-    
-                    if (!user || !user.username) {
-                        user = null;
-                    }
-                } else {
-                    user = null;
-                }
-
-                setIsLoading(false);
-            } catch (err) {
-                console.error(err);
-                setIsLoading(false);
-
-                return;
-            }
-
-            // store.dispatch(setUser(user));
-            userStore.user = user;
-        }
-
-        fetchData();
-    }, [miscStore.serverHost, userStore.user]);
-
-    let [isLoading, setIsLoading] = useState(false);
     let [isInProgress, setIsInProgress] = useState(false);
 
     let [formData, setFormData] = useState({
