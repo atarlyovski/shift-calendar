@@ -4,12 +4,15 @@ import { observer } from 'mobx-react-lite';
 import { ViewStoreContext } from '../../../mobx/viewStore';
 
 import { useShifts } from '../../../hooks/useShifts';
+import { useLocale } from '../../../hooks/useLocale';
+
 import './NextDaysElement.css';
 import '../../../css/day.css';
 
 const NextDaysElement = observer(({date, isToday}) => {
     const viewStore = useContext(ViewStoreContext);
     let shifts = useShifts(date);
+    let locale = useLocale();
 
     const onDayClick = (e, date) => {
         viewStore.activeDate = date;
@@ -20,8 +23,8 @@ const NextDaysElement = observer(({date, isToday}) => {
         <div className={"NextDaysElement column" + (isToday ? " today" : "")}>
             <div onClick={(e) => onDayClick(e, date)}>
                 {/* <div>{date.toMoment().calendar()}</div> */}
-                <div>{date.format("dd", navigator.language)}</div>
-                <div>{date.format("D", navigator.language)}</div>
+                <div>{date.format("dd", locale)}</div>
+                <div>{date.format("D", locale)}</div>
                 <div>{shifts}</div>
             </div>
         </div>

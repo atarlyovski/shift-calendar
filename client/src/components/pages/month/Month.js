@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import moment from '../../../moment-with-locales.custom';
 import MonthElement from './MonthElement';
 import CustomDate from '../../../CustomDate';
+import { useLocale } from '../../../hooks/useLocale';
+
 import './Month.css';
 
 const Month = () => {
@@ -9,6 +11,7 @@ const Month = () => {
         weeks,
         now = moment(),
         nowFormatted = now.format("YYYY-M-D"),
+        locale = useLocale(),
         daysOfWeek;
 
     const [monthOffset, setMonthOffset] = useState(0);
@@ -64,7 +67,7 @@ const Month = () => {
             headings.push(
                 <th key={i}>{
                     now.isoWeekday(i)
-                        .locale(navigator.language)
+                        .locale(locale)
                         .format("dd")
                     }</th>
             )
@@ -74,7 +77,7 @@ const Month = () => {
     }
 
     weeks = getMonthDays(moment(now).add(monthOffset, "month"));
-    month = moment(now).add(monthOffset, "month").locale(navigator.language).format("MMMM");
+    month = moment(now).add(monthOffset, "month").locale(locale).format("MMMM");
     daysOfWeek = getDaysOfWeek(now);
 
     let rows = weeks.map((days, i) => {

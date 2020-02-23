@@ -7,6 +7,7 @@ import { ViewStoreContext } from '../../mobx/viewStore';
 import { MiscStoreContext } from '../../mobx/miscStore';
 
 import { useShifts } from '../../hooks/useShifts';
+import { useLocale } from '../../hooks/useLocale';
 
 import './ShiftSetter.css'
 
@@ -17,8 +18,9 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     let miscStore = useContext(MiscStoreContext);
     let ajaxControllers = useRef({});
     const { t } = useTranslation();
+    let locale = useLocale();
 
-    let title = date.format("dddd[, ]D[ ]MMMM", navigator.language);
+    let title = date.format("dddd[, ]D[ ]MMMM", locale);
 
     const allowedShifts = userStore.user.allowedShifts || [];
 
