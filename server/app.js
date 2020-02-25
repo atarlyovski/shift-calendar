@@ -26,6 +26,7 @@ let key,
     cert;
 
 app.keys = ['A secret for development purposes.'];
+app.proxy = true;
 
 try {
     if (!process.env.PORT) {
