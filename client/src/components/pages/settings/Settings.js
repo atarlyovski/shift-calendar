@@ -22,7 +22,7 @@ const Settings = observer(() => {
             response = await fetch(miscStore.serverHost + logOutURL, {
                 credentials: "include",
                 method: 'post',
-                mode: 'cors'
+                mode: miscStore.serverHost ? 'cors' : 'no-cors',
             });
 
             if (response.ok) {
@@ -60,7 +60,7 @@ const Settings = observer(() => {
             response = await fetch(miscStore.serverHost + changePasswordUrl, {
                 credentials: "include",
                 method: 'post',
-                mode: 'cors',
+                mode: miscStore.serverHost ? 'cors' : 'no-cors',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },

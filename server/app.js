@@ -47,7 +47,10 @@ const httpsOptions = { key, cert };
 app.use(logger());
 app.use(koaStatic("./build/", {maxage: 3000}));
 app.use(crossOriginHeaders());
-// app.use(cors()); // CORS is used for requests made from the React server
+
+if (!process.env.PORT) {
+    app.use(cors()); // CORS is used for requests made from the React server
+}
 
 // Wait for the DB to rev up
 // Session and authentication
@@ -58,7 +61,7 @@ app.use(session({
     store: new LowdbStore(),
     maxAge: 7 * 24 * 60 * 60 * 1000,
     renew: true,
-    secure: process.env.PORT ? true : false
+    // secure: process.env.PORT ? true : false
 }, app));
 
 app.use(passport.initialize())

@@ -21,7 +21,7 @@ export const useUserData = (serverHost, user) => {
             try {
                 response = await fetch(serverHost + userDataUrl, {
                     credentials: "include",
-                    mode: 'cors',
+                    mode: serverHost ? 'cors' : 'no-cors',
                     signal
                 });
     

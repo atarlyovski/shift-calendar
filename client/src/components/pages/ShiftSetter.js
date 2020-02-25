@@ -111,7 +111,7 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
             let response = await fetch(miscStore.serverHost + shiftPostUrl, {
                 method: "post",
                 credentials: "include",
-                mode: 'cors',
+                mode: miscStore.serverHost ? 'cors' : 'no-cors',
                 signal: fetchSignal,
                 headers: {
                     'Content-Type': 'application/json'
