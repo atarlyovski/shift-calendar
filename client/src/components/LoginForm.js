@@ -48,7 +48,7 @@ const LoginForm = () => {
             response = await fetch(miscStore.serverHost + loginUrl, {
                 method: 'POST',
                 credentials: 'include',
-                mode: miscStore.serverHost ? 'cors' : 'no-cors',
+                mode: miscStore.serverHost ? 'cors' : 'same-origin',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },

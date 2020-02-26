@@ -31,7 +31,7 @@ const App = observer(() => {
                 try {
                     response = await fetch(miscStore.serverHost + userShiftDataURL, {
                         credentials: "include",
-                        mode: miscStore.serverHost ? 'cors' : 'no-cors',
+                        mode: miscStore.serverHost ? 'cors' : 'same-origin',
                         signal
                     });
     

@@ -56,7 +56,7 @@ export default observer(function ViewContainer() {
             let response = await fetch(miscStore.serverHost + targetUserUrl, {
                 method: 'POST',
                 credentials: "include",
-                mode: miscStore.serverHost ? 'cors' : 'no-cors',
+                mode: miscStore.serverHost ? 'cors' : 'same-origin',
                 signal,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
