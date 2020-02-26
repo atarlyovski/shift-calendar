@@ -26,7 +26,7 @@ let key,
     cert;
 
 app.keys = ['A secret for development purposes.'];
-app.proxy = true;
+// app.proxy = true; -- breaks Google Cloud, needs investigating
 
 try {
     if (!process.env.PORT) {

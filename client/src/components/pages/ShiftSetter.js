@@ -101,11 +101,9 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     const postShifts = async (date, shifts, roomID, fetchSignal) => {
         let shiftPostUrl = '/api/shifts/shifts';
 
-        let data = {
-            date,
-            shifts,
-            roomID
-        };
+        let body = "date=" + encodeURIComponent(JSON.stringify(date));
+        body += "&shifts=" + encodeURIComponent(JSON.stringify(shifts));
+        body += "&roomID=" + encodeURIComponent(roomID);
 
         try {
             let response = await fetch(miscStore.serverHost + shiftPostUrl, {
@@ -114,10 +112,9 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
                 mode: miscStore.serverHost ? 'cors' : 'no-cors',
                 signal: fetchSignal,
                 headers: {
-                    'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify(data)
+                body
             });
 
             if (!response.ok) {

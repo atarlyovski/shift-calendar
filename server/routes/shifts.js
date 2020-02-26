@@ -28,6 +28,10 @@ router.post(ROUTE_PREFIX + '/shifts', async ctx => {
     }
 
     let { roomID, date, shifts } = ctx.request.body;
+    
+    roomID = parseInt(roomID);
+    shifts = JSON.parse(shifts);
+    date = JSON.parse(date);
     date = new DbDate(date.year, date.month, date.day);
 
     try {
