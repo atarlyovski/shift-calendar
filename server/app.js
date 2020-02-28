@@ -26,7 +26,7 @@ let key,
     cert;
 
 app.keys = ['A secret for development purposes.'];
-// app.proxy = true; -- breaks Google Cloud, needs investigating
+app.proxy = true;
 
 try {
     if (!process.env.PORT) {
@@ -61,7 +61,7 @@ app.use(session({
     store: new LowdbStore(),
     maxAge: 7 * 24 * 60 * 60 * 1000,
     renew: true,
-    // secure: process.env.PORT ? true : false
+    secure: process.env.PORT ? true : false
 }, app));
 
 app.use(passport.initialize())
