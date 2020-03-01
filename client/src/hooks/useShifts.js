@@ -32,15 +32,26 @@ export const useShifts = (date, {format = "html"} = {}) => {
     
     shiftData = shiftData || {};
 
+    let shiftTagClasses = userStore
+        .userShiftData
+        .activeRoomData
+        .shiftTagClasses;
+
     return (format === "html") ?
-        convertShiftsToHtml(shiftData.shifts) :
+        convertShiftsToHtml(shiftData.shifts || [], shiftTagClasses || {}) :
         (shiftData.shifts || []);
 }
 
-const convertShiftsToHtml = (shifts) => {
+const convertShiftsToHtml = (shifts = [], shiftTagClasses = {}) => {
+    let tags = shifts.map((shift, i) => {
+        let classNames = shiftTagClasses[shift] || "";
+
+        return <div className={"tag " + classNames} key={i}>{shift}</div>
+    })
+
     return (
         (shifts && shifts.length > 0) ?
-            <div className="tag">{shifts.join("+")}</div> :
-            <div className="tag" style={{visibility: "hidden"}}></div>
+            <div className="tags has-addons">{tags}</div> :
+            <div className="tags has-addons"><div className="tag" style={{visibility: "hidden"}}>-</div></div>
     )
 }

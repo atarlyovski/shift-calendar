@@ -91,7 +91,15 @@ db.then(db => {
           {
             "id": 1,
             "name": "Room 1",
-            "shiftData": []
+            "shiftData": [],
+            "shiftTagClasses": {
+              "Д": "is-primary",
+              "Н": "is-info",
+              "1": "is-warning",
+              "2": "is-danger",
+              "П": "is-success",
+              "Ц": "is-danger"
+            }
           }
         ],
         "sessions": []
