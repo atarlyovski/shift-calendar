@@ -16,6 +16,8 @@ const crossOriginHeaders = require('./crossOriginHeaders').crossOriginHeaders;
 const shiftsAPI = require('./routes/shifts');
 const userAPI = require('./routes/user');
 
+const maintenance = require('./maintenance');
+
 require('./auth');
 
 const HTTP_PORT = process.env.PORT || 3001;
@@ -46,9 +48,9 @@ const httpsOptions = { key, cert };
 
 app.use(logger());
 app.use(koaStatic("./build/", {maxage: 3000}));
-app.use(crossOriginHeaders());
 
 if (!process.env.PORT) {
+    app.use(crossOriginHeaders());
     app.use(cors()); // CORS is used for requests made from the React server
 }
 
@@ -77,6 +79,8 @@ app.use(shiftsAPI.routes())
 
 app.listen(HTTP_PORT)
 
+maintenance.flushOldShiftsPeriodically();
+
 if (!process.env.PORT) {
     https.createServer(
         httpsOptions,
@@ -92,4 +96,12 @@ function ensureAuthenticated() {
 
         await next();
     }
+}
+
+global.displayError = function displayError(err) {
+    err = err || {};
+    let message = err.message || err || "No error message!";
+    let stack = err.stack || "No error stack!";
+
+    console.error("--- ERROR ---\n" + message + "\n" + stack);
 }

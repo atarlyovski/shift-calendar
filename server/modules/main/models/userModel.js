@@ -1,5 +1,7 @@
 "use strict";
 const bcrypt = require('bcrypt');
+const moment = require('moment');
+
 const db = require('../../../db');
 
 async function hasAccessToRoom(userID, roomID) {
@@ -213,6 +215,25 @@ async function setPasswordForUser(userID, hash) {
         .write();
 }
 
+async function deleteShiftsOlderThan(dateMs, dbDateFormat = "YYYY-M-D") {
+    var dbInstance;
+
+    dbInstance = await db;
+
+    let rooms = await dbInstance
+        .get("rooms")
+        .value();
+    
+    for (let i = 0; i < rooms.length; i++) {
+        await dbInstance
+            .get(`rooms[${i}].shiftData`)
+            .remove(({date}) => {
+                return moment(date, dbDateFormat).isBefore(dateMs)
+            })
+            .write();
+    }
+}
+
 module.exports = {
     hasAccessToRoom,
     authenticateUser,
@@ -221,5 +242,6 @@ module.exports = {
     fetchUserByID,
     setTargetUserID,
     logOutUser,
-    setPasswordForUser
+    setPasswordForUser,
+    deleteShiftsOlderThan
 }
