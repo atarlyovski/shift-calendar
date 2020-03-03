@@ -70,16 +70,21 @@ async function getUserPreferences(userID) {
     let activeRoom = rooms.find(r => r.isActive);
     let roomID = activeRoom ? activeRoom.roomID : null;
     
-    let activeRoomData = await dbInstance.get("rooms")
-        .find({id: roomID})
-        .value();
+    let activeRoomData = JSON.parse(
+        JSON.stringify(
+            await dbInstance.get("rooms")
+            .find({id: roomID})
+            .value()
+        )
+    );
     
+    // Delete the password from the cloned object, not from the DB itself:
     delete activeRoomData.password;
 
-    return {
-        rooms,
-        activeRoomData
-    };
+    // Deep clone so we don't push activeRoomData to the DB:
+    let preferences = JSON.parse(JSON.stringify({rooms, activeRoomData}));
+
+    return preferences;
 }
 
 async function getUsersForRoom(userID, targetUserID, roomID) {

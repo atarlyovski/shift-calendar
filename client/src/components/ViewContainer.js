@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import './ViewContainer.css';
@@ -19,12 +19,17 @@ export default observer(function ViewContainer() {
     const { t } = useTranslation();
 
     let availableUsers =
-        (userStore.user.rooms.find(r => r.isActive) || {}).availableUsers;
+        (userStore.userShiftData &&
+            userStore.userShiftData.rooms.find(r => r.isActive) || {}).availableUsers;
     
     const [targetUserID, setTargetUserID] = useState(
         () => 
             (availableUsers && availableUsers.find(user => user.isActive).id) || null
     );
+
+    useEffect(() => {
+        setTargetUserID((availableUsers && availableUsers.find(user => user.isActive).id) || null);
+    }, [(availableUsers && availableUsers.find(user => user.isActive).id) || null])
 
     const changeTargetUser = async (e) => {
         let targetUserUrl = '/api/user/setTargetUserID';
@@ -84,11 +89,12 @@ export default observer(function ViewContainer() {
             <div className="field">
                 <select className="ViewContainer-userSelect select"
                         onChange={changeTargetUser}
-                        defaultValue={targetUserID}>
-                    {userStore.user.rooms.find(r => r.isActive) &&
-                        (userStore.user.rooms.find(r => r.isActive).availableUsers || []).map(
+                        value={targetUserID || ""}>
+                    {userStore.userShiftData &&
+                        userStore.userShiftData.rooms.find(r => r.isActive) &&
+                        (userStore.userShiftData.rooms.find(r => r.isActive).availableUsers || []).map(
                             user => 
-                                <option key = {user.id}
+                                <option key={user.id}
                                         value={user.id}>
                                     {t("viewingUser", {name: user.fullName})}
                                 </option>
