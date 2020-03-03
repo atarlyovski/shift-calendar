@@ -3,11 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../../../mobx/userStore';
-import { MiscStoreContext } from '../../../mobx/miscStore';
 
 const Settings = observer(() => {
     const userStore = useContext(UserStoreContext);
-    const miscStore = useContext(MiscStoreContext);
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
@@ -19,10 +17,9 @@ const Settings = observer(() => {
             response;
         
         try {
-            response = await fetch(miscStore.serverHost + logOutURL, {
+            response = await fetch(logOutURL, {
                 credentials: "include",
                 method: 'post',
-                mode: miscStore.serverHost ? 'cors' : 'same-origin',
             });
 
             if (response.ok) {
@@ -57,10 +54,9 @@ const Settings = observer(() => {
         body += "&newPassword=" + encodeURIComponent(newPassword);
 
         try {
-            response = await fetch(miscStore.serverHost + changePasswordUrl, {
+            response = await fetch(changePasswordUrl, {
                 credentials: "include",
                 method: 'post',
-                mode: miscStore.serverHost ? 'cors' : 'same-origin',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },

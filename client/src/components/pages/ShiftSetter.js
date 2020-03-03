@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../../mobx/userStore';
 import { ViewStoreContext } from '../../mobx/viewStore';
-import { MiscStoreContext } from '../../mobx/miscStore';
 
 import { useShifts } from '../../hooks/useShifts';
 import { useLocale } from '../../hooks/useLocale';
@@ -15,7 +14,6 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     let shifts = useShifts(date, {format: "array"});
     let userStore = useContext(UserStoreContext);
     let viewStore = useContext(ViewStoreContext);
-    let miscStore = useContext(MiscStoreContext);
     let ajaxControllers = useRef({});
     const { t } = useTranslation();
     let locale = useLocale();
@@ -106,10 +104,9 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
         body += "&roomID=" + encodeURIComponent(roomID);
 
         try {
-            let response = await fetch(miscStore.serverHost + shiftPostUrl, {
+            let response = await fetch(shiftPostUrl, {
                 method: "post",
                 credentials: "include",
-                mode: miscStore.serverHost ? 'cors' : 'same-origin',
                 signal: fetchSignal,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

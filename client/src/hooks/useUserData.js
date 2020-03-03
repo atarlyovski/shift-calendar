@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { UserStoreContext } from '../mobx/userStore';
 
-export const useUserData = (serverHost, user) => {
+export const useUserData = (user) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const userStore = useContext(UserStoreContext);
@@ -19,9 +19,8 @@ export const useUserData = (serverHost, user) => {
             setIsError(false);
 
             try {
-                response = await fetch(serverHost + userDataUrl, {
+                response = await fetch(userDataUrl, {
                     credentials: "include",
-                    mode: serverHost ? 'cors' : 'same-origin',
                     signal
                 });
     
@@ -53,7 +52,7 @@ export const useUserData = (serverHost, user) => {
         return () => {
             controller.abort();
         }
-    }, [serverHost, user]);
+    }, [user]);
 
     return [{ isLoading, isError }];
 }

@@ -11,13 +11,11 @@ import Settings from './pages/settings/Settings';
 import { observer } from 'mobx-react-lite';
 import { ViewStoreContext } from '../mobx/viewStore';
 import { UserStoreContext } from '../mobx/userStore';
-import { MiscStoreContext } from '../mobx/miscStore';
 import CustomDate from '../CustomDate';
 
 export default observer(function ViewContainer() {
     const viewStore = useContext(ViewStoreContext);
     const userStore = useContext(UserStoreContext);
-    const miscStore = useContext(MiscStoreContext);
     const { t } = useTranslation();
 
     let availableUsers =
@@ -53,10 +51,9 @@ export default observer(function ViewContainer() {
             .viewShiftsForUserID = targetUserID;
 
         try {
-            let response = await fetch(miscStore.serverHost + targetUserUrl, {
+            let response = await fetch(targetUserUrl, {
                 method: 'POST',
                 credentials: "include",
-                mode: miscStore.serverHost ? 'cors' : 'same-origin',
                 signal,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'

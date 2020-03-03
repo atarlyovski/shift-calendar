@@ -10,15 +10,13 @@ import './LoginForm.css';
 // import { setUser } from '../redux/actions';
 // import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../mobx/userStore';
-import { MiscStoreContext } from '../mobx/miscStore';
 import { useUserData } from '../hooks/useUserData';
 
 const LoginForm = () => {
     const userStore = useContext(UserStoreContext);
-    const miscStore = useContext(MiscStoreContext);
 
     const [{ isLoading }] =
-        useUserData(miscStore.serverHost, userStore.user);
+        useUserData(userStore.user);
 
     let { t } = useTranslation();
 
@@ -45,10 +43,9 @@ const LoginForm = () => {
         setIsInProgress(true);
     
         try {
-            response = await fetch(miscStore.serverHost + loginUrl, {
+            response = await fetch(loginUrl, {
                 method: 'POST',
                 credentials: 'include',
-                mode: miscStore.serverHost ? 'cors' : 'same-origin',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },

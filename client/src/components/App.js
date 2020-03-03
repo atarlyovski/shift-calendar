@@ -10,7 +10,6 @@ import { usePageVisibility } from '../hooks/usePageVisibility';
 
 import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../mobx/userStore';
-import { MiscStoreContext } from '../mobx/miscStore';
 
 const App = observer(() => {
     let loginForm,
@@ -19,7 +18,6 @@ const App = observer(() => {
     let [lastUpdated, setLastUpdated] = useState(null);
     let isPageVisible = usePageVisibility();
     const userStore = useContext(UserStoreContext);
-    const miscStore = useContext(MiscStoreContext);
     let { t } = useTranslation();
 
     useEffect(() => {
@@ -43,9 +41,8 @@ const App = observer(() => {
     
             (async () => {
                 try {
-                    response = await fetch(miscStore.serverHost + userShiftDataURL, {
+                    response = await fetch(userShiftDataURL, {
                         credentials: "include",
-                        mode: miscStore.serverHost ? 'cors' : 'same-origin',
                         signal
                     });
     
@@ -85,7 +82,7 @@ const App = observer(() => {
             controller.abort();
             clearInterval(fetchDataInterval);
         };
-    }, [t, miscStore.serverHost, userStore.user, isPageVisible, lastUpdated]);
+    }, [t, userStore.user, isPageVisible, lastUpdated]);
     
     if (!userStore.user) {
         loginForm = <LoginForm />
