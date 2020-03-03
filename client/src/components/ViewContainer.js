@@ -12,6 +12,7 @@ import { observer } from 'mobx-react-lite';
 import { ViewStoreContext } from '../mobx/viewStore';
 import { UserStoreContext } from '../mobx/userStore';
 import CustomDate from '../CustomDate';
+import OfflineBanner from './OfflineBanner';
 
 export default observer(function ViewContainer() {
     const viewStore = useContext(ViewStoreContext);
@@ -19,8 +20,8 @@ export default observer(function ViewContainer() {
     const { t } = useTranslation();
 
     let availableUsers =
-        (userStore.userShiftData &&
-            userStore.userShiftData.rooms.find(r => r.isActive) || {}).availableUsers;
+        ((userStore.userShiftData &&
+            userStore.userShiftData.rooms.find(r => r.isActive)) || {}).availableUsers;
     
     const [targetUserID, setTargetUserID] = useState(
         () => 
@@ -29,7 +30,7 @@ export default observer(function ViewContainer() {
 
     useEffect(() => {
         setTargetUserID((availableUsers && availableUsers.find(user => user.isActive).id) || null);
-    }, [(availableUsers && availableUsers.find(user => user.isActive).id) || null])
+    }, [availableUsers])
 
     const changeTargetUser = async (e) => {
         let targetUserUrl = '/api/user/setTargetUserID';
@@ -105,6 +106,7 @@ export default observer(function ViewContainer() {
                 date={viewStore.activeDate || new CustomDate()}
                 isDisabled={isShiftSettingDisabled}
                 isActive={viewStore.shiftSetterIsActive} />
+            <OfflineBanner />
             {viewStore.activePage === "day" ? <Day isDisabled={isShiftSettingDisabled} /> : null}
             {viewStore.activePage === "nextDays" ? <NextDays /> : null}
             {viewStore.activePage === "month" ? <Month /> : null}

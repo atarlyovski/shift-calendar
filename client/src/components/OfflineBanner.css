@@ -1,0 +1,14 @@
+.OfflineBanner {
+    position: fixed;
+    bottom: 4.3rem;
+    width: 100%;
+    background-color: #f14668;
+    color: white;
+    padding: 0.5rem;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.OfflineBanner[data-state="online"] {
+    display: none;
+}

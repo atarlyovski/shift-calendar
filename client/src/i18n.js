@@ -9,7 +9,7 @@ i18n
     .init({
         // lng: 'en',
         fallbackLng: 'en',
-        debug: true,
+        debug: false,
         /* can have multiple namespace, in case you want to divide a huge translation into smaller pieces and load them on demand */
         // ns: ['translations'],
         // defaultNS: 'translations',
@@ -42,7 +42,8 @@ i18n
                     "newPasswordConfirm": "Confirm new password",
                     "changePassword": "Change password",
                     "invalidPasswordCombo": "Invalid password combination. Please try again.",
-                    "passwordChangeSuccess": "Your password was changed successfully."
+                    "passwordChangeSuccess": "Your password was changed successfully.",
+                    "offline": "Offline"
                 }
             },
             bg: {
@@ -65,7 +66,8 @@ i18n
                     "newPasswordConfirm": "Потвърдете новата парола",
                     "changePassword": "Смяна на паролата",
                     "invalidPasswordCombo": "Невалидна комбинация от пароли. Моля, опитайте отново.",
-                    "passwordChangeSuccess": "Паролата ви бе променена успешно."
+                    "passwordChangeSuccess": "Паролата ви бе променена успешно.",
+                    "offline": "Няма връзка"
                 }
             }
         }
