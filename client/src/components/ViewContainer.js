@@ -12,7 +12,6 @@ import { observer } from 'mobx-react-lite';
 import { ViewStoreContext } from '../mobx/viewStore';
 import { UserStoreContext } from '../mobx/userStore';
 import CustomDate from '../CustomDate';
-import OfflineBanner from './OfflineBanner';
 
 export default observer(function ViewContainer() {
     const viewStore = useContext(ViewStoreContext);
@@ -106,7 +105,6 @@ export default observer(function ViewContainer() {
                 date={viewStore.activeDate || new CustomDate()}
                 isDisabled={isShiftSettingDisabled}
                 isActive={viewStore.shiftSetterIsActive} />
-            <OfflineBanner />
             {viewStore.activePage === "day" ? <Day isDisabled={isShiftSettingDisabled} /> : null}
             {viewStore.activePage === "nextDays" ? <NextDays /> : null}
             {viewStore.activePage === "month" ? <Month /> : null}

@@ -6,6 +6,7 @@ import Navigator from './Navigator';
 import './App.css';
 import ViewContainer from './ViewContainer';
 import LoginForm from './LoginForm';
+import OfflineBanner from './OfflineBanner';
 import { usePageVisibility } from '../hooks/usePageVisibility';
 
 import { observer } from 'mobx-react-lite';
@@ -101,6 +102,7 @@ const App = observer(() => {
                 {loginForm}
                 {innerView}
             </Suspense>
+            <OfflineBanner />
         </div>
     );
 })

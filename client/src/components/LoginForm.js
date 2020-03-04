@@ -54,8 +54,6 @@ const LoginForm = () => {
     
             result = await response.json();
     
-            setIsInProgress(false);
-    
             if (response.ok && result.success) {
                 // store.dispatch(setUser(result.user));
                 userStore.user = result.user;
@@ -67,6 +65,8 @@ const LoginForm = () => {
         } catch (err) {
             console.error(err);
         }
+
+        setIsInProgress(false);
     }
 
     const inputsAreValid = (username, password) => {
