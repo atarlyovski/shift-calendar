@@ -2,7 +2,8 @@
     flex: 1 1 auto;
 }
 
-.ViewContainer-userSelect {
-    margin-top: 1rem;
-    margin-left: 1rem;
+.ViewContainer-userSelect-container.column {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 1rem;
 }

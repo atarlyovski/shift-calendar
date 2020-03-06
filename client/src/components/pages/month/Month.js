@@ -101,36 +101,34 @@ const Month = () => {
     })
 
     return (
-        <div className="Month">
-            <div className="month-heading">
-                {monthOffset >= 0 ?
-                    <div className="prev-month"
-                        onClick={() => setMonthOffset(o => o - 1)}>
-                    </div> : false
-                }
-                <h2 className="title">
-                    <span>{month}</span>
-                </h2>
-                {monthOffset <= 0 ?
-                    <div className="next-month"
-                        onClick={() => setMonthOffset(o => o + 1)}>
-                    </div> : false
-                }
-            </div>
-            <div className="columns">
-                <div className="column is-8 is-offset-2">
-                    <div className="table-container">
-                        <table className="MonthTable table is-bordered is-fullwidth is-narrow">
-                            <thead>
-                                <tr>
-                                    {daysOfWeek}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {rows}
-                            </tbody>
-                        </table>
-                    </div>
+        <div className="Month columns">
+            <div className="column is-8 is-offset-2">
+                <div className="month-heading">
+                    {monthOffset >= 0 ?
+                        <div className="prev-month"
+                            onClick={() => setMonthOffset(o => o - 1)}>
+                        </div> : false
+                    }
+                    <h2 className="title">
+                        <span>{month}</span>
+                    </h2>
+                    {monthOffset <= 0 ?
+                        <div className="next-month"
+                            onClick={() => setMonthOffset(o => o + 1)}>
+                        </div> : false
+                    }
+                </div>
+                <div className="table-container">
+                    <table className="MonthTable table is-bordered is-fullwidth is-narrow">
+                        <thead>
+                            <tr>
+                                {daysOfWeek}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rows}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

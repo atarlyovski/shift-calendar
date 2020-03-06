@@ -34,8 +34,9 @@
     border: none;
 }
 
-.Month .title {
+.Month .month-heading .title {
     color: #eee;
+    margin-bottom: 0rem;
 }
 
 .Month .month-heading {

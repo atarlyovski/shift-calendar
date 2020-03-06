@@ -86,20 +86,25 @@ export default observer(function ViewContainer() {
 
     return (
         <div className="ViewContainer">
-            <div className="field">
-                <select className="ViewContainer-userSelect select"
-                        onChange={changeTargetUser}
-                        value={targetUserID || ""}>
-                    {userStore.userShiftData &&
-                        userStore.userShiftData.rooms.find(r => r.isActive) &&
-                        (userStore.userShiftData.rooms.find(r => r.isActive).availableUsers || []).map(
-                            user => 
-                                <option key={user.id}
-                                        value={user.id}>
-                                    {t("viewingUser", {name: user.fullName})}
-                                </option>
-                    )}
-                </select>
+            <div className="columns">
+                <div className="ViewContainer-userSelect-container column is-4-widescreen is-2-fullhd is-8 is-offset-2">
+                    <div className="field">
+                        <div className="select is-fullwidth">
+                            <select onChange={changeTargetUser}
+                                    value={targetUserID || ""}>
+                                {userStore.userShiftData &&
+                                    userStore.userShiftData.rooms.find(r => r.isActive) &&
+                                    (userStore.userShiftData.rooms.find(r => r.isActive).availableUsers || []).map(
+                                        user => 
+                                            <option key={user.id}
+                                                    value={user.id}>
+                                                {t("viewingUser", {name: user.fullName})}
+                                            </option>
+                                )}
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
             <ShiftSetter
                 date={viewStore.activeDate || new CustomDate()}
