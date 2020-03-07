@@ -1,8 +1,16 @@
-.LoginForm {
-    padding: 1rem;
+.LoginForm-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
-.LoginForm input {
-    display: block;
-    width: 100%;
+.LoginForm-logo > img {
+    display: inline-block;
+    height: 2.5rem;
+}
+
+.LoginForm-logo > .title {
+    color: #eee;
+    display: inline-block;
+    padding-left: 0.5rem;
 }

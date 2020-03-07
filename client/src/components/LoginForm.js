@@ -113,8 +113,12 @@ const LoginForm = () => {
     });
 
     return (
-        <div className={"LoginForm columns" + (isLoading ? " is-hidden" : "")}>
-            <div className="column is-one-third is-offset-one-third">
+        <div className={"LoginForm columns is-centered" + (isLoading ? " is-hidden" : "")}>
+            <div className="column is-one-third">
+                <div className="LoginForm-logo">
+                    <img src="a_shift_calendar.svg" alt="logo"/>
+                    <h1 className="title is-4">A Shift Calendar</h1>
+                </div>
                 <form className="">
                     <div className="field">
                         <label
