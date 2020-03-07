@@ -28,8 +28,8 @@ const Day = observer(({isDisabled}) => {
     }
 
     return (
-        <div className="Day columns">
-            <div className="Day-box column is-2 is-offset-5">
+        <div className="Day columns is-centered">
+            <div className="Day-box column is-4">
                 <div>{date.format("dddd", locale)}</div>
                 <div>{date.format("D MMMM", locale)}</div>
                 {shifts}

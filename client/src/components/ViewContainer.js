@@ -79,15 +79,17 @@ export default observer(function ViewContainer() {
     }
 
     let isShiftSettingDisabled = true;
+    const viewsWithUserDropdown = ["day", "nextDays", "month"];
+    let isUserDropdownVisible = viewsWithUserDropdown.includes(viewStore.activePage);
     
     if (userStore.user) {
         isShiftSettingDisabled = (targetUserID !== userStore.user.id);
     }
 
     return (
-        <div className="ViewContainer">
-            <div className="columns">
-                <div className="ViewContainer-userSelect-container column is-4-widescreen is-2-fullhd is-8 is-offset-2">
+        <div className="ViewContainer container is-widescreen">
+            <div className={"columns" + (isUserDropdownVisible ? "" : " is-hidden")}>
+                <div className="ViewContainer-userSelect-container column is-narrow is-offset-2">
                     <div className="field">
                         <div className="select is-fullwidth">
                             <select onChange={changeTargetUser}
