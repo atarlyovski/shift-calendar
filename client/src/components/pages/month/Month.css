@@ -2,7 +2,6 @@
     padding-bottom: 4rem;
 }
 
-
 .Month .table-container {
     padding: 2px;
 }
@@ -31,6 +30,10 @@
 
 .Month table.MonthTable .MonthFirstWeekPlaceholder {
     border: none;
+}
+
+.Month .MonthTable-container {
+    padding-top: 0;
 }
 
 .Month .month-heading .title {
@@ -66,4 +69,8 @@
     border-bottom: 0.8rem solid transparent; 
     border-left: 0.8rem solid #eee;
     display: inline-block;
+}
+
+.month-heading > .column {
+    padding-bottom: 0;
 }

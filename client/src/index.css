@@ -21,6 +21,7 @@ code {
 }
 
 .App .columns,
+.App .columns:not(:last-child),
 .App .columns:last-child {
   margin: 0;
 }
