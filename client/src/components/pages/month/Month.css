@@ -45,6 +45,12 @@
     white-space: nowrap;
 }
 
+.Month .month-heading button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
 .Month .title {
     display: inline-block;
     margin-left: 1rem;
@@ -52,7 +58,6 @@
 }
 
 .Month .prev-month {
-    cursor: pointer;
     width: 0; 
     height: 0; 
     border-top: 0.8rem solid transparent;
@@ -62,7 +67,6 @@
 }
 
 .Month .next-month {
-    cursor: pointer;
     width: 0; 
     height: 0; 
     border-top: 0.8rem solid transparent;

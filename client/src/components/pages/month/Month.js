@@ -116,17 +116,17 @@ const Month = () => {
             <div className="month-heading columns">
                 <div className="column is-8 is-offset-2">
                     {index >= 1 ?
-                        <div className="prev-month"
-                            onClick={() => setIndex(o => o - 1)}>
-                        </div> : false
+                        <button onClick={() => setIndex(o => o - 1)}>
+                            <span className="prev-month"></span>
+                        </button> : false
                     }
                     <h2 className="title">
                         <span>{months[index]}</span>
                     </h2>
                     {index <= 1 ?
-                        <div className="next-month"
-                            onClick={() => setIndex(o => o + 1)}>
-                        </div> : false
+                        <button onClick={() => setIndex(o => o + 1)}>
+                            <span className="next-month"></span>
+                        </button> : false
                     }
                 </div>
             </div>
