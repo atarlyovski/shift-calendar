@@ -16,14 +16,15 @@ const NextDaysElement = observer(({date, isToday}) => {
 
     const onDayClick = (e, date) => {
         viewStore.activeDate = date;
-        viewStore.activePage = "day";
+        viewStore.shiftSetterIsActive = true;
     };
 
     return (
         <div className={"NextDaysElement column" + (isToday ? " today" : "")}>
             <div onClick={(e) => onDayClick(e, date)}>
                 {/* <div>{date.toMoment().calendar()}</div> */}
-                <div>{date.format("dd", locale)}</div>
+                <div className="is-hidden-desktop-only is-hidden-touch">{date.format("dddd", locale)}</div>
+                <div className="is-hidden-widescreen">{date.format("dd", locale)}</div>
                 <div>{date.format("D", locale)}</div>
                 <div>{shifts}</div>
             </div>

@@ -14,7 +14,6 @@ async function getUserPreferences(userID) {
         ).viewShiftsForUserID;
     
     if (activeRoomID !== undefined && targetUserID !== undefined) {
-        // targetUserDataPromise = userModel.getTargetUserData(userID, targetUserID, activeRoomID);
         availableUsers = await userModel.getUsersForRoom(userID, targetUserID, activeRoomID);
     }
 

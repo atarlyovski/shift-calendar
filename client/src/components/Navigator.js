@@ -10,7 +10,7 @@ import { ViewStoreContext } from '../mobx/viewStore';
 
 const Navigator = observer(() => {
     let navButtons = [],
-        navPages = ["day", "nextDays", "month", "settings"];
+        navPages = [/*"day", */"nextDays", "month", "settings"];
 
     const viewStore = useContext(ViewStoreContext);
 

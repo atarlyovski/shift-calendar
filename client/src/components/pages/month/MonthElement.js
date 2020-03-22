@@ -15,7 +15,6 @@ const MonthElement = observer(({date, isToday}) => {
 
     const onDayClick = (e, date) => {
         viewStore.activeDate = date;
-        // viewStore.activePage = "day";
         viewStore.shiftSetterIsActive = true;
     };
 
@@ -23,7 +22,6 @@ const MonthElement = observer(({date, isToday}) => {
         <td className={"MonthElement" + (isToday ? " today" : "")}
                 data-day-of-week={date.format("E")}>
             <div onClick={(e) => onDayClick(e, date)}>
-                {/* <div>{date.toMoment().calendar()}</div> */}
                 <div>{date.format("D", locale)}</div>
                 <div>{shifts}</div>
             </div>

@@ -17,12 +17,13 @@ const App = observer(() => {
         innerView;
 
     let [lastUpdated, setLastUpdated] = useState(null);
+    let [isInitialized, setIsInitialized] = useState(false); // whether or not we have data to show
     let isPageVisible = usePageVisibility();
     const userStore = useContext(UserStoreContext);
     let { t } = useTranslation();
 
     useEffect(() => {
-        let updateIntervalMs = 1 * 60 * 60 * 1000;
+        const updateIntervalMs = 1 * 60 * 60 * 1000;
 
         const fetchData = (signal) => {
             if (!userStore.user) {
@@ -54,8 +55,9 @@ const App = observer(() => {
                         console.error(response);
                         alert(t("error"));
                     }
-
+                    
                     setLastUpdated(moment());
+                    setIsInitialized(true);
                 } catch (err) {
                     console.error(err);
                     return;
@@ -90,8 +92,13 @@ const App = observer(() => {
     } else {
         innerView = (
             <div className="innerView">
-                <ViewContainer />
-                <Navigator />
+                {
+                    isInitialized ?
+                    (<>
+                        <ViewContainer />
+                        <Navigator />
+                    </>) : false
+                }
             </div>
         )
     }
