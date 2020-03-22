@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import "./i18n";
 
 // Bulma
-import 'bulma/css/bulma.min.css';
+// import 'bulma/css/bulma.min.css'; -- dropped in favor of SASS imports of individual files
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
