@@ -12,6 +12,13 @@ const getUserPrivileges = async userId => {
     return JSON.parse(JSON.stringify(privileges));
 }
 
+const getDbState = async () => {
+    let dbInstance = await db;
+    let state = await dbInstance.getState();
+
+    return state;
+}
+
 const setDbState = async state => {
     let dbInstance = await db;
 
@@ -22,5 +29,6 @@ const setDbState = async state => {
 
 module.exports = {
     getUserPrivileges,
+    getDbState,
     setDbState
 };

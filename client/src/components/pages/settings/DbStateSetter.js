@@ -3,14 +3,44 @@ import { useTranslation } from 'react-i18next';
 
 const DbStateSetter = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isPushing, setIsPushing] = useState(false);
     const [dbState, setDbState] = useState("");
+    const [isGettingDbState, setIsGettingDbState] = useState(false);
     const { t } = useTranslation();
 
     const onCancel = () => {
-        if (!isLoading) {
+        if (!isPushing) {
             setIsModalOpen(false);
             setDbState("");
+        }
+    }
+
+    const getDbState = async () => {
+        let url = "/api/admin/dbState";
+        let response;
+
+        try {
+            setIsGettingDbState(true);
+
+            response = await fetch(url, {
+                credentials: "include"
+            });
+
+            setIsGettingDbState(false);
+
+            if (response.ok) {
+                let result = await response.json();
+                setDbState(JSON.stringify(result.dbState, null, 2));
+            } else {
+                console.error(response);
+                alert(t("error"));
+                return;
+            }
+        } catch (err) {
+            setIsGettingDbState(false);
+            console.error(err);
+            alert(t("error"));
+            return;
         }
     }
 
@@ -26,7 +56,7 @@ const DbStateSetter = () => {
         }
 
         try {
-            setIsLoading(true);
+            setIsPushing(true);
 
             let response = await fetch(url, {
                 credentials: "include",
@@ -41,12 +71,12 @@ const DbStateSetter = () => {
                 window.location.reload();
             } else {
                 console.error(response);
-                setIsLoading(false);
+                setIsPushing(false);
                 alert(t("error"));
             }
         } catch (err) {
             console.error(err);
-            setIsLoading(false);
+            setIsPushing(false);
             alert(t("error"));
             return;
         }
@@ -61,7 +91,7 @@ const DbStateSetter = () => {
                         className="button is-black"
                         onClick={() => setIsModalOpen(true)}
                     >
-                        {t("setDbState")}
+                        {t("dbState")}
                     </button>
                 </div>
             </div>
@@ -69,7 +99,7 @@ const DbStateSetter = () => {
                 <div className="modal-background"></div>
                 <div className="modal-card">
                     <header className="modal-card-head">
-                        <p className="modal-card-title">{t("setDbState")}</p>
+                        <p className="modal-card-title">{t("dbState")}</p>
                         <button
                             className="delete"
                             aria-label="close"
@@ -78,6 +108,17 @@ const DbStateSetter = () => {
                         ></button>
                     </header>
                     <section className="modal-card-body">
+                        <div className="field">
+                            <div className="control">
+                                <button
+                                    type="button"
+                                    className={"button" + (isGettingDbState ? " is-loading" : "")}
+                                    onClick={getDbState}
+                                >
+                                    {t("getDbState")}
+                                </button>
+                            </div>
+                        </div>
                         <div className="field">
                             <label htmlFor="DbStateSetter-textarea">
                                 {t("state")}
@@ -92,7 +133,7 @@ const DbStateSetter = () => {
                     </section>
                     <footer className="modal-card-foot">
                         <button
-                            className={"button is-black" + (isLoading ? " is-loading" : "")}
+                            className={"button is-black" + (isPushing ? " is-loading" : "")}
                             type="button"
                             onClick={pushDbState}
                         >
@@ -101,7 +142,7 @@ const DbStateSetter = () => {
                         <button
                             className="button"
                             type="button"
-                            disabled={isLoading}
+                            disabled={isPushing}
                             onClick={onCancel}
                         >
                             {t("cancel")}

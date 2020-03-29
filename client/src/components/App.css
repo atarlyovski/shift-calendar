@@ -1,3 +1,13 @@
 .App {
     color: #eee;
 }
+
+.App input,
+.App select,
+.App textarea {
+    color: #333;
+}
+
+.App .modal {
+    color: #333;
+}

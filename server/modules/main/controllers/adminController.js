@@ -7,13 +7,41 @@ const getUserPrivilege = async (userID, privilege) => {
     return privileges[privilege];
 };
 
+const getDbState = async userID => {
+    try {
+        let hasRights = await getUserPrivilege(userID, "canSetDbState");
+
+        if (!hasRights) {
+            return {
+                status: 403,
+                message: "You don't have the privileges required to perform this action."
+            }
+        }
+
+        let dbState = await adminModel.getDbState();
+
+        return {
+            status: 200,
+            dbState
+        }
+    } catch (err) {
+        console.error(err);
+
+        return {
+            status: 500,
+            message: err.message,
+            stack: err.stack
+        }
+    }
+};
+
 const setDbState = async (userID, state) => {
     try {
         let hasRights = await getUserPrivilege(userID, "canSetDbState");
 
         if (!hasRights) {
             return {
-                success: false,
+                status: 500,
                 message: "You don't have the privileges required to perform this action."
             }
         }
@@ -23,15 +51,16 @@ const setDbState = async (userID, state) => {
         console.error(err);
 
         return {
-            success: false,
+            status: 500,
             message: err.message,
             stack: err.stack
         }
     }
 
-    return true;
+    return {status: 204};
 };
 
 module.exports = {
+    getDbState,
     setDbState
 }

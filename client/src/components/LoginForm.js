@@ -52,6 +52,7 @@ const LoginForm = () => {
                 body: body
             })
     
+            setIsInProgress(false);
             result = await response.json();
     
             if (response.ok && result.success) {
@@ -63,10 +64,9 @@ const LoginForm = () => {
                 })
             }
         } catch (err) {
+            setIsInProgress(false);
             console.error(err);
         }
-
-        setIsInProgress(false);
     }
 
     const inputsAreValid = (username, password) => {
