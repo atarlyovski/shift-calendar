@@ -35,6 +35,7 @@ i18n
                     "error": "Error",
                     "setShifts": "Set shifts",
                     "close": "Close",
+                    "cancel": "Cancel",
                     "viewingUser": "{{name}}'s schedule",
                     "youCannotSetShiftsForOthers": "You cannot set shifts for others. Select yourself from the dropdown if you want to set your shifts.",
                     "oldPassword": "Old password",
@@ -43,7 +44,12 @@ i18n
                     "changePassword": "Change password",
                     "invalidPasswordCombo": "Invalid password combination. Please try again.",
                     "passwordChangeSuccess": "Your password was changed successfully.",
-                    "offline": "Offline"
+                    "offline": "Offline",
+                    "setDbState": "Upload DB state",
+                    "dbState": "Database state",
+                    "state": "State",
+                    "upload": "Upload",
+                    "invalidJson": "Invalid JSON"
                 }
             },
             bg: {
@@ -59,6 +65,7 @@ i18n
                     "error": "Грешка",
                     "setShifts": "Задай смени",
                     "close": "Затвори",
+                    "cancel": "Отмени",
                     "viewingUser": "График на {{name}}",
                     "youCannotSetShiftsForOthers": "Не можете да задавате смени на други потребители. Изберете себе си от падащото меню, ако искате да зададете вашите смени.",
                     "oldPassword": "Стара парола",
@@ -67,7 +74,12 @@ i18n
                     "changePassword": "Смяна на паролата",
                     "invalidPasswordCombo": "Невалидна комбинация от пароли. Моля, опитайте отново.",
                     "passwordChangeSuccess": "Паролата ви бе променена успешно.",
-                    "offline": "Няма връзка"
+                    "offline": "Няма връзка",
+                    "setDbState": "Качи състояние на база данни",
+                    "dbState": "Състояние на базата",
+                    "state": "Състояние",
+                    "upload": "Качи",
+                    "invalidJson": "Невалиден JSON"
                 }
             }
         }

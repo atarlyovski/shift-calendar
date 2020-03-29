@@ -38,11 +38,11 @@
       "last 5 safari versions",
       "last 1 edge version",
       "last 5 ChromeAndroid versions",
-      "last 5 Android versions"
+      "last 5 FirefoxAndroid versions"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
+      "last 2 chrome versions",
+      "last 2 firefox versions",
       "last 1 safari version"
     ]
   }

@@ -4,12 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../../../mobx/userStore';
 
+import DbStateSetter from './DbStateSetter';
+
 const Settings = observer(() => {
     const userStore = useContext(UserStoreContext);
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
     const [isInvalidPasswordCombo, setIsInvalidPasswordCombo] = useState(false);
+    const [isPasswordLoading, setIsPasswordLoading] = useState(false);
     const { t } = useTranslation();
 
     const logOut = async () => {
@@ -24,8 +27,7 @@ const Settings = observer(() => {
 
             if (response.ok) {
                 userStore.user = null;
-            }
-            else {
+            } else {
                 console.error(response);
                 alert(t("error"));
             }
@@ -54,6 +56,8 @@ const Settings = observer(() => {
         body += "&newPassword=" + encodeURIComponent(newPassword);
 
         try {
+            setIsPasswordLoading(true);
+
             response = await fetch(changePasswordUrl, {
                 credentials: "include",
                 method: 'post',
@@ -62,6 +66,8 @@ const Settings = observer(() => {
                 },
                 body
             })
+
+            setIsPasswordLoading(false);
 
             if (response.ok) {
                 userStore.user = null;
@@ -72,10 +78,23 @@ const Settings = observer(() => {
                 alert(t("error"));
             }
         } catch (err) {
+            setIsPasswordLoading(false);
             console.error(err);
             return;
         }
     };
+
+    let dbStateSetter;
+
+    try {
+        let privileges = userStore.user.privileges || {};
+
+        if (privileges.canSetDbState) {
+            dbStateSetter = <DbStateSetter />;
+        }
+    } catch (err) {
+        console.error(err)
+    }
 
     return (
         <div className="Settings columns">
@@ -127,9 +146,18 @@ const Settings = observer(() => {
                     <div className={"notification is-danger" + (!isInvalidPasswordCombo ? " is-hidden" : "")}>
                         {t("invalidPasswordCombo")}
                     </div>
-                    <div className="control">
-                        <button type="button" onClick={changePassword} className="button is-black">{t("changePassword")}</button>
+                    <div className="field">
+                        <div className="control">
+                            <button
+                                type="button"
+                                onClick={changePassword}
+                                className={"button is-black" + (isPasswordLoading ? " is-loading" : "")}
+                            >
+                                {t("changePassword")}
+                            </button>
+                        </div>
                     </div>
+                    {dbStateSetter}
                 </div>
                 {/* {JSON.stringify(userStore.userShiftData, null, 2)} */}
             </form>

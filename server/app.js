@@ -14,6 +14,7 @@ const cors = require('@koa/cors');
 const crossOriginHeaders = require('./crossOriginHeaders').crossOriginHeaders;
 
 const shiftsAPI = require('./routes/shifts');
+const adminAPI = require('./routes/admin');
 const userAPI = require('./routes/user');
 
 const maintenance = require('./maintenance');
@@ -76,6 +77,7 @@ app.use(userAPI.routes())
 // Authenticated Routes
 app.use(ensureAuthenticated())
 app.use(shiftsAPI.routes())
+app.use(adminAPI.routes())
 
 app.listen(HTTP_PORT)
 
