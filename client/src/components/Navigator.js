@@ -1,9 +1,5 @@
 import React, { useContext } from 'react';
 import './Navigator.css';
-import dayLogo from '../img/day.svg';
-import nextDaysLogo from '../img/nextDays.svg';
-import monthLogo from '../img/month.svg';
-import settingsLogo from '../img/settings.svg';
 
 import { observer } from 'mobx-react-lite';
 import { ViewStoreContext } from '../mobx/viewStore';
@@ -19,28 +15,9 @@ const Navigator = observer(() => {
     };
 
     for (let i = 0; i < navPages.length; i++) {
-        let logo;
-
-        switch (navPages[i]) {
-            case "day":
-                logo = dayLogo;
-                break;
-        
-            case "nextDays":
-                logo = nextDaysLogo;
-                break;
-                
-            case "month":
-                logo = monthLogo;
-                break;
-                
-            case "settings":
-                logo = settingsLogo;
-                break;
-
-            default:
-                break;
-        }
+        // Use the active logo if it represents the current page
+        let isActive = (viewStore.activePage === navPages[i]);
+        let logo = require(`../img/${navPages[i] + (isActive ? "-active" : "")}.svg`);
 
         navButtons.push(
             <div

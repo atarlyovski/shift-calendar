@@ -157,11 +157,11 @@ const LoginForm = () => {
                     </div>
                     <div className="field">
                         <button
-                            className="button is-black"
+                            className={"button is-black" + (isInProgress ? " is-loading" : "")}
                             type="submit"
                             onClick={onLoginClick}
-                            disabled={isInProgress}>
-                                {isInProgress ? t("pleaseWait") : t("login")}
+                        >
+                            {t("login")}
                         </button>
                     </div>
                 </form>

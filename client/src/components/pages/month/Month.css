@@ -10,7 +10,7 @@
     background-color: transparent;
 }
 
-.Month table.MonthTable td,
+.Month table.MonthTable .MonthElement,
 .Month table.MonthTable th {
     color: #eee;
 }
@@ -19,12 +19,12 @@
     border: none;
 }
 
-.Month table.MonthTable td:not([colspan]) {
+.Month table.MonthTable .MonthElement {
     cursor: pointer;
     width: 14.2857%;
 }
 
-.Month table.MonthTable td:active {
+.Month table.MonthTable .MonthElement:active {
     background-color: #445;
 }
 

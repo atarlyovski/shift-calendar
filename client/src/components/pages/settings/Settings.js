@@ -13,6 +13,7 @@ const Settings = observer(() => {
     const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
     const [isInvalidPasswordCombo, setIsInvalidPasswordCombo] = useState(false);
     const [isPasswordLoading, setIsPasswordLoading] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const { t } = useTranslation();
 
     const logOut = async () => {
@@ -20,10 +21,14 @@ const Settings = observer(() => {
             response;
         
         try {
+            setIsLoggingOut(true);
+
             response = await fetch(logOutURL, {
                 credentials: "include",
                 method: 'post',
             });
+
+            setIsLoggingOut(false);
 
             if (response.ok) {
                 userStore.user = null;
@@ -32,6 +37,7 @@ const Settings = observer(() => {
                 alert(t("error"));
             }
         } catch (err) {
+            setIsLoggingOut(false);
             console.error(err);
             return;
         }
@@ -106,8 +112,9 @@ const Settings = observer(() => {
                     <div className="control">
                         <button
                             type="button"
-                            className="button is-black"
-                            onClick={logOut}>
+                            className={"button is-black" + (isLoggingOut ? " is-loading" : "")}
+                            onClick={logOut}
+                        >
                             {t("logOut")}
                         </button>
                     </div>
