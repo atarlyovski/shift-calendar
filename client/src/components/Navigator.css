@@ -1,9 +1,12 @@
 .Navigator {
     background-color: #333;
-    display: flex;
     position: fixed;
     bottom: 0px;
     width: 100%;
+}
+
+.Navigator-buttons {
+    display: flex;
 }
 
 .Navigator-btn {
@@ -25,4 +28,8 @@
     width: 10vw;
     max-height: 2rem;
     max-width: 2rem;
+}
+
+.Navigator-btn-logo:not(.active) {
+    filter: brightness(50%);
 }

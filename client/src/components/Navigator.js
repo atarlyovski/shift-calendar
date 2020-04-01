@@ -17,7 +17,7 @@ const Navigator = observer(() => {
     for (let i = 0; i < navPages.length; i++) {
         // Use the active logo if it represents the current page
         let isActive = (viewStore.activePage === navPages[i]);
-        let logo = require(`../img/${navPages[i] + (isActive ? "-active" : "")}.svg`);
+        let logo = require(`../img/${navPages[i]}.svg`);
 
         navButtons.push(
             <div
@@ -26,7 +26,7 @@ const Navigator = observer(() => {
                     data-is-active={viewStore.activePage === navPages[i] ? 1 : 0}
                     onClick={setActiveView}
                     key={i}>    
-                <img className="Navigator-btn-logo"
+                <img className={"Navigator-btn-logo" + (isActive ? " active" : "")}
                     alt={navPages[i]}
                     src={logo}/>
             </div>
@@ -35,7 +35,13 @@ const Navigator = observer(() => {
 
     return (
         <nav className="Navigator">
-            {navButtons}
+            <div className="columns is-centered is-gapless">
+                <div className="column is-4-widescreen is-half-tablet">
+                    <div className="Navigator-buttons container">
+                        {navButtons}
+                    </div>
+                </div>
+            </div>
         </nav>
     )
 });
