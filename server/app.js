@@ -10,8 +10,9 @@ const LowdbStore = require('./LowdbStore');
 const passport = require('koa-passport')
 const logger = require('koa-logger')
 const koaStatic = require('koa-static')
-const cors = require('@koa/cors');
-const crossOriginHeaders = require('./crossOriginHeaders').crossOriginHeaders;
+const conditional = require('koa-conditional-get');
+const etag = require('koa-etag');
+const compress = require('koa-compress');
 
 const shiftsAPI = require('./routes/shifts');
 const adminAPI = require('./routes/admin');
@@ -31,31 +32,19 @@ let key,
 app.keys = ['A secret for development purposes.'];
 app.proxy = true;
 
-try {
-    if (!process.env.PORT) {
-        key = fs.readFileSync('./https/prod.key');
-        cert = fs.readFileSync('./https/prod.pem');
-    }
-} catch (err) {
-    if (err.code === "ENOENT") {
-        key = fs.readFileSync('./https/a_shift_calendar_self.key');
-        cert = fs.readFileSync('./https/a_shift_calendar_self.pem');
-    } else {
-        console.error(err);
-    }
+if (!process.env.PORT) {
+    key = fs.readFileSync('./https/a_shift_calendar_self.key');
+    cert = fs.readFileSync('./https/a_shift_calendar_self.pem');
 }
 
 const httpsOptions = { key, cert };
 
 app.use(logger());
+app.use(conditional());
+app.use(etag());
+app.use(compress());
 app.use(koaStatic("./build/", {maxage: 3000}));
 
-if (!process.env.PORT) {
-    app.use(crossOriginHeaders());
-    app.use(cors()); // CORS is used for requests made from the React server
-}
-
-// Wait for the DB to rev up
 // Session and authentication
 app.keys = ['A random secret']
 app.use(bodyParser())
