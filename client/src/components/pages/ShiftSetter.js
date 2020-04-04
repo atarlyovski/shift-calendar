@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { observer } from 'mobx-react-lite';
@@ -14,31 +14,17 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     let shifts = useShifts(date, {format: "array"});
     let userStore = useContext(UserStoreContext);
     let viewStore = useContext(ViewStoreContext);
-    let ajaxControllers = useRef({});
     const { t } = useTranslation();
     let locale = useLocale();
+    let [isPosting, setIsPosting] = useState(false);
 
     let title = date.format("dddd[, ]D[ ]MMMM", locale);
 
     const allowedShifts = userStore.user.allowedShifts || [];
 
-    const cancelAjaxRequest = (date) => {
-        const formattedDate = date.toFormattedString();
-
-        if (ajaxControllers.current[formattedDate] instanceof AbortController) {
-            ajaxControllers.current[formattedDate].abort();
-            ajaxControllers.current[formattedDate] = null;
-        }
-    };
-
     const toggleShift = async (e) => {
-        var controller = new AbortController();
-        var signal = controller.signal;
-
         let shift = e.target.getAttribute("data-shift");
         let newShifts = [...shifts];
-
-        const formattedDate = date.toFormattedString();
 
         if (e.target.checked && !newShifts.includes(shift)) {
             newShifts.push(shift);
@@ -62,11 +48,8 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
         });
 
         updateStoreShifts(viewStore.activeDate, newShifts);
-        cancelAjaxRequest(viewStore.activeDate);
 
-        ajaxControllers.current[formattedDate] = controller;
-
-        await postShifts(viewStore.activeDate, newShifts, userStore.userShiftData.activeRoomData.id, signal);
+        await postShifts(viewStore.activeDate, newShifts, userStore.userShiftData.activeRoomData.id);
     }
 
     const updateStoreShifts = (date, shifts) => {
@@ -96,7 +79,7 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
         }
     }
 
-    const postShifts = async (date, shifts, roomID, fetchSignal) => {
+    const postShifts = async (date, shifts, roomID) => {
         let shiftPostUrl = '/api/shifts/shifts';
 
         let body = "date=" + encodeURIComponent(JSON.stringify(date));
@@ -104,24 +87,30 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
         body += "&roomID=" + encodeURIComponent(roomID);
 
         try {
+            setIsPosting(true);
+
             let response = await fetch(shiftPostUrl, {
                 method: "post",
                 credentials: "include",
-                signal: fetchSignal,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body
             });
 
+            setIsPosting(false);
+
             if (!response.ok) {
                 alert(t("error"));
                 console.error("Couldn't set shifts...");
             }
         } catch (err) {
+            setIsPosting(false);
+
             if (err.name === 'AbortError') {
                 console.log("fetch aborted");
             } else {
+                alert(t("error"));
                 console.error(err);
             }
         }
@@ -137,7 +126,12 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
             <div className="modal-card">
                 <header className="modal-card-head">
                     <p className="modal-card-title">{title}</p>
-                    <button className="delete" aria-label="close" onClick={() => {viewStore.shiftSetterIsActive = false}}></button>
+                    <button
+                        disabled={isPosting}
+                        className="delete"
+                        aria-label="close"
+                        onClick={() => {viewStore.shiftSetterIsActive = false}}
+                    ></button>
                 </header>
                 <section className="modal-card-body">
                     {allowedShifts.map(
@@ -151,7 +145,7 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
                                                 id={"set-shift-" + allowedShift.shiftName}
                                                 data-shift={allowedShift.shiftName}
                                                 type="checkbox"
-                                                disabled={isDisabled}
+                                                disabled={isDisabled || isPosting}
                                                 onChange={(e) => toggleShift(e)}
                                                 checked={shifts.includes(allowedShift.shiftName)} />
                                             {" " + allowedShift.shiftName}
@@ -164,7 +158,12 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
                     </div>
                 </section>
                 <footer className="modal-card-foot">
-                    <button className="button is-black" onClick={closeShiftSetter}>{t("close")}</button>
+                    <button
+                        className={"button" + (isPosting ? " is-loading" : "")}
+                        onClick={closeShiftSetter}
+                    >
+                        {t("close")}
+                    </button>
                 </footer>
             </div>
         </div>
