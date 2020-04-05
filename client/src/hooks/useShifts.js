@@ -51,7 +51,7 @@ const convertShiftsToHtml = (shifts = [], shiftTagClasses = {}) => {
 
     return (
         (shifts && shifts.length > 0) ?
-            <div className="tags has-addons">{tags}</div> :
+            <div className={"tags has-addons" + (shifts.length > 1 ? " is-multi-shift" : "")}>{tags}</div> :
             <div className="tags has-addons"><div className="tag" style={{visibility: "hidden"}}>-</div></div>
     )
 }
