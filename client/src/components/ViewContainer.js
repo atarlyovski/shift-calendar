@@ -17,6 +17,7 @@ export default observer(function ViewContainer() {
     const viewStore = useContext(ViewStoreContext);
     const userStore = useContext(UserStoreContext);
     const { t } = useTranslation();
+    let [isChangingActiveUser, setIsChangingActiveUser] = useState(false);
 
     let availableUsers =
         ((userStore.userShiftData &&
@@ -56,6 +57,8 @@ export default observer(function ViewContainer() {
             .viewShiftsForUserID = targetUserID;
 
         try {
+            setIsChangingActiveUser(true);
+
             let response = await fetch(targetUserUrl, {
                 method: 'POST',
                 credentials: "include",
@@ -66,6 +69,8 @@ export default observer(function ViewContainer() {
                 body
             });
 
+            setIsChangingActiveUser(false);
+
             if (response.ok) {
                 let result = await response.json();
                 userStore.userShiftData = result;
@@ -74,7 +79,9 @@ export default observer(function ViewContainer() {
                 alert(t("error"));
             }
         } catch (err) {
+            setIsChangingActiveUser(false);
             alert(t("error"));
+            console.error(err);
         }
     }
 
@@ -91,9 +98,12 @@ export default observer(function ViewContainer() {
             <div className={"columns" + (isUserDropdownVisible ? "" : " is-hidden")}>
                 <div className="ViewContainer-userSelect-container column is-narrow is-offset-2">
                     <div className="field">
-                        <div className="select is-fullwidth">
-                            <select onChange={changeTargetUser}
-                                    value={targetUserID || ""}>
+                        <div className={"select is-fullwidth" + (isChangingActiveUser ? " is-loading" : "")}>
+                            <select
+                                onChange={changeTargetUser}
+                                value={targetUserID || ""}
+                                disabled={isChangingActiveUser}
+                            >
                                 {userStore.userShiftData &&
                                     userStore.userShiftData.rooms.find(r => r.isActive) &&
                                     (userStore.userShiftData.rooms.find(r => r.isActive).availableUsers || []).map(
