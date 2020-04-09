@@ -1,7 +1,7 @@
 {
-  "name": "weather-forecast",
+  "name": "shift-calendar",
   "version": "1.0.0",
-  "description": "A weather forecast app",
+  "description": "A shift calendar",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

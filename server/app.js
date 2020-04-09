@@ -17,6 +17,7 @@ const compress = require('koa-compress');
 const shiftsAPI = require('./routes/shifts');
 const adminAPI = require('./routes/admin');
 const userAPI = require('./routes/user');
+const googleAPI = require('./routes/google');
 
 const maintenance = require('./maintenance');
 
@@ -61,6 +62,7 @@ app.use(passport.session())
 
 // Routes
 // Unauthenticated Routes
+app.use(googleAPI.routes())
 app.use(userAPI.routes())
 
 // Authenticated Routes
