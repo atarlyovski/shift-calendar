@@ -2,11 +2,10 @@
 const Router = require('@koa/router');
 const passport = require('koa-passport');
 
-const router = new Router();
-const ROUTE_PREFIX = '/api/user';
+const router = new Router({prefix: '/api/user'});
 const userController = require('../modules/main/controllers/userController');
 
-router.post(ROUTE_PREFIX + '/login',
+router.post('/login',
     ctx => passport.authenticate('local', (err, user) => {
         if (err) {
             throw err;
@@ -28,12 +27,12 @@ router.post(ROUTE_PREFIX + '/login',
     })(ctx)
 );
 
-router.post(ROUTE_PREFIX + '/logout', ctx => {
+router.post('/logout', ctx => {
     ctx.logout();
     ctx.body = ({ success: true });
 });
 
-router.get(ROUTE_PREFIX + '/userData', ctx => {
+router.get('/userData', ctx => {
     if (!ctx.state.user) {
         ctx.body = {};
         return;
@@ -45,7 +44,7 @@ router.get(ROUTE_PREFIX + '/userData', ctx => {
     ctx.body = userData;
 });
 
-router.post(ROUTE_PREFIX + '/setTargetUserID', async ctx => {
+router.post('/setTargetUserID', async ctx => {
     if (!ctx.state.user) {
         return ctx.throw(401);
     }
@@ -70,7 +69,7 @@ router.post(ROUTE_PREFIX + '/setTargetUserID', async ctx => {
     }
 });
 
-router.post(ROUTE_PREFIX + '/changePassword', async ctx => {
+router.post('/changePassword', async ctx => {
     if (!ctx.state.user) {
         return ctx.throw(401);
     }

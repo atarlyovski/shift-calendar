@@ -86,7 +86,7 @@ export default observer(function ViewContainer() {
     }
 
     let isShiftSettingDisabled = true;
-    const viewsWithUserDropdown = ["day", "nextDays", "month"];
+    const viewsWithUserDropdown = ["day", "month"];
     let isUserDropdownVisible = viewsWithUserDropdown.includes(viewStore.activePage);
     
     if (userStore.user) {

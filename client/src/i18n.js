@@ -49,7 +49,9 @@ i18n
                     "dbState": "Database state",
                     "state": "State",
                     "upload": "Upload",
-                    "invalidJson": "Invalid JSON"
+                    "invalidJson": "Invalid JSON",
+                    "mySchedule": "My schedule",
+                    "otherUsers": "Other users"
                 }
             },
             bg: {
@@ -79,7 +81,9 @@ i18n
                     "dbState": "Състояние на базата",
                     "state": "Състояние",
                     "upload": "Качи",
-                    "invalidJson": "Невалиден JSON"
+                    "invalidJson": "Невалиден JSON",
+                    "mySchedule": "Моят график",
+                    "otherUsers": "Други потребители"
                 }
             }
         }

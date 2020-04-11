@@ -5,10 +5,9 @@ const userController = require('../modules/main/controllers/userController');
 const dayController = require('../modules/main/controllers/dayController');
 const DbDate = require('../DbDate').DbDate;
 
-const router = new Router();
-const ROUTE_PREFIX = '/api/shifts';
+const router = new Router({prefix: '/api/shifts'});
 
-router.get(ROUTE_PREFIX + '/data', async ctx => {
+router.get('/data', async ctx => {
     if (!ctx.state.user) {
         ctx.body = {};
         return;
@@ -19,7 +18,7 @@ router.get(ROUTE_PREFIX + '/data', async ctx => {
     ctx.body = preferences;
 });
 
-router.post(ROUTE_PREFIX + '/shifts', async ctx => {
+router.post('/shifts', async ctx => {
     var isSuccessful = false;
 
     if (!ctx.state.user) {

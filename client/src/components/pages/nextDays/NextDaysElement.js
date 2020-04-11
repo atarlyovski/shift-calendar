@@ -9,9 +9,9 @@ import { useLocale } from '../../../hooks/useLocale';
 import './NextDaysElement.css';
 import '../../../css/day.css';
 
-const NextDaysElement = observer(({date, isToday}) => {
+const NextDaysElement = observer(({userID, date, isToday}) => {
     const viewStore = useContext(ViewStoreContext);
-    let shifts = useShifts(date);
+    let shifts = useShifts(date, {userID});
     let locale = useLocale();
 
     const onDayClick = (e, date) => {

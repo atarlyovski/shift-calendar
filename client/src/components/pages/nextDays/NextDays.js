@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import moment from '../../../moment-with-locales.custom';
 import CustomDate from '../../../CustomDate';
 import NextDaysElement from './NextDaysElement';
+import OtherUser from './OtherUser';
+import { useTranslation } from 'react-i18next';
 import './NextDays.css';
 
-const NextDays = () => {
+import { observer } from 'mobx-react-lite';
+import { UserStoreContext } from '../../../mobx/userStore';
+
+const NextDays = observer(() => {
+    const userStore = useContext(UserStoreContext);
+    const { t } = useTranslation();
+
     const dateSpan = {from: -1, to: 4};
     let dates = [];
     let nowFormatted = moment().format("YYYY-M-D");
@@ -19,11 +27,21 @@ const NextDays = () => {
         ));
     }
 
+    let availableUsers = userStore
+        .userShiftData
+        .rooms
+        .find(r => r.isActive)
+        .availableUsers || [];
+
+    let otherUsers = availableUsers.filter(user => user.id !== userStore.user.id);
+
     return (
-        <div className="NextDays columns">
+        <div className="NextDays columns is-multiline">
             <div className="column is-8 is-offset-2">
+                <h2>{t("mySchedule")}</h2>
                 <div className="NextDays-days columns is-mobile">
                     {dates.map((date) => <NextDaysElement
+                        userID={userStore.user.id}
                         gridWidth={dates.length}
                         key={date.toFormattedString()}
                         date={date}
@@ -31,8 +49,20 @@ const NextDays = () => {
                     }
                 </div>
             </div>
+            <div className="column is-8 is-offset-2">
+                <h2>{t("otherUsers")}</h2>
+                {otherUsers.map(
+                    user => 
+                        <OtherUser
+                            userID={user.id}
+                            fullName={user.fullName}
+                            dates={dates}
+                            nowFormatted={nowFormatted}
+                        />
+                )}
+            </div>
         </div>
     )
-};
+});
 
 export default NextDays;

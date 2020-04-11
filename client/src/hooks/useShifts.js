@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import { UserStoreContext } from '../mobx/userStore';
 
-export const useShifts = (date, {format = "html"} = {}) => {
+export const useShifts = (date, {format = "html", userID} = {}) => {
     const userStore = useContext(UserStoreContext);
 
     if (!userStore.userShiftData) {
@@ -15,7 +15,7 @@ export const useShifts = (date, {format = "html"} = {}) => {
         .find(room => room.isActive);
 
     let dateString = date.toFormattedString();
-    let targetUserID = room ? room.viewShiftsForUserID : null;
+    let targetUserID = userID || (room ? room.viewShiftsForUserID : null);
 
     if (targetUserID === null) {
         throw new Error("targetUserID is null");
