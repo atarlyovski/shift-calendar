@@ -90,7 +90,9 @@ export default observer(function ViewContainer() {
     let isUserDropdownVisible = viewsWithUserDropdown.includes(viewStore.activePage);
     
     if (userStore.user) {
-        isShiftSettingDisabled = (targetUserID !== userStore.user.id);
+        isShiftSettingDisabled =
+            viewsWithUserDropdown.includes(viewStore.activePage) &&
+            (targetUserID !== userStore.user.id);
     }
 
     return (

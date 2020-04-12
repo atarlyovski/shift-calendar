@@ -2,6 +2,10 @@
     justify-content: center;
 }
 
+.NextDays-section-title {
+    margin-bottom: 0.4rem;
+}
+
 .OtherUser .NextDays-days {
     background-color: #333;
     padding: 1rem;
@@ -18,6 +22,10 @@
     margin-bottom: 0.2rem;
     box-shadow: 3px 3px 10px 10px rgb(0,0,0,0.15);
     border-radius: 4px;
+}
+
+.OtherUser .NextDaysElement.today {
+    border: 1px solid #0af;
 }
 
 .OtherUser .NextDaysElement:not(:last-child),
@@ -38,7 +46,7 @@
 }
 
 .OtherUsers {
-    margin-top: 1rem;
+    margin-top: 0.4rem;
     margin-bottom: 5rem;
 }
 
