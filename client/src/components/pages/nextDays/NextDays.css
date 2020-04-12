@@ -1,3 +1,54 @@
 .NextDays .tags {
     justify-content: center;
 }
+
+.OtherUser .NextDays-days {
+    background-color: #333;
+    padding: 1rem;
+    border-radius: 6px;
+    border-top-left-radius: 0px;
+}
+
+.OtherUser .NextDaysElement,
+.OtherUser .NextDaysElement.today {
+    border: 1px solid transparent;
+    background-color: #222;
+    cursor: default;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    box-shadow: 3px 3px 10px 10px rgb(0,0,0,0.15);
+    border-radius: 4px;
+}
+
+.OtherUser .NextDaysElement:not(:last-child),
+.OtherUser .NextDaysElement.today:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.OtherUser:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+.OtherUser-fullName {
+    background-color: #333;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    display: inline-block;
+    padding: 0rem 1rem;
+}
+
+.OtherUsers {
+    margin-top: 1rem;
+    margin-bottom: 5rem;
+}
+
+@media screen and (max-width: 600px) {
+    .OtherUser .NextDays-days {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .OtherUser .NextDaysElement:not(:last-child), 
+    .OtherUser .NextDaysElement.today:not(:last-child) {
+        margin-right: 0.5rem;
+    }
+}

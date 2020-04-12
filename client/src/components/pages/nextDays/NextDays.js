@@ -49,17 +49,19 @@ const NextDays = observer(() => {
                     }
                 </div>
             </div>
-            <div className="column is-8 is-offset-2">
+            <div className={"column is-8 is-offset-2" + (otherUsers.length > 0 ? "" : " is-hidden")}>
                 <h2>{t("otherUsers")}</h2>
-                {otherUsers.map(
-                    user => 
-                        <OtherUser
-                            userID={user.id}
-                            fullName={user.fullName}
-                            dates={dates}
-                            nowFormatted={nowFormatted}
-                        />
-                )}
+                <div className="OtherUsers">
+                    {otherUsers.map(
+                        user => 
+                            <OtherUser
+                                userID={user.id}
+                                fullName={user.fullName}
+                                dates={dates}
+                                nowFormatted={nowFormatted}
+                            />
+                    )}
+                </div>
             </div>
         </div>
     )

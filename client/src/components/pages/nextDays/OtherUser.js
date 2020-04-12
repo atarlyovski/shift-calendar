@@ -12,6 +12,7 @@ const OtherUser = ({fullName, userID, dates, nowFormatted}) => {
                 {dates.map((date) => <NextDaysElement
                     userID={userID}
                     gridWidth={dates.length}
+                    isClickable={false}
                     key={date.toFormattedString()}
                     date={date}
                     isToday={date.toFormattedString() === nowFormatted} />)

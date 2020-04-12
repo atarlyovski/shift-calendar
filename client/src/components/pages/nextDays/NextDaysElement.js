@@ -9,7 +9,12 @@ import { useLocale } from '../../../hooks/useLocale';
 import './NextDaysElement.css';
 import '../../../css/day.css';
 
-const NextDaysElement = observer(({userID, date, isToday}) => {
+const NextDaysElement = observer(({
+    userID,
+    date,
+    isToday,
+    isClickable = true
+}) => {
     const viewStore = useContext(ViewStoreContext);
     let shifts = useShifts(date, {userID});
     let locale = useLocale();
@@ -21,7 +26,7 @@ const NextDaysElement = observer(({userID, date, isToday}) => {
 
     return (
         <div className={"NextDaysElement column" + (isToday ? " today" : "")}>
-            <div onClick={(e) => onDayClick(e, date)}>
+            <div onClick={isClickable ? (e => onDayClick(e, date)) : false}>
                 {/* <div>{date.toMoment().calendar()}</div> */}
                 <div className="is-hidden-desktop-only is-hidden-touch">{date.format("dddd", locale)}</div>
                 <div className="is-hidden-widescreen">{date.format("dd", locale)}</div>
