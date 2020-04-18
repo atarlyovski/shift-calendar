@@ -11,12 +11,17 @@ import { useLocale } from '../../hooks/useLocale';
 import './ShiftSetter.css'
 
 const ShiftSetter = observer(({date, isActive, isDisabled}) => {
-    let shifts = useShifts(date, {format: "array"});
     let userStore = useContext(UserStoreContext);
     let viewStore = useContext(ViewStoreContext);
     const { t } = useTranslation();
     let locale = useLocale();
     let [isPosting, setIsPosting] = useState(false);
+
+    // Use the current user's ID when displaying shifts
+    // in views other than Month regardless of the target user ID.
+    // This makes sure that the user sees his shifts in ShiftSetter when in NextDays.
+    let userID = (viewStore.activeDate !== "month" ? userStore.user.id : undefined);
+    let shifts = useShifts(date, {format: "array", userID});
 
     let title = date.format("dddd[, ]D[ ]MMMM", locale);
 

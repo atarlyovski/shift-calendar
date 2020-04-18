@@ -56,6 +56,7 @@ const NextDays = observer(() => {
                         user => 
                             <OtherUser
                                 userID={user.id}
+                                key={user.id}
                                 fullName={user.fullName}
                                 dates={dates}
                                 nowFormatted={nowFormatted}
