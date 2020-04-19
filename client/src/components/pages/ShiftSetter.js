@@ -58,27 +58,23 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     }
 
     const updateStoreShifts = (date, shifts) => {
-        let activeRoom = userStore
-            .userShiftData
-            .rooms
-            .find(r => r.isActive) || {};
-
         try {
-            if (userStore.user.id === activeRoom.viewShiftsForUserID) {
-                let shiftData = userStore
-                    .userShiftData
-                    .activeRoomData
-                    .shiftData
-                    .filter(day => day.date !== date.toFormattedString());
-                
-                shiftData.push({
-                    userID: userStore.user.id,
-                    date: date.toFormattedString(),
-                    shifts
-                });
+            let shiftData = userStore
+                .userShiftData
+                .activeRoomData
+                .shiftData
+                .filter(day =>
+                    day.date !== date.toFormattedString() ||
+                    day.userID !== userStore.user.id
+                );
+            
+            shiftData.push({
+                userID: userStore.user.id,
+                date: date.toFormattedString(),
+                shifts
+            });
 
-                userStore.userShiftData.activeRoomData.shiftData = shiftData;
-            }
+            userStore.userShiftData.activeRoomData.shiftData = shiftData;
         } catch (err) {
             console.error(err);
         }
