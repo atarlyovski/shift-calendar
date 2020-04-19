@@ -1,10 +1,16 @@
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import preval from 'preval.macro';
 
 import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../../../mobx/userStore';
 
 import DbStateSetter from './DbStateSetter';
+
+const buildDate = preval`module.exports =
+    require("../../../moment-with-locales.custom")
+    (new Date()).format("YYYY-MM-DD");
+`;
 
 const Settings = observer(() => {
     const userStore = useContext(UserStoreContext);
@@ -166,6 +172,7 @@ const Settings = observer(() => {
                     </div>
                     {dbStateSetter}
                 </div>
+                <div>{t("buildDate", {buildDate})}</div>
                 {/* {JSON.stringify(userStore.userShiftData, null, 2)} */}
             </form>
         </div>

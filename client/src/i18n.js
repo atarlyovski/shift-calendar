@@ -51,7 +51,8 @@ i18n
                     "upload": "Upload",
                     "invalidJson": "Invalid JSON",
                     "mySchedule": "My schedule",
-                    "otherUsers": "Other users"
+                    "otherUsers": "Other users",
+                    "buildDate": "Build date: {{buildDate}}"
                 }
             },
             bg: {
@@ -83,7 +84,8 @@ i18n
                     "upload": "Качи",
                     "invalidJson": "Невалиден JSON",
                     "mySchedule": "Моят график",
-                    "otherUsers": "Други потребители"
+                    "otherUsers": "Други потребители",
+                    "buildDate": "Дата на компилация: {{buildDate}}"
                 }
             }
         }
