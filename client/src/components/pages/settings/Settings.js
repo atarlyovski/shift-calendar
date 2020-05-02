@@ -229,7 +229,7 @@ const Settings = observer(() => {
     )
 });
 
-const canSetDbState = (privileges) => {
+const canSetDbState = (privileges = {}) => {
     return privileges.canSetDbState;
 }
 
