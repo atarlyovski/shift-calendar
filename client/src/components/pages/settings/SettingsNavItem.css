@@ -1,0 +1,10 @@
+.SettingsNavItem {
+    border-top: 1px solid #aaa;
+    cursor: pointer;
+    padding: 1rem 0rem;
+}
+
+.SettingsNavItem:last-child {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 0.5rem;
+}

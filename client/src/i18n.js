@@ -52,7 +52,11 @@ i18n
                     "invalidJson": "Invalid JSON",
                     "mySchedule": "My schedule",
                     "otherUsers": "Other users",
-                    "buildDate": "Build date: {{buildDate}}"
+                    "buildDate": "Build date: {{buildDate}}",
+                    "security": "Security",
+                    "rooms": "Rooms",
+                    "back": "Back",
+                    "dbStateSetter": "DB State"
                 }
             },
             bg: {
@@ -85,7 +89,11 @@ i18n
                     "invalidJson": "Невалиден JSON",
                     "mySchedule": "Моят график",
                     "otherUsers": "Други потребители",
-                    "buildDate": "Дата на компилация: {{buildDate}}"
+                    "buildDate": "Дата на компилация: {{buildDate}}",
+                    "security": "Сигурност",
+                    "rooms": "Стаи",
+                    "back": "Обратно",
+                    "dbStateSetter": "Състояние на базата данни"
                 }
             }
         }

@@ -6,6 +6,8 @@ import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../../../mobx/userStore';
 
 import DbStateSetter from './DbStateSetter';
+import SettingsNavItem from './SettingsNavItem';
+import SettingsPage from './SettingsPage';
 
 const buildDate = preval`module.exports =
     require("../../../moment-with-locales.custom")
@@ -20,6 +22,7 @@ const Settings = observer(() => {
     const [isInvalidPasswordCombo, setIsInvalidPasswordCombo] = useState(false);
     const [isPasswordLoading, setIsPasswordLoading] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [settingsPage, setSettingsPage] = useState(null);
     const { t } = useTranslation();
 
     const logOut = async () => {
@@ -96,36 +99,14 @@ const Settings = observer(() => {
         }
     };
 
-    let dbStateSetter;
-
-    try {
-        let privileges = userStore.user.privileges || {};
-
-        if (privileges.canSetDbState) {
-            dbStateSetter = <DbStateSetter />;
-        }
-    } catch (err) {
-        console.error(err)
+    const setActiveSettingsPage = pageName => {
+        setSettingsPage(pageName);
     }
 
-    return (
-        <div className="Settings columns">
-            <form className="column is-one-third is-offset-one-third">
-                <div className="Settings-username field is-grouped">
-                    <div className="control is-expanded">
-                        <input className="input" disabled type="text" value={userStore.user.fullName}></input>
-                    </div>
-                    <div className="control">
-                        <button
-                            type="button"
-                            className={"button is-black" + (isLoggingOut ? " is-loading" : "")}
-                            onClick={logOut}
-                        >
-                            {t("logOut")}
-                        </button>
-                    </div>
-                </div>
-                <div>
+    const getPageChildren = pageName => {
+        const getSecurityPage = () => {
+            return (
+                <>
                     <div className="field">
                         <label htmlFor="change-password-old">{t("oldPassword")}</label>
                         <input 
@@ -170,13 +151,86 @@ const Settings = observer(() => {
                             </button>
                         </div>
                     </div>
-                    {dbStateSetter}
+                </>
+            );
+        }
+
+        const getRoomsPage = () => <div>Rooms</div>
+
+        const getDbStatePage = () => <DbStateSetter />
+    
+        switch (pageName) {
+            case "security":
+                return getSecurityPage();
+            case "rooms":
+                return getRoomsPage();
+            case "dbStateSetter":
+                return getDbStatePage();
+            default:
+                console.error("Unknown page: " + pageName);
+                return;
+        }
+    }
+
+    let pages = ["security", "rooms"];
+
+    // Add DB state setter page for users with privileges
+    pages = canSetDbState(userStore.user.privileges) ? pages.concat("dbStateSetter") : pages;
+
+    const pageNavItems = pages.map(pageName => {
+        return (
+            <SettingsNavItem
+                key={pageName}
+                text={t(pageName)}
+                pageName={pageName}
+                setActiveSettingsPage={setActiveSettingsPage}
+            />
+        )
+    });
+
+    const settingsPages = pages.map(pageName => 
+        <SettingsPage
+            key={pageName}
+            name={pageName}
+            isActive={pageName === settingsPage}
+            setSettingsPage={setSettingsPage}
+        >
+            {getPageChildren(pageName)}
+        </SettingsPage>
+    )
+
+    return (
+        <div className="Settings columns">
+            <form className="column is-one-third is-offset-one-third">
+                <div className="Settings-username field is-grouped">
+                    <div className="control is-expanded">
+                        <input className="input" disabled type="text" value={userStore.user.fullName}></input>
+                    </div>
+                    <div className="control">
+                        <button
+                            type="button"
+                            className={"button is-black" + (isLoggingOut ? " is-loading" : "")}
+                            onClick={logOut}
+                        >
+                            {t("logOut")}
+                        </button>
+                    </div>
                 </div>
-                <div>{t("buildDate", {buildDate})}</div>
+                <div className={settingsPage ? "is-hidden" : ""}>
+                    {pageNavItems}
+                </div>
+                <div>
+                    {settingsPages}
+                </div>
+                <div className={settingsPage ? "is-hidden" : ""}>{t("buildDate", {buildDate})}</div>
                 {/* {JSON.stringify(userStore.userShiftData, null, 2)} */}
             </form>
         </div>
     )
 });
+
+const canSetDbState = (privileges) => {
+    return privileges.canSetDbState;
+}
 
 export default Settings;
