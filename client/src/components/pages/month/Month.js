@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SwipeableViews from 'react-swipeable-views';
+import SwipeableViews from 'react-swipeable-views-react-18-fix';
 
 import moment from '../../../moment-with-locales.custom';
 import MonthElement from './MonthElement';

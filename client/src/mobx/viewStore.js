@@ -1,16 +1,15 @@
-import { observable, decorate } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { createContext } from 'react';
 
 class ViewStore {
     activePage = 'nextDays';
     activeDate = null;
     shiftSetterIsActive = false;
+
+    constructor() {
+        makeAutoObservable(this)
+    }
 }
 
-decorate(ViewStore, {
-    activePage: observable,
-    activeDate: observable,
-    shiftSetterIsActive: observable
-})
 
 export const ViewStoreContext = createContext(new ViewStore());

@@ -1,14 +1,14 @@
-import { observable, decorate } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { createContext } from 'react';
 
 class UserStore {
     user = null;
     userShiftData = null;
+
+    constructor() {
+        makeAutoObservable(this);
+    }
 }
 
-decorate(UserStore, {
-    user: observable,
-    userShiftData: observable
-})
 
 export const UserStoreContext = createContext(new UserStore());
