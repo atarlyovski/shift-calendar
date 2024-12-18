@@ -1,13 +1,13 @@
 const low = require('lowdb');
-// const FileAsync = require('lowdb/adapters/FileAsync');
-const GcloudAdapter = require('./GcloudAdapter');
+const FileAsync = require('lowdb/adapters/FileAsync');
+// const GcloudAdapter = require('./GcloudAdapter');
 
-// const adapter = new FileAsync('db.json');
-const adapter = new GcloudAdapter('db.json', {
-    projectId: "a-shift-calendar",
-    keyFilename: "./A Shift Calendar-c83d3128678d.json",
-    bucketName: "a-shift-calendar-db-eu-w6",
-})
+const adapter = new FileAsync('db.json');
+// const adapter = new GcloudAdapter('db.json', {
+//     projectId: "a-shift-calendar",
+//     keyFilename: "./A Shift Calendar-c83d3128678d.json",
+//     bucketName: "a-shift-calendar-db-eu-w6",
+// })
 
 const db = low(adapter);
 
