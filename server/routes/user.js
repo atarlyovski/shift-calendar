@@ -27,9 +27,17 @@ router.post('/login',
     })(ctx)
 );
 
-router.post('/logout', ctx => {
-    ctx.logout();
-    ctx.body = ({ success: true });
+router.post('/logout', async ctx => {
+    try {
+        await ctx.logout();
+    } catch (err) {
+        console.error(err);
+        ctx.throw(500);
+    }
+
+    if (!ctx.headerSent) {
+        ctx.body = ({ success: true });
+    }
 });
 
 router.get('/userData', ctx => {
