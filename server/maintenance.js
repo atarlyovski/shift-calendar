@@ -1,25 +1,40 @@
-var moment = require('moment');
+const moment = require('moment');
+const userModel = require('./modules/main/models/userModel');
 
-var userModel = require('./modules/main/models/userModel');
-
-async function flushOldShiftsPeriodically(interval = 2147483647) {
-    const flush = () => {
-        let now = moment();
-
-        userModel.deleteShiftsOlderThan(now.subtract(2, "months").valueOf());
-    }
-
-    flush();
-
-    return setInterval(() => {
+async function flushPeriodically(flushFunction, interval = 2147483647) { // default: 24 hours
+    const flush = async () => {
         try {
-            flush();
+            await flushFunction();
         } catch (err) {
             displayError(err);
         }
-    }, interval);
+    };
+
+    await flush();
+
+    return setInterval(flush, interval);
+}
+
+async function flushOldShifts() {
+    const now = moment();
+    await userModel.deleteShiftsOlderThan(now.subtract(2, "months").valueOf());
+}
+
+async function flushOldUnsuccessfulLogins() {
+    const now = moment();
+    await userModel.deleteUnsuccessfulLoginAttemptsOlderThan(now.subtract(1, "day").valueOf());
+}
+
+async function flushOldSessions() {
+    await userModel.deleteExpiredSessions();
+}
+
+function startMaintenanceTasks() {
+    flushPeriodically(flushOldShifts);
+    flushPeriodically(flushOldUnsuccessfulLogins);
+    flushPeriodically(flushOldSessions);
 }
 
 module.exports = {
-    flushOldShiftsPeriodically
+    startMaintenanceTasks
 }

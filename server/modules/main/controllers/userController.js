@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 const saltRounds = 12;
 
 let userModel = require('../models/userModel');
@@ -59,8 +60,40 @@ async function changePassword(userID, oldPassword, oldHash, newPassword) {
     return {changed: true};
 }
 
+async function addUnsuccessfulLoginAttempt(username) {
+    return userModel.addUnsuccessfulLoginAttempt(username);
+}
+
+async function hasTooManyUnsuccessfulLoginAttempts(username) {
+    const maxAllowedAttempts = 5;
+    const startDate = moment().subtract(1, 'day').valueOf();
+    const unsuccessfulLoginAttempts = await userModel.getUnsuccessfulLoginAttempts(username, startDate);
+
+    if (unsuccessfulLoginAttempts === maxAllowedAttempts) {
+        displayError(`User ${username} has too many unsuccessful login attempts!`);
+    }
+
+    return unsuccessfulLoginAttempts >= maxAllowedAttempts;
+}
+
+async function isAcessBlockedByUnsuccessfulAttempts() {
+    const totalAllowedAttempts = 100;
+    const startDate = moment().subtract(1, 'day').valueOf();
+    const totalAttempts = await userModel.getTotalNumberOfUnsuccessfulAttempts(startDate);
+
+    if (totalAttempts > totalAllowedAttempts) {
+        displayError(`Too many unsuccessful login attempts!`);
+        return true;
+    }
+
+    return false;
+}
+
 module.exports = {
     getUserPreferences,
     setTargetUserID,
-    changePassword
+    changePassword,
+    addUnsuccessfulLoginAttempt,
+    hasTooManyUnsuccessfulLoginAttempts,
+    isAcessBlockedByUnsuccessfulAttempts
 }

@@ -26,7 +26,7 @@ i18n
                 translation: {
                     "invalidUsername": "Please enter a username with only alphanumeric characters!",
                     "invalidPassword": "Please enter a password!",
-                    "invalidCredentials": "The user name or password is incorrect.",
+                    "invalidCredentials": "The user name or password is incorrect, or the account is currently locked.",
                     "login": "Log in",
                     "pleaseWait": "Please wait...",
                     "username": "User name",
@@ -63,7 +63,7 @@ i18n
                 translation: {
                     "invalidUsername": "Моля, въведете потребителско име съдържащо само букви и цифри!",
                     "invalidPassword": "Моля, въведете парола!",
-                    "invalidCredentials": "Потребителското име или паролата са грешни.",
+                    "invalidCredentials": "Потребителското име или паролата са невалидни, или акаунтът е заключен.",
                     "login": "Вход",
                     "pleaseWait": "Моля, изчакайте...",
                     "username": "Потребителско име",

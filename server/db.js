@@ -105,7 +105,12 @@ db.then(db => {
             }
           }
         ],
-        "sessions": []
+        "sessions": [],
+        "unsuccessfulLoginAttempts": {
+          "alexander": [
+            1734637237293
+          ]
+        },
       }).write();
 });
 

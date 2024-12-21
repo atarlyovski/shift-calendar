@@ -13,6 +13,7 @@ const koaStatic = require('koa-static')
 const conditional = require('koa-conditional-get');
 const etag = require('koa-etag');
 const compress = require('koa-compress');
+const moment = require('moment');
 
 const shiftsAPI = require('./routes/shifts');
 const adminAPI = require('./routes/admin');
@@ -72,7 +73,7 @@ app.use(adminAPI.routes())
 
 app.listen(HTTP_PORT)
 
-maintenance.flushOldShiftsPeriodically();
+maintenance.startMaintenanceTasks();
 
 if (!process.env.PORT) {
     https.createServer(
@@ -95,6 +96,7 @@ global.displayError = function displayError(err) {
     err = err || {};
     let message = err.message || err || "No error message!";
     let stack = err.stack || "No error stack!";
+    const now = moment().format("YYYY-MM-DD HH:mm:ss");
 
-    console.error("--- ERROR ---\n" + message + "\n" + stack);
+    console.error("--- ERROR --- " + now + "\n" + message + "\n" + stack);
 }

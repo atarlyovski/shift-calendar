@@ -6,7 +6,40 @@ const router = new Router({prefix: '/api/user'});
 const userController = require('../modules/main/controllers/userController');
 
 router.post('/login',
-    ctx => passport.authenticate('local', (err, user) => {
+    async (ctx, next) => {
+        let isAccessBlockedByUnsuccessfulAttempts;
+
+        try {
+            isAccessBlockedByUnsuccessfulAttempts = await userController.isAcessBlockedByUnsuccessfulAttempts();
+        } catch (err) {
+            displayError(err);
+            return ctx.throw(500);
+        }
+
+        if (isAccessBlockedByUnsuccessfulAttempts) {
+            return ctx.body = { success: false };
+        }
+
+        await next();
+    },
+    async (ctx, next) => {
+        let hasTooManyUnsuccessfulLoginAttempts;
+
+        try {
+            hasTooManyUnsuccessfulLoginAttempts = await userController.hasTooManyUnsuccessfulLoginAttempts(ctx.request.body.username);
+        } catch (err) {
+            displayError(err);
+            return ctx.throw(500);
+        }
+
+        if (hasTooManyUnsuccessfulLoginAttempts) {
+            await userController.addUnsuccessfulLoginAttempt(ctx.request.body.username);
+            return ctx.body = { success: false };
+        }
+
+        await next();
+    },
+    ctx => passport.authenticate('local', async (err, user) => {
         if (err) {
             throw err;
         }
@@ -15,6 +48,7 @@ router.post('/login',
         delete userData.password;
 
         if (user === false) {
+            await userController.addUnsuccessfulLoginAttempt(ctx.request.body.username);
             ctx.body = { success: false };
         } else {
             ctx.body = {
@@ -31,8 +65,8 @@ router.post('/logout', async ctx => {
     try {
         await ctx.logout();
     } catch (err) {
-        console.error(err);
-        ctx.throw(500);
+        displayError(err);
+        return ctx.throw(500);
     }
 
     if (!ctx.headerSent) {

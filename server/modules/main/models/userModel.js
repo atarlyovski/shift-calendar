@@ -239,6 +239,125 @@ async function deleteShiftsOlderThan(dateMs, dbDateFormat = "YYYY-M-D") {
     }
 }
 
+async function addUnsuccessfulLoginAttempt(username) {
+    var dbInstance;
+
+    dbInstance = await db;
+
+    let unsuccessfulLoginAttempts = await dbInstance
+        .get("unsuccessfulLoginAttempts")
+        .get(username)
+        .value();
+
+    if (!unsuccessfulLoginAttempts) {
+        unsuccessfulLoginAttempts = [];
+    }
+
+    unsuccessfulLoginAttempts.push(moment().valueOf());
+
+    await dbInstance
+        .get("unsuccessfulLoginAttempts")
+        .set(username, unsuccessfulLoginAttempts)
+        .write();
+}
+
+async function getUnsuccessfulLoginAttempts(username, startDateMs) {
+    var dbInstance;
+
+    dbInstance = await db;
+
+    let unsuccessfulLoginAttempts = await dbInstance
+        .get("unsuccessfulLoginAttempts")
+        .get(username)
+        .value();
+
+    if (!unsuccessfulLoginAttempts) {
+        return 0;
+    }
+
+    let startDate = startDateMs || moment().subtract(1, 'day').valueOf();
+    let count = unsuccessfulLoginAttempts.filter(date => date > startDate).length;
+
+    return count;
+}
+
+async function getTotalNumberOfUnsuccessfulAttempts(startDateMs) {
+    var dbInstance;
+
+    dbInstance = await db;
+
+    let usernames = await dbInstance
+        .get("unsuccessfulLoginAttempts")
+        .keys()
+        .value();
+    
+    let startDate = startDateMs || moment().subtract(1, 'day').valueOf();
+    let count = 0;
+
+    for (let i = 0; i < usernames.length; i++) {
+        let unsuccessfulLoginAttempts = await dbInstance
+            .get("unsuccessfulLoginAttempts")
+            .get(usernames[i])
+            .value();
+        
+        count += unsuccessfulLoginAttempts.filter(date => date > startDate).length;
+    }
+
+    return count;
+}
+
+async function deleteUnsuccessfulLoginAttemptsOlderThan(dateMs) {
+    var dbInstance;
+
+    dbInstance = await db;
+
+    let usernames = await dbInstance
+        .get("unsuccessfulLoginAttempts")
+        .keys()
+        .value();
+
+    for (let i = 0; i < usernames.length; i++) {
+        let unsuccessfulLoginAttempts = await dbInstance
+            .get("unsuccessfulLoginAttempts")
+            .get(usernames[i])
+            .value();
+        
+        let newUnsuccessfulLoginAttempts = unsuccessfulLoginAttempts.filter(date => date > dateMs);
+
+        if (newUnsuccessfulLoginAttempts.length === 0) {
+            await dbInstance
+                .get("unsuccessfulLoginAttempts")
+                .unset(usernames[i])
+                .write();
+        } else {
+            await dbInstance
+                .get("unsuccessfulLoginAttempts")
+                .set(usernames[i], newUnsuccessfulLoginAttempts)
+                .write();
+        }
+    }
+}
+
+async function deleteExpiredSessions() {
+    var dbInstance;
+
+    dbInstance = await db;
+
+    let sessions = await dbInstance
+        .get("sessions")
+        .value();
+
+    let validSessions = sessions
+        .filter(({sess}) => {
+            let expires = sess._expire;
+            return expires && moment(expires).isAfter(moment());
+        });
+
+    await dbInstance
+        .set("sessions", validSessions)
+        .write();
+}
+
 module.exports = {
     hasAccessToRoom,
     authenticateUser,
@@ -248,5 +367,10 @@ module.exports = {
     setTargetUserID,
     logOutUser,
     setPasswordForUser,
-    deleteShiftsOlderThan
+    deleteShiftsOlderThan,
+    addUnsuccessfulLoginAttempt,
+    getUnsuccessfulLoginAttempts,
+    getTotalNumberOfUnsuccessfulAttempts,
+    deleteUnsuccessfulLoginAttemptsOlderThan,
+    deleteExpiredSessions
 }
