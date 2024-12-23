@@ -130,7 +130,7 @@ router.post('/changePassword', async ctx => {
         return ctx.throw(500);
     }
 
-    ctx.status = (result && result.changed ? 204 : 500);
+    ctx.body = result;
 })
 
 module.exports = router;

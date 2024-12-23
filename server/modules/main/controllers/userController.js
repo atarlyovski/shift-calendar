@@ -41,10 +41,25 @@ async function setTargetUserID(userID, roomID, targetUserID) {
 };
 
 async function changePassword(userID, oldPassword, oldHash, newPassword) {
+    const minLength = 8;
+
+    if (newPassword.length < minLength) {
+        return {changed: false, cause: "passwordTooShort"};
+    }
+
+    const hasLowercase = /[a-z]/.test(newPassword);
+    const hasUppercase = /[A-Z]/.test(newPassword);
+    const hasNumber = /[0-9]/.test(newPassword);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
+
+    if (hasLowercase + hasUppercase + hasNumber + hasSpecial < 3) {
+        return {changed: false, cause: "passwordTooWeak"};
+    }
+
     let isOK = await bcrypt.compare(oldPassword, oldHash);
 
     if (!isOK) {
-        return {changed: false, cause: "wrong password"};
+        return {changed: false, cause: "invalidPasswordCombo"};
     }
 
     let salt = await bcrypt.genSalt(saltRounds);

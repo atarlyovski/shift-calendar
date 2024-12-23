@@ -19,7 +19,7 @@ const Settings = observer(() => {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
-    const [isInvalidPasswordCombo, setIsInvalidPasswordCombo] = useState(false);
+    const [passwordError, setPasswordError] = useState(null);
     const [isPasswordLoading, setIsPasswordLoading] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [settingsPage, setSettingsPage] = useState(null);
@@ -61,10 +61,10 @@ const Settings = observer(() => {
                 !newPassword ||
                 !newPasswordConfirm ||
                 newPasswordConfirm !== newPassword) {
-            setIsInvalidPasswordCombo(true);
+            setPasswordError("invalidPasswordCombo");
             return;
         } else {
-            setIsInvalidPasswordCombo(false);
+            setPasswordError(null);
         }
 
         body = "oldPassword=" + encodeURIComponent(oldPassword);
@@ -85,8 +85,14 @@ const Settings = observer(() => {
             setIsPasswordLoading(false);
 
             if (response.ok) {
-                userStore.user = null;
-                alert(t("passwordChangeSuccess"));
+                const result = await response.json();
+
+                if (result && result.changed) {
+                    userStore.user = null;
+                    alert(t("passwordChangeSuccess"));
+                } else {
+                    setPasswordError(result.cause);
+                }
             }
             else {
                 console.error(response);
@@ -137,8 +143,8 @@ const Settings = observer(() => {
                             name="change-password-new-confirm"
                             type="password" />
                     </div>
-                    <div className={"notification is-danger" + (!isInvalidPasswordCombo ? " is-hidden" : "")}>
-                        {t("invalidPasswordCombo")}
+                    <div className={"notification is-danger" + (!passwordError ? " is-hidden" : "")}>
+                        {t(passwordError)}
                     </div>
                     <div className="field">
                         <div className="control">
