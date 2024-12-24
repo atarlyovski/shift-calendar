@@ -1,5 +1,4 @@
 "use strict";
-const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const Koa = require('koa');
@@ -14,48 +13,54 @@ const conditional = require('koa-conditional-get');
 const etag = require('koa-etag');
 const compress = require('koa-compress');
 const moment = require('moment');
+const forceHTTPS = require('koa-force-https');
 
 const shiftsAPI = require('./routes/shifts');
 const adminAPI = require('./routes/admin');
 const userAPI = require('./routes/user');
-const googleAPI = require('./routes/google');
+// const googleAPI = require('./routes/google');
 
 const maintenance = require('./maintenance');
 
 require('./auth');
 
 const HTTP_PORT = process.env.PORT || 3001;
-const HTTPS_PORT = 3002;
+const HTTPS_PORT = process.env.HTTPS_PORT || 3002;
 const app = new Koa();
+
+app.keys = [fs.readFileSync('./secret_key.txt')];
+app.proxy = true;
 
 let key,
     cert;
 
-app.keys = ['A secret for development purposes.'];
-app.proxy = true;
-
-if (!process.env.PORT) {
+if (process.env.NODE_ENV === 'production') {
+    key = fs.readFileSync('../certificates/letsencrypt/privkey.pem');
+    cert = fs.readFileSync('../certificates/letsencrypt/fullchain.pem');
+    app.use(forceHTTPS());
+} else {
     key = fs.readFileSync('./https/a_shift_calendar_self.key');
     cert = fs.readFileSync('./https/a_shift_calendar_self.pem');
 }
 
 const httpsOptions = { key, cert };
 
-app.use(logger());
+app.use(logger(str => {
+    console.log("[" + moment().format("YYYY-MM-DD HH:mm:ss") + "] " + str);
+}));
 app.use(conditional());
 app.use(etag());
 app.use(compress());
 app.use(koaStatic("./build/", {maxage: 3000}));
 
 // Session and authentication
-app.keys = ['A random secret']
 app.use(bodyParser())
 
 app.use(session({
     store: new LowdbStore(),
     maxAge: 7 * 24 * 60 * 60 * 1000,
     renew: true,
-    secure: process.env.PORT ? true : false
+    secure: process.env.NODE_ENV === 'production'
 }, app));
 
 app.use(passport.initialize())
@@ -63,7 +68,7 @@ app.use(passport.session())
 
 // Routes
 // Unauthenticated Routes
-app.use(googleAPI.routes())
+// app.use(googleAPI.routes())
 app.use(userAPI.routes())
 
 // Authenticated Routes
@@ -73,14 +78,12 @@ app.use(adminAPI.routes())
 
 app.listen(HTTP_PORT)
 
-maintenance.startMaintenanceTasks();
+https.createServer(
+    httpsOptions,
+    app.callback()
+).listen(HTTPS_PORT);
 
-if (!process.env.PORT) {
-    https.createServer(
-        httpsOptions,
-        app.callback()
-    ).listen(HTTPS_PORT);
-}
+maintenance.startMaintenanceTasks();
 
 function ensureAuthenticated() {
     return async function(ctx, next) {
