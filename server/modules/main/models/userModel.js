@@ -1,5 +1,5 @@
 "use strict";
-const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 const moment = require('moment');
 
 const db = require('../../../db');
@@ -19,7 +19,7 @@ async function hasAccessToRoom(userID, roomID) {
 
 /**
  * Authenticates a user by checking if the username and password match.
- * The password is compared against the bcrypt hash stored in the DB.
+ * The password is compared against the hash stored in the DB.
  * @param {String} username
  * @param {String} password - The plain text password provided by the user.
  * @returns {Promise} - The promise is resolved with the user object if
@@ -43,7 +43,7 @@ function authenticateUser(username, password) {
             let userData = await getHashedPasswordForUser(username);
             
             if (userData.found) {
-                isOK = await bcrypt.compare(password, userData.password);
+                isOK = await argon2.verify(userData.password, password);
             }
 
             if (isOK) {

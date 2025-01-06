@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 const moment = require('moment');
 const saltRounds = 12;
 
@@ -56,14 +56,17 @@ async function changePassword(userID, oldPassword, oldHash, newPassword) {
         return {changed: false, cause: "passwordTooWeak"};
     }
 
-    let isOK = await bcrypt.compare(oldPassword, oldHash);
+    let isOK = await argon2.verify(oldHash, oldPassword);
 
     if (!isOK) {
         return {changed: false, cause: "invalidPasswordCombo"};
     }
 
-    let salt = await bcrypt.genSalt(saltRounds);
-    let newHash = await bcrypt.hash(newPassword, salt);
+    let newHash = await argon2.hash(newPassword, {
+        memoryCost: 2 ** 16,
+        timeCost: 4,
+        parallelism: 4
+    });
 
     let promises = [
         userModel.logOutUser(userID),

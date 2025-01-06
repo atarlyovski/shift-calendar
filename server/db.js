@@ -18,7 +18,7 @@ db.then(db => {
             "id": 1,
             "username": "alexander",
             "fullName": "Alexander",
-            "password": "$2a$12$TbEVhB7w7cnujvA7PcwYl.zeEW5RPGqBLW4b820Nb4ddIMlSRub0.",
+            "password": "$argon2id$v=19$m=65536,t=4,p=4$2lPo6lihfkMj7uTCFA2XUg$9TUWPQMP72TbBfyj+ffk5TuPXjdFScEU13BacSbZds4",
             "privileges": {
               "canSetDbState": true
             },
@@ -48,7 +48,7 @@ db.then(db => {
             "id": 2,
             "username": "rumyana",
             "fullName": "Rumyana",
-            "password": "$2a$12$TbEVhB7w7cnujvA7PcwYl.zeEW5RPGqBLW4b820Nb4ddIMlSRub0.",
+            "password": "$argon2id$v=19$m=65536,t=4,p=4$2lPo6lihfkMj7uTCFA2XUg$9TUWPQMP72TbBfyj+ffk5TuPXjdFScEU13BacSbZds4",
             "rooms": [
               {
                 "roomID": 1,
@@ -79,7 +79,7 @@ db.then(db => {
             "id": 3,
             "username": "yoana",
             "fullName": "Yoana",
-            "password": "$2a$12$TbEVhB7w7cnujvA7PcwYl.zeEW5RPGqBLW4b820Nb4ddIMlSRub0.",
+            "password": "$argon2id$v=19$m=65536,t=4,p=4$2lPo6lihfkMj7uTCFA2XUg$9TUWPQMP72TbBfyj+ffk5TuPXjdFScEU13BacSbZds4",
             "rooms": [
               {
                 "roomID": 1,
