@@ -1,6 +1,5 @@
 const argon2 = require('argon2');
 const moment = require('moment');
-const saltRounds = 12;
 
 let userModel = require('../models/userModel');
 
@@ -107,11 +106,24 @@ async function isAcessBlockedByUnsuccessfulAttempts() {
     return false;
 }
 
+function processUserData(userData = {}) {
+    const now = new Date().getTime();
+    delete userData.password;
+    
+    // Delete home data if it is older than 30 minutes
+    if (userData.isHomeData && now - userData.isHomeData.lastCheck > 30 * 60 * 1000) {
+        delete userData.isHomeData;
+    }
+
+    return userData;
+}
+
 module.exports = {
     getUserPreferences,
     setTargetUserID,
     changePassword,
     addUnsuccessfulLoginAttempt,
     hasTooManyUnsuccessfulLoginAttempts,
-    isAcessBlockedByUnsuccessfulAttempts
+    isAcessBlockedByUnsuccessfulAttempts,
+    processUserData
 }

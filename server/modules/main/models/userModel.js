@@ -116,7 +116,8 @@ async function getUsersForRoom(userID, targetUserID, roomID) {
         return {
             id: user.id,
             fullName: user.fullName,
-            isActive: user.id === targetUserID
+            isActive: user.id === targetUserID,
+            isHomeData: user.isHomeData
         }
     });
 
@@ -358,6 +359,19 @@ async function deleteExpiredSessions() {
         .write();
 }
 
+async function setIsHome(userID, isHome) {
+    var dbInstance;
+    const now = new Date().getTime();
+
+    dbInstance = await db;
+
+    await dbInstance
+        .get("users")
+        .find({id: userID})
+        .set("isHomeData", {isHome, lastCheck: now})
+        .write();
+}
+
 module.exports = {
     hasAccessToRoom,
     authenticateUser,
@@ -372,5 +386,6 @@ module.exports = {
     getUnsuccessfulLoginAttempts,
     getTotalNumberOfUnsuccessfulAttempts,
     deleteUnsuccessfulLoginAttemptsOlderThan,
-    deleteExpiredSessions
+    deleteExpiredSessions,
+    setIsHome
 }

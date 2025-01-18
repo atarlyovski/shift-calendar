@@ -38,7 +38,10 @@ const NextDays = observer(() => {
     return (
         <div className="NextDays columns is-multiline">
             <div className="column is-8 is-offset-2">
-                <h2 className="NextDays-section-title">{t("mySchedule")}</h2>
+                <h2 className="NextDays-section-title">
+                    <span>{t("mySchedule")}</span>
+                    <span className={'NextDays-section-title-home' + (userStore.user.isHomeData?.isHome ? '' : ' is-hidden')}> 🏠︎</span>
+                </h2>
                 <div className="NextDays-days columns is-mobile">
                     {dates.map((date) => <NextDaysElement
                         userID={userStore.user.id}
@@ -59,6 +62,7 @@ const NextDays = observer(() => {
                                 key={user.id}
                                 fullName={user.fullName}
                                 dates={dates}
+                                isHomeData={user.isHomeData}
                                 nowFormatted={nowFormatted}
                             />
                     )}

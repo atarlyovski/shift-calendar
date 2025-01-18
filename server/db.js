@@ -22,6 +22,10 @@ db.then(db => {
             "privileges": {
               "canSetDbState": true
             },
+            "isHomeData": {
+              "isHome": true,
+              "lastCheck": 1734637237293
+            },
             "rooms": [
               {
                 "roomID": 1,

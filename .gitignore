@@ -2,3 +2,6 @@ node_modules/
 package-lock.json
 db.json
 server/secret_key.txt
+server/asus_ssh_keygen_key
+server/asus_ssh_keygen_key.pub
+server/asus_ssh_keygen_key_putty.ppk

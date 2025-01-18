@@ -6,6 +6,19 @@
     margin-bottom: 0.4rem;
 }
 
+.NextDays-section-title-home {
+    animation: flash 4s infinite;
+}
+
+@keyframes flash {
+    50% {
+        color: rgb(216, 255, 216);
+    }
+    0%, 40%, 60%, 100% {
+        color: lime;
+    }
+}
+
 .OtherUser .NextDays-days {
     background-color: #333;
     padding: 1rem;

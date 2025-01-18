@@ -44,8 +44,7 @@ router.post('/login',
             throw err;
         }
 
-        const userData = Object.assign({}, user);
-        delete userData.password;
+        const userData = userController.processUserData(Object.assign({}, user));
 
         if (user === false) {
             await userController.addUnsuccessfulLoginAttempt(ctx.request.body.username);
@@ -80,8 +79,7 @@ router.get('/userData', ctx => {
         return;
     }
 
-    const userData = Object.assign({}, ctx.state.user);
-    delete userData.password;
+    const userData = userController.processUserData(Object.assign({}, ctx.state.user));
 
     ctx.body = userData;
 });

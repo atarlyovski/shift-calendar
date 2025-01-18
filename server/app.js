@@ -21,6 +21,7 @@ const userAPI = require('./routes/user');
 // const googleAPI = require('./routes/google');
 
 const maintenance = require('./maintenance');
+const userIsHomeController = require('./modules/main/controllers/userIsHomeController');
 
 require('./auth');
 
@@ -84,6 +85,7 @@ https.createServer(
 ).listen(HTTPS_PORT);
 
 maintenance.startMaintenanceTasks();
+userIsHomeController.setScheduledHomeCheck();
 
 function ensureAuthenticated() {
     return async function(ctx, next) {
