@@ -7,7 +7,7 @@
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.1",
-    "bulma": "^0.9.4",
+    "bulma": "^1.0.3",
     "i18next": "^24.1.2",
     "i18next-browser-languagedetector": "^8.0.2",
     "i18next-xhr-backend": "^3.2.2",
@@ -30,8 +30,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "latest",
-    "sass": "^1.83.0"
+    "@babel/plugin-proposal-private-property-in-object": "latest"
   },
   "browserslist": {
     "production": [
