@@ -65,7 +65,7 @@ const setScheduledHomeCheck = async() => {
     });
 }
 
-export { 
+export default { 
     checkIfUserIsHome,
     setScheduledHomeCheck
 }

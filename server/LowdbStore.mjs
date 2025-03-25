@@ -8,6 +8,8 @@ export default class LowdbStore {
     async get(key) {
         let dbInstance = await db;
 
+        await dbInstance.read();
+
         let session = await dbInstance
             .data[this.dbPath]
             .find(s => s._id === key)?.sess;

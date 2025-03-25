@@ -4,17 +4,21 @@ import db from '../../../db.mjs';
 const getUserPrivileges = async userId => {
     let dbInstance = await db;
 
-    let privileges = await dbInstance.get("users")
-        .find({id: userId})
-        .get("privileges")
-        .value();
+    await dbInstance.read();
+
+    let privileges = await dbInstance
+        .data
+        .users
+        .find(user => user.id === userId)
+        ?.privileges;
 
     return JSON.parse(JSON.stringify(privileges));
 }
 
 const getDbState = async () => {
     let dbInstance = await db;
-    let state = await dbInstance.getState();
+    await dbInstance.read();
+    let state = dbInstance.data;
 
     return state;
 }
@@ -22,9 +26,7 @@ const getDbState = async () => {
 const setDbState = async state => {
     let dbInstance = await db;
 
-    await dbInstance
-        .setState(state)
-        .write();
+    await dbInstance.update(() => state);
 }
 
 export default {
