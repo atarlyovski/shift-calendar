@@ -1,5 +1,5 @@
 "use strict";
-let adminModel = require('../models/adminModel');
+import adminModel from '../models/adminModel.mjs';
 
 const getUserPrivilege = async (userID, privilege) => {
     let privileges = await adminModel.getUserPrivileges(userID) || {};
@@ -60,7 +60,7 @@ const setDbState = async (userID, state) => {
     return {status: 204};
 };
 
-module.exports = {
+export default {
     getDbState,
     setDbState
-}
+};

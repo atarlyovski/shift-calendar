@@ -2,10 +2,10 @@
   "name": "shift-calendar",
   "version": "1.0.0",
   "description": "A shift calendar",
-  "main": "app.js",
+  "main": "app.mjs",
   "scripts": {
-    "start": "node app.js",
-    "start-nodemon": "nodemon app.js --ignore db.json --ignore client",
+    "start": "node app.mjs",
+    "start-nodemon": "nodemon app.mjs --ignore db.json --ignore client",
     "test": "test"
   },
   "author": "Alexander Tarlyovski",
@@ -24,7 +24,7 @@
     "koa-passport": "^6.0.0",
     "koa-session": "^7.0.2",
     "koa-static": "^5.0.0",
-    "lowdb": "^1.0.0",
+    "lowdb": "^7.0.1",
     "moment": "^2.28.0",
     "passport-local": "^1.0.0",
     "request": "^2.88.2",

@@ -1,4 +1,4 @@
-const Router = require('@koa/router');
+import Router from '@koa/router';
 
 const router = new Router({prefix: "/_ah"});
 
@@ -10,4 +10,4 @@ router.get("/stop", ctx => {
     ctx.status = 204;
 })
 
-module.exports = router;
+export default router;

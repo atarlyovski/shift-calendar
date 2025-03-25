@@ -1,9 +1,9 @@
 "use strict";
-const { Client } = require('ssh2');
-const cron = require('cron');
-const fs = require('fs');
+import { Client } from 'ssh2';
+import cron from 'cron';
+import fs from 'fs';
 
-const userModel = require('../models/userModel');
+import userModel from '../models/userModel.mjs';
 
 const userId = 1;
 
@@ -65,7 +65,7 @@ const setScheduledHomeCheck = async() => {
     });
 }
 
-module.exports = {
+export { 
     checkIfUserIsHome,
     setScheduledHomeCheck
 }

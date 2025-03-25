@@ -1,9 +1,9 @@
 "use strict";
-const Router = require('@koa/router');
-const passport = require('koa-passport');
+import Router from '@koa/router';
+import passport from 'koa-passport';
 
 const router = new Router({prefix: '/api/user'});
-const userController = require('../modules/main/controllers/userController');
+import userController from '../modules/main/controllers/userController.mjs';
 
 router.post('/login',
     async (ctx, next) => {
@@ -131,4 +131,4 @@ router.post('/changePassword', async ctx => {
     ctx.body = result;
 })
 
-module.exports = router;
+export default router;

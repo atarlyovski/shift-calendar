@@ -1,10 +1,10 @@
 "use strict";
-let dayModel = require('../models/dayModel')
-let userModel = require('../models/userModel')
+import dayModel from '../models/dayModel.mjs';
+import userModel from '../models/userModel.mjs';
 
-let DbDate = require('../../../DbDate').DbDate;
+import { DbDate } from '../../../DbDate.mjs';
 
-exports.setDayShifts = async function setDayShifts(roomID, userID, date, shifts) {
+export async function setDayShifts(roomID, userID, date, shifts) {
     let isSuccessful = false;
 
     if (!(date instanceof DbDate)) {

@@ -1,7 +1,7 @@
-const argon2 = require('argon2');
-const moment = require('moment');
+import argon2 from 'argon2';
+import moment from 'moment';
 
-let userModel = require('../models/userModel');
+import userModel from '../models/userModel.mjs';
 
 async function getUserPreferences(userID) {
     var availableUsers = []; // available for selection in the active room
@@ -118,7 +118,7 @@ function processUserData(userData = {}) {
     return userData;
 }
 
-module.exports = {
+export default {
     getUserPreferences,
     setTargetUserID,
     changePassword,

@@ -1,8 +1,8 @@
 "use strict";
-const Router = require('@koa/router');
+import Router from '@koa/router';
 
 const router = new Router({prefix: "/api/admin"});
-const adminController = require('../modules/main/controllers/adminController');
+import adminController from '../modules/main/controllers/adminController.mjs';
 
 router.get("/dbState", async ctx => {
     let result;
@@ -37,4 +37,4 @@ router.post("/setDbState", async ctx => {
     ctx.body = result;
 });
 
-module.exports = router;
+export default router;

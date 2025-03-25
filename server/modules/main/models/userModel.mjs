@@ -1,8 +1,8 @@
 "use strict";
-const argon2 = require('argon2');
-const moment = require('moment');
+import argon2 from 'argon2';
+import moment from 'moment';
 
-const db = require('../../../db');
+import db from '../../../db.mjs';
 
 async function hasAccessToRoom(userID, roomID) {
     let dbInstance = await db;
@@ -372,7 +372,7 @@ async function setIsHome(userID, isHome) {
         .write();
 }
 
-module.exports = {
+export {
     hasAccessToRoom,
     authenticateUser,
     getUserPreferences,
@@ -388,4 +388,4 @@ module.exports = {
     deleteUnsuccessfulLoginAttemptsOlderThan,
     deleteExpiredSessions,
     setIsHome
-}
+};

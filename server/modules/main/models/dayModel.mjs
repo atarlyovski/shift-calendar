@@ -1,25 +1,25 @@
 "use strict";
-const db = require('../../../db')
+import db from '../../../db.mjs';
 
-exports.getShifts = async function getShifts(roomID, forUserID, dates) {
+export async function getShifts(roomID, forUserID, dates) {
     let dbInstance = await db;
 
     dates = dates.map(date => date.toFormattedString());
 
     let shifts = await dbInstance.get("rooms")
-        .find({id: roomID})
+        .find({ id: roomID })
         .get("shifts")
         .filter(shift => dates.includes(shift.date))
-        .filter({userID: forUserID});
+        .filter({ userID: forUserID });
 
     return shifts;
 }
 
-exports.setShifts = async function setShifts(roomID, userID, date, shifts) {
+export async function setShifts(roomID, userID, date, shifts) {
     let dbInstance = await db;
 
     await dbInstance.get("rooms")
-        .find({id: roomID})
+        .find({ id: roomID })
         .get("shiftData")
         .remove({
             date: date.toFormattedString(),
@@ -28,7 +28,7 @@ exports.setShifts = async function setShifts(roomID, userID, date, shifts) {
         .write();
     
     await dbInstance.get("rooms")
-        .find({id: roomID})
+        .find({ id: roomID })
         .get("shiftData")
         .push({
             date: date.toFormattedString(),

@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name   : "a-shift-calendar",
-    script : "./app.js",
+    script : "./app.mjs",
     env    : {
       "NODE_ENV": "production",
       "PORT": 3275,

@@ -1,29 +1,29 @@
 "use strict";
-const https = require('https');
-const fs = require('fs');
-const Koa = require('koa');
-const bodyParser = require('koa-bodyparser')
-const session = require('koa-session')
-// const RedisStore = require('koa-session-redis-store');
-const LowdbStore = require('./LowdbStore');
-const passport = require('koa-passport')
-const logger = require('koa-logger')
-const koaStatic = require('koa-static')
-const conditional = require('koa-conditional-get');
-const etag = require('koa-etag');
-const compress = require('koa-compress');
-const moment = require('moment');
-const forceHTTPS = require('koa-force-https');
+import https from 'https';
+import fs from 'fs';
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
+import session from 'koa-session';
+// import RedisStore from 'koa-session-redis-store';
+import LowdbStore from './LowdbStore.mjs';
+import passport from 'koa-passport';
+import logger from 'koa-logger';
+import koaStatic from 'koa-static';
+import conditional from 'koa-conditional-get';
+import etag from 'koa-etag';
+import compress from 'koa-compress';
+import moment from 'moment';
+import forceHTTPS from 'koa-force-https';
 
-const shiftsAPI = require('./routes/shifts');
-const adminAPI = require('./routes/admin');
-const userAPI = require('./routes/user');
-// const googleAPI = require('./routes/google');
+import shiftsAPI from './routes/shifts.mjs';
+import adminAPI from './routes/admin.mjs';
+import userAPI from './routes/user.mjs';
+// import googleAPI from './routes/google.mjs';
 
-const maintenance = require('./maintenance');
-const userIsHomeController = require('./modules/main/controllers/userIsHomeController');
+import maintenance from './maintenance.mjs';
+import userIsHomeController from './modules/main/controllers/userIsHomeController.mjs';
 
-require('./auth');
+import './auth.mjs';
 
 const HTTP_PORT = process.env.PORT || 3001;
 const HTTPS_PORT = process.env.HTTPS_PORT || 3002;
@@ -32,8 +32,7 @@ const app = new Koa();
 app.keys = [fs.readFileSync('./secret_key.txt')];
 app.proxy = true;
 
-let key,
-    cert;
+let key, cert;
 
 if (process.env.NODE_ENV === 'production') {
     key = fs.readFileSync('../certificates/letsencrypt/privkey.pem');
@@ -52,10 +51,10 @@ app.use(logger(str => {
 app.use(conditional());
 app.use(etag());
 app.use(compress());
-app.use(koaStatic("./build/", {maxage: 3000, hidden: true}));
+app.use(koaStatic("./build/", { maxage: 3000, hidden: true }));
 
 // Session and authentication
-app.use(bodyParser())
+app.use(bodyParser());
 
 app.use(session({
     store: new LowdbStore(),
@@ -64,20 +63,20 @@ app.use(session({
     secure: process.env.NODE_ENV === 'production'
 }, app));
 
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Routes
 // Unauthenticated Routes
-// app.use(googleAPI.routes())
-app.use(userAPI.routes())
+// app.use(googleAPI.routes());
+app.use(userAPI.routes());
 
 // Authenticated Routes
-app.use(ensureAuthenticated())
-app.use(shiftsAPI.routes())
-app.use(adminAPI.routes())
+app.use(ensureAuthenticated());
+app.use(shiftsAPI.routes());
+app.use(adminAPI.routes());
 
-app.listen(HTTP_PORT)
+app.listen(HTTP_PORT);
 
 https.createServer(
     httpsOptions,
@@ -88,13 +87,13 @@ maintenance.startMaintenanceTasks();
 userIsHomeController.setScheduledHomeCheck();
 
 function ensureAuthenticated() {
-    return async function(ctx, next) {
+    return async function (ctx, next) {
         if (ctx.isUnauthenticated()) {
             return ctx.throw(401);
         }
 
         await next();
-    }
+    };
 }
 
 global.displayError = function displayError(err) {
@@ -104,4 +103,4 @@ global.displayError = function displayError(err) {
     const now = moment().format("YYYY-MM-DD HH:mm:ss");
 
     console.error("--- ERROR --- " + now + "\n" + message + "\n" + stack);
-}
+};

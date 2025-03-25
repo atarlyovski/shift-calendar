@@ -1,9 +1,9 @@
 "use strict";
-const Router = require('@koa/router');
+import Router from '@koa/router';
 
-const userController = require('../modules/main/controllers/userController');
-const dayController = require('../modules/main/controllers/dayController');
-const DbDate = require('../DbDate').DbDate;
+import userController from '../modules/main/controllers/userController.mjs';
+import dayController from '../modules/main/controllers/dayController.mjs';
+import { DbDate } from '../DbDate.mjs';
 
 const router = new Router({prefix: '/api/shifts'});
 
@@ -44,4 +44,4 @@ router.post('/shifts', async ctx => {
     ctx.status = isSuccessful ? 204 : 400;
 });
 
-module.exports = router;
+export default router;

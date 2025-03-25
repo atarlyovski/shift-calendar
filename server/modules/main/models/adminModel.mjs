@@ -1,5 +1,5 @@
 "use strict";
-var db = require('../../../db');
+import db from '../../../db.mjs';
 
 const getUserPrivileges = async userId => {
     let dbInstance = await db;
@@ -27,7 +27,7 @@ const setDbState = async state => {
         .write();
 }
 
-module.exports = {
+export default {
     getUserPrivileges,
     getDbState,
     setDbState
