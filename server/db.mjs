@@ -112,6 +112,7 @@ const defaultData = {
   },
 };
 
-const db = await JSONFilePreset('db.json', defaultData)
+const db = await JSONFilePreset('db.json', defaultData);
+await db.read();
 
 export default db;

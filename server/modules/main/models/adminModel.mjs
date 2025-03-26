@@ -4,8 +4,6 @@ import db from '../../../db.mjs';
 const getUserPrivileges = async userId => {
     let dbInstance = await db;
 
-    await dbInstance.read();
-
     let privileges = await dbInstance
         .data
         .users
@@ -17,7 +15,6 @@ const getUserPrivileges = async userId => {
 
 const getDbState = async () => {
     let dbInstance = await db;
-    await dbInstance.read();
     let state = dbInstance.data;
 
     return state;

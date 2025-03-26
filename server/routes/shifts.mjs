@@ -2,7 +2,7 @@
 import Router from '@koa/router';
 
 import userController from '../modules/main/controllers/userController.mjs';
-import dayController from '../modules/main/controllers/dayController.mjs';
+import { setDayShifts } from '../modules/main/controllers/dayController.mjs';
 import { DbDate } from '../DbDate.mjs';
 
 const router = new Router({prefix: '/api/shifts'});
@@ -34,8 +34,7 @@ router.post('/shifts', async ctx => {
     date = new DbDate(date.year, date.month, date.day);
 
     try {
-        isSuccessful = await dayController
-            .setDayShifts(roomID, ctx.state.user.id, date, shifts);
+        isSuccessful = await setDayShifts(roomID, ctx.state.user.id, date, shifts);
     } catch (err) {
         console.error(err);
         return ctx.status = 500;

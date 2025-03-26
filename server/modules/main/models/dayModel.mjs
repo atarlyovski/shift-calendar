@@ -4,8 +4,6 @@ import db from '../../../db.mjs';
 async function getShifts(roomID, forUserID, dates) {
     let dbInstance = await db;
 
-    await dbInstance.read();
-
     dates = dates.map(date => date.toFormattedString());
 
     let shifts = dbInstance

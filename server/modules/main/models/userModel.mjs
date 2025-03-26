@@ -7,8 +7,6 @@ import db from '../../../db.mjs';
 async function hasAccessToRoom(userID, roomID) {
     let dbInstance = await db;
 
-    await dbInstance.read();
-
     let room = dbInstance
         .data
         .users
@@ -64,8 +62,6 @@ async function getUserPreferences(userID) {
 
     dbInstance = await db;
 
-    await dbInstance.read();
-
     let rooms = dbInstance
         .data
         .users
@@ -97,7 +93,6 @@ async function getUsersForRoom(userID, targetUserID, roomID) {
     var dbInstance;
 
     dbInstance = await db;
-    await dbInstance.read();
 
     // Make sure the user has access to the room
     let room = dbInstance
@@ -133,7 +128,6 @@ async function getUsersForRoom(userID, targetUserID, roomID) {
 
 async function setTargetUserID(userID, roomID, targetUserID) {
     let dbInstance = await db;
-    await dbInstance.read();
 
     await dbInstance
         .update(data => {
@@ -147,8 +141,6 @@ function fetchUserByID(userID) {
     return new Promise(async (resolve, reject) => {
         var user;
         var dbInstance = await db;
-
-        await dbInstance.read();
 
         user = dbInstance
             .data
@@ -164,8 +156,6 @@ function fetchUserByUsername(username) {
         var user;
         var dbInstance = await db;
 
-        await dbInstance.read();
-
         user = dbInstance
             .data
             .users
@@ -180,7 +170,6 @@ async function getHashedPasswordForUser(username) {
         dbInstance;
 
         dbInstance = await db;
-        await dbInstance.read();
 
         user = dbInstance
             .data

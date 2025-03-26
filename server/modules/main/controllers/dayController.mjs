@@ -4,7 +4,7 @@ import userModel from '../models/userModel.mjs';
 
 import { DbDate } from '../../../DbDate.mjs';
 
-export default async function setDayShifts(roomID, userID, date, shifts) {
+export async function setDayShifts(roomID, userID, date, shifts) {
     let isSuccessful = false;
 
     if (!(date instanceof DbDate)) {
