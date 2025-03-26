@@ -322,8 +322,8 @@ async function deleteExpiredSessions() {
 
     await dbInstance
         .update(data => {
-            data.sessions = data.sessions.filter(({ttl}) => {
-                return moment(ttl).isAfter(moment());
+            data.sessions = data.sessions.filter(({ sess }) => {
+                return sess && sess._expire && moment(sess._expire).isAfter(moment());
             });
         });
 }
