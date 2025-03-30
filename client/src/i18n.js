@@ -58,7 +58,10 @@ i18n
                     "security": "Security",
                     "rooms": "Rooms",
                     "back": "Back",
-                    "dbStateSetter": "DB State"
+                    "dbStateSetter": "DB State",
+                    "atHome": "AT HOME ({{minutesAgo}}m ago)",
+                    "atHomeNow": "AT HOME (just now)",
+                    "unknownLocationShort": "UNKNOWN",
                 }
             },
             bg: {
@@ -97,7 +100,10 @@ i18n
                     "security": "Сигурност",
                     "rooms": "Стаи",
                     "back": "Обратно",
-                    "dbStateSetter": "Състояние на базата данни"
+                    "dbStateSetter": "Състояние на базата данни",
+                    "atHome": "ВКЪЩИ (преди {{minutesAgo}}м)",
+                    "atHomeNow": "ВКЪЩИ (току-що)",
+                    "unknownLocationShort": "НЕИЗВЕСТНО",
                 }
             }
         }
