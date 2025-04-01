@@ -1,18 +1,18 @@
 "use strict";
-const argon2 = require('argon2');
-const moment = require('moment');
+import argon2 from 'argon2';
+import moment from 'moment';
 
-const db = require('../../../db');
+import db from '../../../db.mjs';
 
 async function hasAccessToRoom(userID, roomID) {
     let dbInstance = await db;
 
-    let room = await dbInstance
-        .get("users")
-        .find({id: userID})
-        .get("rooms")
-        .find({roomID: roomID})
-        .value();
+    let room = dbInstance
+        .data
+        .users
+        .find(user => user.id === userID)
+        ?.rooms
+        .find(room => room.roomID === roomID);
     
     return room ? true : false;
 }
@@ -62,19 +62,21 @@ async function getUserPreferences(userID) {
 
     dbInstance = await db;
 
-    let rooms = await dbInstance.get("users")
-        .find({id: userID})
-        .get("rooms")
-        .value();
+    let rooms = dbInstance
+        .data
+        .users
+        .find(user => user.id === userID)
+        ?.rooms;
     
     let activeRoom = rooms.find(r => r.isActive);
     let roomID = activeRoom ? activeRoom.roomID : null;
     
     let activeRoomData = JSON.parse(
         JSON.stringify(
-            await dbInstance.get("rooms")
-            .find({id: roomID})
-            .value()
+            dbInstance
+                .data
+                .rooms
+                .find(room => room.id === roomID)
         )
     );
     
@@ -93,24 +95,24 @@ async function getUsersForRoom(userID, targetUserID, roomID) {
     dbInstance = await db;
 
     // Make sure the user has access to the room
-    let room = await dbInstance
-        .get("users")
-        .find({id: userID})
-        .get("rooms")
-        .find({roomID})
-        .value();
+    let room = dbInstance
+        .data
+        .users
+        .find(user => user.id === userID)
+        ?.rooms
+        .find(room => room.roomID === roomID);
 
     if (!room) {
         return {};
     }
 
-    let roomUsers = await dbInstance
-        .get("users")
+    let roomUsers = dbInstance
+        .data
+        .users
         .filter(user =>
             user.rooms.find(room =>
                 room.roomID === roomID)
-        )
-        .value();
+        );
     
     roomUsers = roomUsers.map(user => {
         return {
@@ -128,23 +130,22 @@ async function setTargetUserID(userID, roomID, targetUserID) {
     let dbInstance = await db;
 
     await dbInstance
-        .get('users')
-        .find({id: userID})
-        .get('rooms')
-        .find({roomID})
-        .set('viewShiftsForUserID', targetUserID)
-        .write();
+        .update(data => {
+            let user = data.users.find(user => user.id === userID);
+            let room = user.rooms.find(room => room.roomID === roomID);
+            room.viewShiftsForUserID = targetUserID;
+        });
 }
 
 function fetchUserByID(userID) {
     return new Promise(async (resolve, reject) => {
         var user;
+        var dbInstance = await db;
 
-        try {
-            user = fetchUser({id: userID});
-        } catch (error) {
-            return reject(err);
-        }
+        user = dbInstance
+            .data
+            .users
+            .find(user => user.id === userID);
 
         resolve(user);
     });
@@ -153,32 +154,15 @@ function fetchUserByID(userID) {
 function fetchUserByUsername(username) {
     return new Promise(async (resolve, reject) => {
         var user;
+        var dbInstance = await db;
 
-        try {
-            user = fetchUser({username: username});
-        } catch (error) {
-            return reject(err);
-        }
+        user = dbInstance
+            .data
+            .users
+            .find(user => user.username === username);
 
         resolve(user);
     });
-}
-
-async function fetchUser(filter) {
-    var user,
-        dbInstance;
-
-    dbInstance = await db;
-
-    user = await dbInstance.get("users")
-        .filter(filter)
-        .value();
-
-    if (!user || !user[0]) {
-        resolve(false);
-    }
-
-    return user[0];
 }
 
 async function getHashedPasswordForUser(username) {
@@ -187,15 +171,16 @@ async function getHashedPasswordForUser(username) {
 
         dbInstance = await db;
 
-        user = await dbInstance.get("users")
-            .filter({username: username})
-            .value();
+        user = dbInstance
+            .data
+            .users
+            .find(user => user.username === username);
 
-    if (!user || !user[0]) {
+    if (!user) {
         return {found: false};
     }
 
-    return {found: true, password: user[0].password};
+    return {found: true, password: user.password};
 }
 
 async function logOutUser(userID) {
@@ -204,9 +189,11 @@ async function logOutUser(userID) {
     dbInstance = await db;
 
     await dbInstance
-        .get("sessions")
-        .remove(({sess}) => {return (sess.passport || {}).user === userID})
-        .write();
+        .update(data => {
+            data.sessions = data.sessions.filter(({sess}) => {
+                return (sess.passport || {}).user !== userID;
+            });
+        });
 }
 
 async function setPasswordForUser(userID, hash) {
@@ -215,10 +202,10 @@ async function setPasswordForUser(userID, hash) {
     dbInstance = await db;
 
     await dbInstance
-        .get("users")
-        .find({id: userID})
-        .set("password", hash)
-        .write();
+        .update(data => {
+            let user = data.users.find(user => user.id === userID);
+            user.password = hash;
+        });
 }
 
 async function deleteShiftsOlderThan(dateMs, dbDateFormat = "YYYY-M-D") {
@@ -226,18 +213,13 @@ async function deleteShiftsOlderThan(dateMs, dbDateFormat = "YYYY-M-D") {
 
     dbInstance = await db;
 
-    let rooms = await dbInstance
-        .get("rooms")
-        .value();
-    
-    for (let i = 0; i < rooms.length; i++) {
-        await dbInstance
-            .get(`rooms[${i}].shiftData`)
-            .remove(({date}) => {
-                return moment(date, dbDateFormat).isBefore(dateMs)
-            })
-            .write();
-    }
+    await dbInstance
+        .update(data => {
+            data.rooms = data.rooms.map(room => {
+                room.shifts = room.shifts?.filter(shift => moment(shift.date, dbDateFormat).isAfter(dateMs));
+                return room;
+            });
+        });
 }
 
 async function addUnsuccessfulLoginAttempt(username) {
@@ -245,10 +227,9 @@ async function addUnsuccessfulLoginAttempt(username) {
 
     dbInstance = await db;
 
-    let unsuccessfulLoginAttempts = await dbInstance
-        .get("unsuccessfulLoginAttempts")
-        .get(username)
-        .value();
+    let unsuccessfulLoginAttempts = dbInstance
+        .data
+        .unsuccessfulLoginAttempts[username];
 
     if (!unsuccessfulLoginAttempts) {
         unsuccessfulLoginAttempts = [];
@@ -257,9 +238,9 @@ async function addUnsuccessfulLoginAttempt(username) {
     unsuccessfulLoginAttempts.push(moment().valueOf());
 
     await dbInstance
-        .get("unsuccessfulLoginAttempts")
-        .set(username, unsuccessfulLoginAttempts)
-        .write();
+        .update(data => {
+            data.unsuccessfulLoginAttempts[username] = unsuccessfulLoginAttempts;
+        });
 }
 
 async function getUnsuccessfulLoginAttempts(username, startDateMs) {
@@ -267,10 +248,9 @@ async function getUnsuccessfulLoginAttempts(username, startDateMs) {
 
     dbInstance = await db;
 
-    let unsuccessfulLoginAttempts = await dbInstance
-        .get("unsuccessfulLoginAttempts")
-        .get(username)
-        .value();
+    let unsuccessfulLoginAttempts = dbInstance
+        .data
+        .unsuccessfulLoginAttempts[username];
 
     if (!unsuccessfulLoginAttempts) {
         return 0;
@@ -287,19 +267,18 @@ async function getTotalNumberOfUnsuccessfulAttempts(startDateMs) {
 
     dbInstance = await db;
 
-    let usernames = await dbInstance
-        .get("unsuccessfulLoginAttempts")
-        .keys()
-        .value();
+    let usernames = Object.keys(dbInstance
+        .data
+        .unsuccessfulLoginAttempts
+    );
     
     let startDate = startDateMs || moment().subtract(1, 'day').valueOf();
     let count = 0;
 
     for (let i = 0; i < usernames.length; i++) {
-        let unsuccessfulLoginAttempts = await dbInstance
-            .get("unsuccessfulLoginAttempts")
-            .get(usernames[i])
-            .value();
+        let unsuccessfulLoginAttempts = dbInstance
+            .data
+            .unsuccessfulLoginAttempts[usernames[i]];
         
         count += unsuccessfulLoginAttempts.filter(date => date > startDate).length;
     }
@@ -312,30 +291,27 @@ async function deleteUnsuccessfulLoginAttemptsOlderThan(dateMs) {
 
     dbInstance = await db;
 
-    let usernames = await dbInstance
-        .get("unsuccessfulLoginAttempts")
-        .keys()
-        .value();
+    let usernames = Object.keys(dbInstance
+        .data
+        .unsuccessfulLoginAttempts
+    );
 
     for (let i = 0; i < usernames.length; i++) {
-        let unsuccessfulLoginAttempts = await dbInstance
-            .get("unsuccessfulLoginAttempts")
-            .get(usernames[i])
-            .value();
+        let unsuccessfulLoginAttempts = dbInstance
+            .data
+            .unsuccessfulLoginAttempts[usernames[i]];
         
         let newUnsuccessfulLoginAttempts = unsuccessfulLoginAttempts.filter(date => date > dateMs);
 
-        if (newUnsuccessfulLoginAttempts.length === 0) {
-            await dbInstance
-                .get("unsuccessfulLoginAttempts")
-                .unset(usernames[i])
-                .write();
-        } else {
-            await dbInstance
-                .get("unsuccessfulLoginAttempts")
-                .set(usernames[i], newUnsuccessfulLoginAttempts)
-                .write();
-        }
+        await dbInstance
+            .update(data => {
+                if (newUnsuccessfulLoginAttempts.length === 0) {
+                    delete data.unsuccessfulLoginAttempts[usernames[i]];
+                    return;
+                }
+
+                data.unsuccessfulLoginAttempts[usernames[i]] = newUnsuccessfulLoginAttempts;
+            });
     }
 }
 
@@ -344,19 +320,12 @@ async function deleteExpiredSessions() {
 
     dbInstance = await db;
 
-    let sessions = await dbInstance
-        .get("sessions")
-        .value();
-
-    let validSessions = sessions
-        .filter(({sess}) => {
-            let expires = sess._expire;
-            return expires && moment(expires).isAfter(moment());
-        });
-
     await dbInstance
-        .set("sessions", validSessions)
-        .write();
+        .update(data => {
+            data.sessions = data.sessions.filter(({ sess }) => {
+                return sess && sess._expire && moment(sess._expire).isAfter(moment());
+            });
+        });
 }
 
 async function setIsHome(userID, isHome) {
@@ -372,7 +341,7 @@ async function setIsHome(userID, isHome) {
         .write();
 }
 
-module.exports = {
+export default {
     hasAccessToRoom,
     authenticateUser,
     getUserPreferences,
@@ -388,4 +357,4 @@ module.exports = {
     deleteUnsuccessfulLoginAttemptsOlderThan,
     deleteExpiredSessions,
     setIsHome
-}
+};

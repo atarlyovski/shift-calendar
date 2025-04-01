@@ -131,7 +131,7 @@ const DbStateSetter = () => {
                             />
                         </div>
                     </section>
-                    <footer className="modal-card-foot">
+                    <footer className="modal-card-foot buttons">
                         <button
                             className={"button is-black" + (isPushing ? " is-loading" : "")}
                             type="button"

@@ -1,4 +1,4 @@
-module.exports.DbDate = class DbDate {
+export class DbDate {
     constructor(year, month, day) {
         this.year = year;
         this.month = month;

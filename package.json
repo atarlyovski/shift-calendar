@@ -2,10 +2,10 @@
   "name": "shift-calendar",
   "version": "0.0.1",
   "description": "An app to set your shift schedule so others can view it.",
-  "main": "server/app.js",
+  "main": "server/app.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd server && node app.js"
+    "start": "cd server && node app.mjs"
   },
   "repository": {
     "type": "git",

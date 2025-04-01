@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import moment from '../moment-with-locales.custom';
 
 import Navigator from './Navigator';
-import './App.sass';
+import 'bulma/css/bulma.css';
 import './App.css';
 import ViewContainer from './ViewContainer';
 import LoginForm from './LoginForm';

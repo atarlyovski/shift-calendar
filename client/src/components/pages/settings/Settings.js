@@ -207,7 +207,7 @@ const Settings = observer(() => {
 
     return (
         <div className="Settings columns">
-            <form className="column is-one-third is-offset-one-third">
+            <form className="column is-4 is-offset-4">
                 <div className="Settings-username field is-grouped">
                     <div className="control is-expanded">
                         <input className="input" disabled type="text" value={userStore.user.fullName}></input>

@@ -8,6 +8,7 @@ import './NextDays.css';
 
 import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../../../mobx/userStore';
+import UserIsHomeStatus from '../../UserIsHomeStatus';
 
 const NextDays = observer(() => {
     const userStore = useContext(UserStoreContext);
@@ -40,7 +41,7 @@ const NextDays = observer(() => {
             <div className="column is-8 is-offset-2">
                 <h2 className="NextDays-section-title">
                     <span>{t("mySchedule")}</span>
-                    <span className={'NextDays-section-title-home' + (userStore.user.isHomeData?.isHome ? '' : ' is-hidden')}> 🏠︎</span>
+                    <UserIsHomeStatus isHomeData={userStore.user.isHomeData} />
                 </h2>
                 <div className="NextDays-days columns is-mobile">
                     {dates.map((date) => <NextDaysElement
