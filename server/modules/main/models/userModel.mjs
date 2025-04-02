@@ -334,11 +334,11 @@ async function setIsHome(userID, isHome) {
 
     dbInstance = await db;
 
-    await dbInstance
-        .get("users")
-        .find({id: userID})
-        .set("isHomeData", {isHome, lastCheck: now})
-        .write();
+    dbInstance
+        .update(data => {
+            let user = data.users.find(user => user.id === userID);
+            user.isHomeData = {isHome, lastCheck: now};
+        });
 }
 
 export default {
