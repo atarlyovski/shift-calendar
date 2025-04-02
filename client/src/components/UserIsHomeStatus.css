@@ -1,6 +1,6 @@
 .UserIsHomeStatus-line {
     color: lightgray;
-    font-weight: 200;
+    font-weight: 300;
     font-size: 0.9rem;
     padding-left: 0.6rem;
 }
@@ -23,14 +23,6 @@
 }
 
 .UserIsHomeStatus-line.is-home::before {
-    content: ' ';
     background-color: lime;
     border-color: lime;
-    border-radius: 50%;
-    display: inline-block;
-    height: 0.5rem;
-    margin-right: 0.3rem;
-    width: 0.5rem;
-    position: relative;
-    top: -0.15rem;
 }
