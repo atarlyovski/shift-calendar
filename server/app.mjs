@@ -35,8 +35,8 @@ app.proxy = true;
 let key, cert;
 
 if (process.env.NODE_ENV === 'production') {
-    key = fs.readFileSync('../certificates/letsencrypt/privkey.pem');
-    cert = fs.readFileSync('../certificates/letsencrypt/fullchain.pem');
+    key = fs.readFileSync('/etc/letsencrypt/live/alexandert2763.duckdns.org/privkey.pem');
+    cert = fs.readFileSync('/etc/letsencrypt/live/alexandert2763.duckdns.org/fullchain.pem');
     app.use(forceHTTPS());
 } else {
     key = fs.readFileSync('./https/a_shift_calendar_self.key');
