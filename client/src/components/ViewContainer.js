@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import './ViewContainer.css';
 import ShiftSetter from './pages/ShiftSetter';
-import Day from './pages/day/Day';
 import NextDays from './pages/nextDays/NextDays';
 import Month from './pages/month/Month';
 import Settings from './pages/settings/Settings';
@@ -11,7 +10,6 @@ import Settings from './pages/settings/Settings';
 import { observer } from 'mobx-react-lite';
 import { ViewStoreContext } from '../mobx/viewStore';
 import { UserStoreContext } from '../mobx/userStore';
-import CustomDate from '../CustomDate';
 
 export default observer(function ViewContainer() {
     const viewStore = useContext(ViewStoreContext);
@@ -121,10 +119,9 @@ export default observer(function ViewContainer() {
                 </div>
             </div>
             <ShiftSetter
-                date={viewStore.activeDate || new CustomDate()}
+                date={viewStore.activeDate || new Date()}
                 isDisabled={isShiftSettingDisabled}
                 isActive={viewStore.shiftSetterIsActive} />
-            {viewStore.activePage === "day" ? <Day isDisabled={isShiftSettingDisabled} /> : null}
             {viewStore.activePage === "nextDays" ? <NextDays /> : null}
             {viewStore.activePage === "month" ? <Month /> : null}
             {viewStore.activePage === "settings" ? <Settings /> : null}

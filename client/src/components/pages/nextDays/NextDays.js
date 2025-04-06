@@ -1,6 +1,4 @@
 import React, { useContext } from 'react';
-import moment from '../../../moment-with-locales.custom';
-import CustomDate from '../../../CustomDate';
 import NextDaysElement from './NextDaysElement';
 import OtherUser from './OtherUser';
 import { useTranslation } from 'react-i18next';
@@ -16,16 +14,13 @@ const NextDays = observer(() => {
 
     const dateSpan = {from: -1, to: 4};
     let dates = [];
-    let nowFormatted = moment().format("YYYY-M-D");
+    let now = new Date();
+    let nowFormatted = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
 
     for (let i = dateSpan.from; i < dateSpan.to; i++) {
-        let dateMoment = moment().add(i, "days");
+        let offsetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
 
-        dates.push(new CustomDate(
-            parseInt(dateMoment.format("YYYY")),
-            parseInt(dateMoment.format("M")),
-            parseInt(dateMoment.format("D"))
-        ));
+        dates.push(offsetDate);
     }
 
     let availableUsers = userStore
@@ -47,9 +42,9 @@ const NextDays = observer(() => {
                     {dates.map((date) => <NextDaysElement
                         userID={userStore.user.id}
                         gridWidth={dates.length}
-                        key={date.toFormattedString()}
+                        key={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`}
                         date={date}
-                        isToday={date.toFormattedString() === nowFormatted} />)
+                        isToday={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` === nowFormatted} />)
                     }
                 </div>
             </div>

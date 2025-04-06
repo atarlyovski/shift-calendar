@@ -17,9 +17,9 @@ const OtherUser = ({fullName, userID, dates, isHomeData = {}, nowFormatted}) => 
                     userID={userID}
                     gridWidth={dates.length}
                     isClickable={false}
-                    key={date.toFormattedString()}
+                    key={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`}
                     date={date}
-                    isToday={date.toFormattedString() === nowFormatted} />)
+                    isToday={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` === nowFormatted} />)
                 }
             </div>
         </div>

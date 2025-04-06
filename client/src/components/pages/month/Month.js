@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import SwipeableViews from 'react-swipeable-views-react-18-fix';
 
-import moment from '../../../moment-with-locales.custom';
 import MonthElement from './MonthElement';
-import CustomDate from '../../../CustomDate';
 import { useLocale } from '../../../hooks/useLocale';
 
 import './Month.css';
@@ -11,8 +9,8 @@ import './Month.css';
 const Month = () => {
     let months,
         weeks,
-        now = moment(),
-        nowFormatted = now.format("YYYY-M-D"),
+        now = new Date(),
+        nowFormatted = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
         locale = useLocale(),
         daysOfWeek;
 
@@ -20,41 +18,32 @@ const Month = () => {
     const monthOffsets = [-1, 0, 1];
 
     const getMonthDays = (currentMoment) => {
-        let now = moment(currentMoment);
+        let now = new Date(currentMoment);
         let weeks = [];
-        let prevDayMoment;
 
         for (let currentDay = 1; currentDay <= 31; currentDay++) {
-            let currentDayMoment = now.date(currentDay);
+            let currentDayMoment = new Date(now.getFullYear(), now.getMonth(), currentDay);
 
-            if (!currentDayMoment.isSame(currentMoment, "month")) {
+            if (currentDayMoment.getMonth() !== now.getMonth()) {
                 break;
             }
 
-            if (weeks.length === 0 || !currentDayMoment.isSame(prevDayMoment, "isoWeek")) {
+            if (weeks.length === 0 || currentDayMoment.getDay() === 1) {
                 weeks.push([]);
             }
 
             // Add a placeholder for days from the previous month in the first week
             if (currentDay === 1) {
-                let dayOfWeek = parseInt(currentDayMoment.format("E"))
+                let dayOfWeek = currentDayMoment.getDay() === 0 ? 7 : currentDayMoment.getDay(); // 0 is Sunday, 1 is Monday, etc.
 
                 if (dayOfWeek !== 1) {
                     weeks[0].push({type: "placeholder", colSpan: dayOfWeek - 1})
                 }
             }
 
-            let date = new CustomDate(
-                currentDayMoment.year(),
-                currentDayMoment.month() + 1,
-                currentDayMoment.date()
-            );
-
-            // weeks[weeks.length - 1] = weeks[weeks.length - 1] || [];
+            let date = new Date(currentDayMoment.getFullYear(), currentDayMoment.getMonth(), currentDayMoment.getDate());
 
             weeks[weeks.length - 1].push({type: "day", date});
-
-            prevDayMoment = moment(now).date(currentDay);
         }
 
         return weeks;
@@ -62,44 +51,44 @@ const Month = () => {
 
     const getDaysOfWeek = (currentMoment) => {
         let headings = [];
-        let now = moment(currentMoment);
-        let startDay = parseInt(now.startOf("isoWeek").format("E"));
-        let endDay = parseInt(now.endOf("isoWeek").format("E"));
+        const { format } = new Intl.DateTimeFormat(locale, { weekday: 'short' });
+        let now = new Date(currentMoment);
+        let startDay = new Date(now.setDate(now.getDate() - now.getDay() === 0 ? 7 : now.getDay()));
 
-        for (let i = startDay; i <= endDay; i++) {
+        for (let i = 0; i < 7; i++) {
             headings.push(
                 <th key={i}>{
-                    now.isoWeekday(i)
-                        .locale(locale)
-                        .format("dd")
+                    format(startDay)
                     }</th>
             )
+
+            startDay.setDate(startDay.getDate() + 1);
         }
 
         return headings;
     }
 
     weeks = monthOffsets.map(offset => 
-        getMonthDays(moment(now).add(offset, "month"))
+        getMonthDays(new Date(now.getFullYear(), now.getMonth() + offset, now.getDate()))
     );
 
     daysOfWeek = getDaysOfWeek(now);
 
     months = monthOffsets.map(offset => 
-        moment(now).add(offset, "month").locale(locale).format("MMMM")
+        new Date(now.getFullYear(), now.getMonth() + offset, now.getDate()).toLocaleString(locale, { month: 'long' })
     );
 
-    let rows = weeks.map(monthWeeks => {
-        return monthWeeks.map((days, i) => {
+    let rows = weeks.map(monthWeek => {
+        return monthWeek.map((days, i) => {
             return (
                 <tr key={i}>
                     {days.map(day => {
                         return (
                             day.type === "day" ? <MonthElement 
                                 className="column"
-                                key={day.date.toFormattedString()}
+                                key={day.date.toLocaleDateString()}
                                 date={day.date}
-                                isToday={day.date.toFormattedString() === nowFormatted} />
+                                isToday={`${day.date.getFullYear()}-${day.date.getMonth() + 1}-${day.date.getDate()}` === nowFormatted} />
                                 :
                                 <td key="placeholder"
                                     className="MonthFirstWeekPlaceholder"

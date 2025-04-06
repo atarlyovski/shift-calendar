@@ -4,14 +4,12 @@ import { observer } from 'mobx-react-lite';
 import { ViewStoreContext } from '../../../mobx/viewStore';
 
 import { useShifts } from '../../../hooks/useShifts';
-import { useLocale } from '../../../hooks/useLocale';
 import '../../../css/day.css';
 import './MonthElement.css';
 
 const MonthElement = observer(({date, isToday}) => {
     const viewStore = useContext(ViewStoreContext);
     let shifts = useShifts(date);
-    let locale = useLocale();
 
     const onDayClick = (e, date) => {
         viewStore.activeDate = date;
@@ -20,9 +18,9 @@ const MonthElement = observer(({date, isToday}) => {
 
     return (
         <td className={"MonthElement" + (isToday ? " today" : "")}
-                data-day-of-week={date.format("E")}>
+                data-day-of-week={date.getDay() === 0 ? 7 : date.getDay()}>
             <div onClick={(e) => onDayClick(e, date)}>
-                <div>{date.format("D", locale)}</div>
+                <div>{date.getDate()}</div>
                 <div>{shifts}</div>
             </div>
         </td>

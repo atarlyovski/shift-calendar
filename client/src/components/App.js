@@ -1,6 +1,5 @@
 import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import moment from '../moment-with-locales.custom';
 
 import Navigator from './Navigator';
 import 'bulma/css/bulma.css';
@@ -35,7 +34,7 @@ const App = observer(() => {
                 return;
             }
 
-            if (lastUpdated && lastUpdated > moment().subtract(updateIntervalMs)) {
+            if (lastUpdated && lastUpdated > new Date(Date.now() - updateIntervalMs).valueOf()) {
                 return;
             }
     
@@ -57,7 +56,7 @@ const App = observer(() => {
                         alert(t("error"));
                     }
                     
-                    setLastUpdated(moment());
+                    setLastUpdated(new Date().valueOf());
                     setIsInitialized(true);
                 } catch (err) {
                     console.error(err);

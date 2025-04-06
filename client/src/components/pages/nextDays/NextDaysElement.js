@@ -27,10 +27,9 @@ const NextDaysElement = observer(({
     return (
         <div className={"NextDaysElement column" + (isToday ? " today" : "")}>
             <div onClick={isClickable ? (e => onDayClick(e, date)) : undefined}>
-                {/* <div>{date.toMoment().calendar()}</div> */}
-                <div className="is-hidden-desktop-only is-hidden-touch">{date.format("dddd", locale)}</div>
-                <div className="is-hidden-widescreen">{date.format("dd", locale)}</div>
-                <div>{date.format("D", locale)}</div>
+                <div className="is-hidden-desktop-only is-hidden-touch">{(new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(date))}</div>
+                <div className="is-hidden-widescreen">{(new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(date))}</div>
+                <div>{date.getDate()}</div>
                 <div>{shifts}</div>
             </div>
         </div>

@@ -14,7 +14,7 @@ export const useShifts = (date, {format = "html", userID} = {}) => {
         .rooms
         .find(room => room.isActive);
 
-    let dateString = date.toFormattedString();
+    let dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
     let targetUserID = userID || (room ? room.viewShiftsForUserID : null);
 
     if (targetUserID === null) {

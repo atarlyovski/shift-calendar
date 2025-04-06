@@ -10,8 +10,9 @@ import SettingsNavItem from './SettingsNavItem';
 import SettingsPage from './SettingsPage';
 
 const buildDate = preval`module.exports =
-    require("../../../moment-with-locales.custom")
-    (new Date()).format("YYYY-MM-DD");
+    (new Date()).getFullYear() + "-" +
+    ((new Date()).getMonth() + 1) + "-" +
+    (new Date()).getDate();
 `;
 
 const Settings = observer(() => {

@@ -23,7 +23,7 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     let userID = (viewStore.activeDate !== "month" ? userStore.user.id : undefined);
     let shifts = useShifts(date, {format: "array", userID});
 
-    let title = date.format("dddd[, ]D[ ]MMMM", locale);
+    let title = date.toLocaleDateString(locale, {weekday: 'long', month: 'long', day: 'numeric'});
 
     const allowedShifts = userStore.user.allowedShifts || [];
 
@@ -58,19 +58,21 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     }
 
     const updateStoreShifts = (date, shifts) => {
+        let formattedDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
         try {
             let shiftData = userStore
                 .userShiftData
                 .activeRoomData
                 .shiftData
                 .filter(day =>
-                    day.date !== date.toFormattedString() ||
+                    day.date !== formattedDate ||
                     day.userID !== userStore.user.id
                 );
             
             shiftData.push({
                 userID: userStore.user.id,
-                date: date.toFormattedString(),
+                date: formattedDate,
                 shifts
             });
 
@@ -83,7 +85,7 @@ const ShiftSetter = observer(({date, isActive, isDisabled}) => {
     const postShifts = async (date, shifts, roomID) => {
         let shiftPostUrl = '/api/shifts/shifts';
 
-        let body = "date=" + encodeURIComponent(JSON.stringify(date));
+        let body = "date=" + encodeURIComponent(JSON.stringify({year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate(), stringFormat: "YYYY-M-D"}));
         body += "&shifts=" + encodeURIComponent(JSON.stringify(shifts));
         body += "&roomID=" + encodeURIComponent(roomID);
 
