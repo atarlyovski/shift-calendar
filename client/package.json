@@ -1,50 +1,34 @@
 {
   "name": "shift-calendar",
-  "version": "0.0.1",
   "private": true,
-  "proxy": "http://localhost:3001",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "@testing-library/jest-dom": "^6.1.4",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.5.1",
     "bulma": "^1.0.3",
     "i18next": "^24.1.2",
     "i18next-browser-languagedetector": "^8.0.2",
     "i18next-xhr-backend": "^3.2.2",
     "mobx": "^6.10.2",
     "mobx-react-lite": "^4.0.5",
-    "preval.macro": "^5.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-i18next": "^15.0.0",
-    "react-scripts": "^5.0.1",
-    "react-swipeable-views-react-18-fix": "^0.14.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^15.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "latest"
-  },
-  "browserslist": {
-    "production": [
-      "last 5 chrome versions",
-      "last 5 firefox versions",
-      "last 5 safari versions",
-      "last 1 edge version",
-      "last 5 ChromeAndroid versions",
-      "last 5 FirefoxAndroid versions"
-    ],
-    "development": [
-      "last 2 chrome versions",
-      "last 2 firefox versions",
-      "last 1 safari version"
-    ]
+    "@eslint/js": "^9.22.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.22.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "vite": "^6.3.1"
   }
 }

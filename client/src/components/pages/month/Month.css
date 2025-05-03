@@ -78,3 +78,15 @@
 .month-heading > .column {
     padding-bottom: 0;
 }
+
+.Month-swipe-container {
+    display: flex; /* Place children side by side */
+    width: 100%; /* Ensure the container takes up the full width */
+    overflow: hidden; /* Hide elements outside the view */
+    position: relative;
+}
+
+.Month-swipe-container > .columns {
+    flex: 0 0 100%; /* Each child takes up 100% of the container width */
+    transition: transform 0.3s ease; /* Smooth transition for swiping */
+}

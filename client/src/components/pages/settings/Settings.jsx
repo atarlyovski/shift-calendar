@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import preval from 'preval.macro';
 
 import { observer } from 'mobx-react-lite';
 import { UserStoreContext } from '../../../mobx/userStore';
@@ -9,11 +8,7 @@ import DbStateSetter from './DbStateSetter';
 import SettingsNavItem from './SettingsNavItem';
 import SettingsPage from './SettingsPage';
 
-const buildDate = preval`module.exports =
-    (new Date()).getFullYear() + "-" +
-    ((new Date()).getMonth() + 1) + "-" +
-    (new Date()).getDate();
-`;
+const buildDate = __BUILD_DATE__;
 
 const Settings = observer(() => {
     const userStore = useContext(UserStoreContext);

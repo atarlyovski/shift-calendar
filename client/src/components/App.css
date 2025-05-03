@@ -1,25 +1,25 @@
 .App {
-    color: #eee;
+  color: #eee;
 }
 
 .App input,
 .App select,
 .App textarea {
-    color: #333;
+  color: #333;
 }
 
 .App .modal {
-    color: #333;
+  color: #333;
 }
 
 .App .tags.is-multi-shift {
-    display: flex;
-    flex-direction: row;
-    white-space: nowrap;
-    flex-wrap: nowrap;
+  display: flex;
+  flex-direction: row;
+  white-space: nowrap;
+  flex-wrap: nowrap;
 }
 
 .App .tags.is-multi-shift .tag {
-    display: inline-block;
-    padding: 0.2rem;
+  display: inline-block;
+  padding: 0.2rem;
 }

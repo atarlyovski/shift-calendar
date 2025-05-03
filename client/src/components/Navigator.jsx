@@ -6,7 +6,7 @@ import { ViewStoreContext } from '../mobx/viewStore';
 
 const Navigator = observer(() => {
     let navButtons = [],
-        navPages = [/*"day", */"nextDays", "month", "settings"];
+        navPages = ["nextDays", "month", "settings"];
 
     const viewStore = useContext(ViewStoreContext);
 
@@ -17,7 +17,7 @@ const Navigator = observer(() => {
     for (let i = 0; i < navPages.length; i++) {
         // Use the active logo if it represents the current page
         let isActive = (viewStore.activePage === navPages[i]);
-        let logo = require(`../img/${navPages[i]}.svg`);
+        let logo = `/img/${navPages[i]}.svg`;
 
         navButtons.push(
             <div
