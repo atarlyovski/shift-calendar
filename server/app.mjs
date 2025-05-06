@@ -51,7 +51,7 @@ app.use(logger(str => {
 app.use(conditional());
 app.use(etag());
 app.use(compress());
-app.use(koaStatic("./build/", { maxage: 3000, hidden: true }));
+app.use(koaStatic("./dist/", { maxage: 3000, hidden: true }));
 
 // Session and authentication
 app.use(bodyParser());
