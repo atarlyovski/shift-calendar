@@ -16,6 +16,15 @@ const Month = () => {
     const [index, setIndex] = useState(1); // Current active index
     const monthOffsets = [-1, 0, 1]; // Offsets for previous, current, and next months
 
+    const adjustMonth = (date, offset) => {
+        const newDate = new Date(date);
+        newDate.setDate(1); // Set to the first day of the month to avoid overflow issues
+        newDate.setMonth(newDate.getMonth() + offset); // Add or subtract the month
+        const daysInMonth = new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0).getDate(); // Get days in the new month
+        newDate.setDate(Math.min(date.getDate(), daysInMonth)); // Set the day, ensuring it doesn't exceed the last day of the month
+        return newDate;
+    };
+
     const getMonthDays = (currentMoment) => {
         let now = new Date(currentMoment);
         let weeks = [];
@@ -63,13 +72,13 @@ const Month = () => {
     };
 
     weeks = monthOffsets.map((offset) =>
-        getMonthDays(new Date(now.getFullYear(), now.getMonth() + offset, now.getDate()))
+        getMonthDays(adjustMonth(now, offset))
     );
 
     daysOfWeek = getDaysOfWeek(now);
 
     months = monthOffsets.map((offset) =>
-        new Date(now.getFullYear(), now.getMonth() + offset, now.getDate()).toLocaleString(locale, { month: 'long' })
+        adjustMonth(now, offset).toLocaleString(locale, { month: 'long' })
     );
 
     let rows = weeks.map((monthWeek) => {
