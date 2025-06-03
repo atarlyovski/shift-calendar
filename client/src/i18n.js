@@ -59,7 +59,7 @@ i18n
                     "rooms": "Rooms",
                     "back": "Back",
                     "dbStateSetter": "DB State",
-                    "atHome": "AT HOME ({{minutesAgo}}m ago)",
+                    "atHome": "AT HOME ({{minutesAgo}} min ago)",
                     "atHomeNow": "AT HOME (just now)",
                     "unknownLocationShort": "UNKNOWN",
                 }
@@ -101,7 +101,7 @@ i18n
                     "rooms": "Стаи",
                     "back": "Обратно",
                     "dbStateSetter": "Състояние на базата данни",
-                    "atHome": "ВКЪЩИ (преди {{minutesAgo}}м)",
+                    "atHome": "ВКЪЩИ (преди {{minutesAgo}} мин)",
                     "atHomeNow": "ВКЪЩИ (току-що)",
                     "unknownLocationShort": "НЕИЗВЕСТНО",
                 }
