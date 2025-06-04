@@ -28,6 +28,17 @@ const UserIsHomeStatus = ({ isHomeData }) => {
                 } else if (minutesAgo < 30) {
                     statusLine = t('atHome', { minutesAgo: calculateMinutesAgo(isHomeData.lastCheck) });
                 }
+            } else if (isHomeData && isHomeData.lastSeenHome) {
+                let minutesAgo = calculateMinutesAgo(isHomeData.lastSeenHome);
+
+                // convert to hours, days, etc.
+                if (minutesAgo < 60) {
+                    statusLine = t('lastSeenHomeMinutes', { minutesAgo });
+                } else if (minutesAgo < 60 * 24) {
+                    statusLine = t('lastSeenHomeHours', { hoursAgo: Math.floor(minutesAgo / 60) });
+                } else {
+                    statusLine = t('lastSeenHomeDays', { daysAgo: Math.floor(minutesAgo / (60 * 24)) });
+                }
             }
         
             return statusLine;

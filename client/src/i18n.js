@@ -62,6 +62,9 @@ i18n
                     "atHome": "AT HOME ({{minutesAgo}} min ago)",
                     "atHomeNow": "AT HOME (just now)",
                     "unknownLocationShort": "UNKNOWN",
+                    "lastSeenHomeMinutes": "Last seen {{minutesAgo}} min ago",
+                    "lastSeenHomeHours": "Last seen {{hoursAgo}} h ago",
+                    "lastSeenHomeDays": "Last seen {{daysAgo}} d ago"
                 }
             },
             bg: {
@@ -104,6 +107,9 @@ i18n
                     "atHome": "ВКЪЩИ (преди {{minutesAgo}} мин)",
                     "atHomeNow": "ВКЪЩИ (току-що)",
                     "unknownLocationShort": "НЕИЗВЕСТНО",
+                    "lastSeenHomeMinutes": "Видян преди {{minutesAgo}} мин",
+                    "lastSeenHomeHours": "Видян преди {{hoursAgo}} ч",
+                    "lastSeenHomeDays": "Видян преди {{daysAgo}} д"
                 }
             }
         }

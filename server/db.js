@@ -24,7 +24,8 @@ db.then(db => {
             },
             "isHomeData": {
               "isHome": true,
-              "lastCheck": 1734637237293
+              "lastCheck": 1734637237293,
+              "lastSeenHome": 1734637237293
             },
             "rooms": [
               {

@@ -331,13 +331,30 @@ async function deleteExpiredSessions() {
 async function setIsHome(userID, isHome) {
     var dbInstance;
     const now = new Date().getTime();
+    let lastSeenHome;
 
     dbInstance = await db;
+
+    if (!isHome) {
+        lastSeenHome = dbInstance
+            .data
+            .users
+            .find(user => user.id === userID)
+            ?.isHomeData?.lastSeenHome || null;
+    }
+    else {
+        lastSeenHome = now;
+    }
 
     dbInstance
         .update(data => {
             let user = data.users.find(user => user.id === userID);
-            user.isHomeData = {isHome, lastCheck: now};
+
+            user.isHomeData = {
+                isHome,
+                lastCheck: now,
+                lastSeenHome
+            };
         });
 }
 
