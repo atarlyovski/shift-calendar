@@ -19,10 +19,10 @@
 }
 
 .UserIsHomeStatus-line.is-home {
-    color: lime;
+    color: rgb(57, 255, 57);
 }
 
 .UserIsHomeStatus-line.is-home::before {
-    background-color: lime;
-    border-color: lime;
+    background-color: rgb(57, 255, 57);
+    border-color: rgb(57, 255, 57);
 }
