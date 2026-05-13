@@ -5,7 +5,7 @@
   "main": "app.mjs",
   "scripts": {
     "start": "node app.mjs",
-    "start-nodemon": "nodemon app.mjs --ignore db.json --ignore client",
+    "dev": "nodemon app.mjs --ignore db.json --ignore client",
     "test": "test"
   },
   "author": "Alexander Tarlyovski",
@@ -18,7 +18,7 @@
     "koa-bodyparser": "^4.3.0",
     "koa-compress": "^5.0.1",
     "koa-conditional-get": "^3.0.0",
-    "koa-etag": "^5.0.0",
+    "@koa/etag": "^5.0.2",
     "koa-force-https": "^2.0.1",
     "koa-logger": "^4.0.0",
     "koa-passport": "^6.0.0",

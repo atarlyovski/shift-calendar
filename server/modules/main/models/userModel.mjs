@@ -216,7 +216,7 @@ async function deleteShiftsOlderThan(dateMs, dbDateFormat = "YYYY-M-D") {
     await dbInstance
         .update(data => {
             data.rooms = data.rooms.map(room => {
-                room.shifts = room.shifts?.filter(shift => moment(shift.date, dbDateFormat).isAfter(dateMs));
+                room.shiftData = room.shiftData?.filter(shift => moment(shift.date, dbDateFormat).isAfter(dateMs));
                 return room;
             });
         });

@@ -10,7 +10,7 @@ import passport from 'koa-passport';
 import logger from 'koa-logger';
 import koaStatic from 'koa-static';
 import conditional from 'koa-conditional-get';
-import etag from 'koa-etag';
+import etag from '@koa/etag';
 import compress from 'koa-compress';
 import moment from 'moment';
 import forceHTTPS from 'koa-force-https';
