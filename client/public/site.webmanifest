@@ -1,6 +1,8 @@
 {
   "name": "A Shift Calendar",
   "short_name": "Shifts",
+  "start_url": "https://alexandert2763.duckdns.org/",
+  "id": "https://alexandert2763.duckdns.org/a-shift-calendar",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +17,7 @@
       "purpose": "maskable"
     },
     {
-      "src": "/web-app-manifest-512x512.png",
+      "src": "/web-app-manifest-1024x1024.png",
       "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "maskable"
