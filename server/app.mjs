@@ -13,7 +13,6 @@ import conditional from 'koa-conditional-get';
 import etag from '@koa/etag';
 import compress from 'koa-compress';
 import moment from 'moment';
-import forceHTTPS from 'koa-force-https';
 
 import shiftsAPI from './routes/shifts.mjs';
 import adminAPI from './routes/admin.mjs';
@@ -37,7 +36,6 @@ let key, cert;
 if (process.env.NODE_ENV === 'production') {
     key = fs.readFileSync('/etc/letsencrypt/live/alexandert2763.duckdns.org/privkey.pem');
     cert = fs.readFileSync('/etc/letsencrypt/live/alexandert2763.duckdns.org/fullchain.pem');
-    app.use(forceHTTPS());
 } else {
     key = fs.readFileSync('./https/a_shift_calendar_self.key');
     cert = fs.readFileSync('./https/a_shift_calendar_self.pem');
