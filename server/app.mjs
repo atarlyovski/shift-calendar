@@ -58,6 +58,8 @@ app.use(session({
     store: new LowdbStore(),
     maxAge: 7 * 24 * 60 * 60 * 1000,
     renew: true,
+    httpOnly: true,
+    sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production'
 }, app));
 

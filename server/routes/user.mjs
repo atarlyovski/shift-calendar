@@ -1,11 +1,26 @@
 "use strict";
 import Router from '@koa/router';
 import passport from 'koa-passport';
+import ratelimit from 'koa-ratelimit';
 
-const router = new Router({prefix: '/api/user'});
 import userController from '../modules/main/controllers/userController.mjs';
 
+const router = new Router({prefix: '/api/user'});
+
+const rateLimitDb = new Map();
+
+const rateLimiter = ratelimit({
+    driver: 'memory',
+    db: rateLimitDb,
+    duration: 60 * 1000, // 1 minute
+    errorMessage: 'Too many requests, please try again later.',
+    id: (ctx) => ctx.ip,
+    max: 3,
+    disableHeader: false,
+});
+
 router.post('/login',
+    rateLimiter,
     async (ctx, next) => {
         let isAccessBlockedByUnsuccessfulAttempts;
 
@@ -37,6 +52,11 @@ router.post('/login',
             return ctx.body = { success: false };
         }
 
+        await next();
+    },
+    async (ctx, next) => {
+        // Clear session to prevent session fixation attacks
+        ctx.session = null;
         await next();
     },
     ctx => passport.authenticate('local', async (err, user) => {

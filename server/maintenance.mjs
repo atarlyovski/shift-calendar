@@ -1,7 +1,7 @@
 import moment from 'moment';
 import userModel from './modules/main/models/userModel.mjs';
 
-async function flushPeriodically(flushFunction, interval = 2147483647) { // default: 24 hours
+async function flushPeriodically(flushFunction, interval = 86400000) { // default: 24 hours
     const flush = async () => {
         try {
             await flushFunction();

@@ -53,11 +53,20 @@ const LoginForm = () => {
             })
     
             setIsInProgress(false);
-            result = await response.json();
+            const resultText = await response.text();
+            try {
+                result = resultText ? JSON.parse(resultText) : {};
+            } catch (err) {
+                result = { message: resultText };
+            }
     
             if (response.ok && result.success) {
                 // store.dispatch(setUser(result.user));
                 userStore.user = result.user;
+            } else if (response.status === 429) {
+                setValidationMessages({
+                    common: result.message || t("tooManyRequests")
+                })
             } else if (!result.success) {
                 setValidationMessages({
                     common: t("invalidCredentials")
