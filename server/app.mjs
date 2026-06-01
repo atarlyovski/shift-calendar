@@ -1,5 +1,4 @@
 "use strict";
-import https from 'https';
 import fs from 'fs';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
@@ -12,6 +11,7 @@ import koaStatic from 'koa-static';
 import conditional from 'koa-conditional-get';
 import etag from '@koa/etag';
 import compress from 'koa-compress';
+import helmet from "koa-helmet";
 import moment from 'moment';
 
 import shiftsAPI from './routes/shifts.mjs';
@@ -25,31 +25,20 @@ import userIsHomeController from './modules/main/controllers/userIsHomeControlle
 import './auth.mjs';
 
 const HTTP_PORT = process.env.PORT || 3001;
-const HTTPS_PORT = process.env.HTTPS_PORT || 3002;
 const app = new Koa();
 
 app.keys = [fs.readFileSync('./secret_key.txt')];
 app.proxy = true;
 
-let key, cert;
-
-if (process.env.NODE_ENV === 'production') {
-    key = fs.readFileSync('/etc/letsencrypt/live/alexandert2763.duckdns.org/privkey.pem');
-    cert = fs.readFileSync('/etc/letsencrypt/live/alexandert2763.duckdns.org/fullchain.pem');
-} else {
-    key = fs.readFileSync('./https/a_shift_calendar_self.key');
-    cert = fs.readFileSync('./https/a_shift_calendar_self.pem');
-}
-
-const httpsOptions = { key, cert };
-
 app.use(logger(str => {
     console.log("[" + moment().format("YYYY-MM-DD HH:mm:ss") + "] " + str);
 }));
+
+app.use(helmet());
 app.use(conditional());
 app.use(etag());
 app.use(compress());
-app.use(koaStatic("./dist/", { maxage: 3000, hidden: true }));
+app.use(koaStatic("./dist/", { maxage: 3000, hidden: false }));
 
 // Session and authentication
 app.use(bodyParser());
@@ -76,12 +65,10 @@ app.use(ensureAuthenticated());
 app.use(shiftsAPI.routes());
 app.use(adminAPI.routes());
 
-app.listen(HTTP_PORT);
-
-https.createServer(
-    httpsOptions,
-    app.callback()
-).listen(HTTPS_PORT);
+// Bind HTTP to localhost only; nginx proxies from here
+app.listen(HTTP_PORT, '127.0.0.1', () => {
+    console.log(`Server listening on http://127.0.0.1:${HTTP_PORT}`);
+});
 
 maintenance.startMaintenanceTasks();
 userIsHomeController.setScheduledHomeCheck();

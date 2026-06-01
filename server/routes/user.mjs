@@ -54,11 +54,6 @@ router.post('/login',
 
         await next();
     },
-    async (ctx, next) => {
-        // Clear session to prevent session fixation attacks
-        ctx.session = null;
-        await next();
-    },
     ctx => passport.authenticate('local', async (err, user) => {
         if (err) {
             throw err;
@@ -75,6 +70,7 @@ router.post('/login',
                 user: userData
             };
 
+            ctx.session = null; // regenerate session to prevent fixation attacks
             return ctx.login(user)
         }
     })(ctx)

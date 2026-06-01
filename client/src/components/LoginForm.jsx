@@ -65,7 +65,7 @@ const LoginForm = () => {
                 userStore.user = result.user;
             } else if (response.status === 429) {
                 setValidationMessages({
-                    common: result.message || t("tooManyRequests")
+                    common: t("tooManyRequests")
                 })
             } else if (!result.success) {
                 setValidationMessages({
