@@ -34,7 +34,25 @@ app.use(logger(str => {
     console.log("[" + moment().format("YYYY-MM-DD HH:mm:ss") + "] " + str);
 }));
 
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'"],
+            styleSrc: ["'self'"],
+            imgSrc: ["'self'"],
+            connectSrc: ["'self'"],
+            fontSrc: ["'self'"],
+            manifestSrc: ["'self'"],
+            baseUri: ["'self'"],
+            formAction: ["'self'"],
+
+            objectSrc: ["'none'"],
+            frameAncestors: ["'none'"],
+        },
+    }
+}));
+
 app.use(conditional());
 app.use(etag());
 app.use(compress());

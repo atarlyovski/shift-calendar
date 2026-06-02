@@ -53,20 +53,26 @@ const LoginForm = () => {
             })
     
             setIsInProgress(false);
-            const resultText = await response.text();
-            try {
-                result = resultText ? JSON.parse(resultText) : {};
-            } catch (err) {
-                result = { message: resultText };
-            }
-    
-            if (response.ok && result.success) {
-                // store.dispatch(setUser(result.user));
-                userStore.user = result.user;
-            } else if (response.status === 429) {
+
+            if (response.status === 429) {
                 setValidationMessages({
                     common: t("tooManyRequests")
                 })
+
+                return;
+            }
+
+            if (!response.ok) {
+                setValidationMessages({
+                    common: t("serverError")
+                })
+            }
+
+            const result = await response.json();
+    
+            if (result.success) {
+                // store.dispatch(setUser(result.user));
+                userStore.user = result.user;
             } else if (!result.success) {
                 setValidationMessages({
                     common: t("invalidCredentials")

@@ -70,8 +70,14 @@ router.post('/login',
                 user: userData
             };
 
-            ctx.session = null; // regenerate session to prevent fixation attacks
-            return ctx.login(user)
+            // Prevent session fixation: destroy the current session and
+            // create a fresh one before establishing the authenticated session.
+            // This keeps session middleware available for `ctx.login`.
+            ctx.session = null;
+            ctx.session = {};
+
+            await ctx.login(user);
+            return;
         }
     })(ctx)
 );
