@@ -10,30 +10,34 @@ const userId = 1;
 const checkIfUserIsHome = async() => {
     return new Promise((resolve, reject) => {
         const targetIp = '192.168.6.99';
+        const interfaceName = process.env.ROUTER_ARPING_IFACE || 'eth0';
+        const reportError = typeof displayError === 'function'
+            ? displayError
+            : err => console.error(err);
         const conn = new Client();
+
         conn.on('error', err => {
             reject(err);
         });
         conn.on('ready', () => {
-            conn.exec('arp -a', (err, stream) => {
-                if (err) throw err;
-                let output = '';
-                stream.on('close', () => {
-                    const lines = output.split('\n');
-                    const targetLine = lines.find(line => line.includes(targetIp));
+            const command = `arping -c 1 -W 1 -I ${interfaceName} ${targetIp}`;
+            conn.exec(command, (err, stream) => {
+                if (err) {
                     conn.end();
+                    reject(err);
+                    return;
+                }
 
-                    if (targetLine && !targetLine.includes('<incomplete>')) {
-                        resolve(true);
-                    } else {
-                        resolve(false);
-                    }
+                let output = '';
+                stream.on('close', (code) => {
+                    conn.end();
+                    resolve(code === 0);
                 }).on('data', (data) => {
                     output += data.toString();
                 }).stderr.on('data', (data) => {
-                    displayError('STDERR: ' + data);
+                    reportError('STDERR: ' + data);
                     conn.end();
-                    reject("Error while executing command");
+                    reject(new Error('Error while executing command'));
                 });
             });
         }).connect({
