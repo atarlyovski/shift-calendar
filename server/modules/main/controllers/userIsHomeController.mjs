@@ -2,14 +2,39 @@
 import { Client } from 'ssh2';
 import cron from 'cron';
 import fs from 'fs';
+import { exec } from 'child_process';
+import os from 'os';
 
 import userModel from '../models/userModel.mjs';
 
 const userId = 1;
+const targetIp = '192.168.6.99';
 
 const checkIfUserIsHome = async() => {
+    return new Promise((resolve) => {
+        const platform = os.platform();
+        const pingCommand = platform === 'win32' 
+            ? `ping -n 1 -w 1000 ${targetIp}`
+            : `ping -c 1 -W 1 ${targetIp}`;
+        
+        exec(pingCommand, (error) => {
+            if (error) {
+                displayError(`Error executing ping command: ${error.message}`);
+                resolve(false);
+            } else {
+                resolve(true);
+            }
+        });
+    });
+}
+
+/**
+ * Checks if the user is home by executing the 'arp -a' command on the router via SSH.
+ * Note: This has shown to be unreliable due to the arp cache not always being updated in time. Use with caution.
+ * @returns Promise
+ */
+const checkIfUserIsHomeArp = async() => {
     return new Promise((resolve, reject) => {
-        const targetIp = '192.168.6.99';
         const conn = new Client();
         conn.on('error', err => {
             reject(err);
