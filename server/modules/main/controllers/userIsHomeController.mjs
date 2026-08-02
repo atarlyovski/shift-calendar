@@ -19,7 +19,6 @@ const checkIfUserIsHome = async() => {
         
         exec(pingCommand, (error) => {
             if (error) {
-                displayError(`Error executing ping command: ${error.message}`);
                 resolve(false);
             } else {
                 resolve(true);
