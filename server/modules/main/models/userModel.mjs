@@ -17,6 +17,51 @@ async function hasAccessToRoom(userID, roomID) {
     return room ? true : false;
 }
 
+function normalizeSyncRoomIDs(syncWithRooms = []) {
+    return [...new Set(
+        (Array.isArray(syncWithRooms) ? syncWithRooms : [])
+            .map(value => parseInt(value, 10))
+            .filter(value => !Number.isNaN(value))
+    )];
+}
+
+async function syncUserRoomData(userID, roomID1, roomID2) {
+    let dbInstance = await db;
+
+    await dbInstance.update(data => {
+        const roomA = data.rooms.find(room => room.id === roomID1);
+        const roomB = data.rooms.find(room => room.id === roomID2);
+
+        if (!roomA || !roomB) {
+            return;
+        }
+
+        const entriesByDate = {};
+
+        [...(roomA.shiftData || []), ...(roomB.shiftData || [])]
+            .filter(entry => entry.userID === userID)
+            .forEach(entry => {
+                entriesByDate[entry.date] = {
+                    date: entry.date,
+                    userID,
+                    shifts: [...(entry.shifts || [])]
+                };
+            });
+
+        roomA.shiftData = (roomA.shiftData || []).filter(entry => entry.userID !== userID);
+        roomB.shiftData = (roomB.shiftData || []).filter(entry => entry.userID !== userID);
+
+        Object.values(entriesByDate).forEach(entry => {
+            roomA.shiftData.push(entry);
+            roomB.shiftData.push({
+                date: entry.date,
+                userID,
+                shifts: [...entry.shifts]
+            });
+        });
+    });
+}
+
 /**
  * Authenticates a user by checking if the username and password match.
  * The password is compared against the hash stored in the DB.
@@ -58,35 +103,115 @@ function authenticateUser(username, password) {
 };
 
 async function getUserPreferences(userID) {
-    var dbInstance;
+    const dbInstance = await db;
 
-    dbInstance = await db;
-
-    let rooms = dbInstance
+    let user = dbInstance
         .data
         .users
-        .find(user => user.id === userID)
-        ?.rooms;
-    
-    let activeRoom = rooms.find(r => r.isActive);
-    let roomID = activeRoom ? activeRoom.roomID : null;
-    
-    let activeRoomData = JSON.parse(
-        JSON.stringify(
-            dbInstance
-                .data
-                .rooms
-                .find(room => room.id === roomID)
-        )
-    );
-    
-    // Delete the password from the cloned object, not from the DB itself:
-    delete activeRoomData.password;
+        .find(user => user.id === userID);
 
-    // Deep clone so we don't push activeRoomData to the DB:
+    let rooms = (user?.rooms || []).map(room => {
+        const roomData = dbInstance
+            .data
+            .rooms
+            .find(r => r.id === room.roomID);
+
+        return {
+            ...room,
+            name: roomData?.name || null,
+            syncWithRooms: normalizeSyncRoomIDs(room.syncWithRooms)
+        };
+    });
+
+    let activeRoom = rooms.find(r => r.isActive) || rooms[0] || null;
+    let roomID = activeRoom ? activeRoom.roomID : null;
+
+    let activeRoomData = null;
+
+    if (roomID !== null) {
+        activeRoomData = JSON.parse(
+            JSON.stringify(
+                dbInstance
+                    .data
+                    .rooms
+                    .find(room => room.id === roomID)
+            )
+        );
+
+        if (activeRoomData) {
+            delete activeRoomData.password;
+        }
+    }
+
     let preferences = JSON.parse(JSON.stringify({rooms, activeRoomData}));
 
     return preferences;
+}
+
+async function setActiveRoom(userID, roomID) {
+    let dbInstance = await db;
+
+    await dbInstance.update(data => {
+        let user = data.users.find(user => user.id === userID);
+
+        if (!user || !user.rooms) {
+            return;
+        }
+
+        user.rooms.forEach(room => {
+            room.isActive = room.roomID === roomID;
+        });
+    });
+}
+
+async function getSyncedRoomIDs(userID, roomID) {
+    let dbInstance = await db;
+
+    let user = dbInstance
+        .data
+        .users
+        .find(user => user.id === userID);
+
+    let room = user?.rooms?.find(room => room.roomID === roomID);
+
+    return normalizeSyncRoomIDs(room?.syncWithRooms || []);
+}
+
+async function setRoomSync(userID, roomID1, roomID2, isSynced) {
+    let dbInstance = await db;
+
+    await dbInstance.update(data => {
+        let user = data.users.find(user => user.id === userID);
+
+        if (!user || !user.rooms) {
+            return;
+        }
+
+        const toggleSync = (roomID, linkedRoomID) => {
+            const room = user.rooms.find(room => room.roomID === roomID);
+
+            if (!room) {
+                return;
+            }
+
+            room.syncWithRooms = normalizeSyncRoomIDs(room.syncWithRooms || []);
+
+            if (isSynced) {
+                if (!room.syncWithRooms.includes(linkedRoomID)) {
+                    room.syncWithRooms.push(linkedRoomID);
+                }
+            } else {
+                room.syncWithRooms = room.syncWithRooms.filter(id => id !== linkedRoomID);
+            }
+        };
+
+        toggleSync(roomID1, roomID2);
+        toggleSync(roomID2, roomID1);
+    });
+
+    if (isSynced) {
+        await syncUserRoomData(userID, roomID1, roomID2);
+    }
 }
 
 async function getUsersForRoom(userID, targetUserID, roomID) {
@@ -365,7 +490,10 @@ export default {
     getUsersForRoom,
     fetchUserByID,
     setTargetUserID,
+    setActiveRoom,
+    getSyncedRoomIDs,
     logOutUser,
+    setRoomSync,
     setPasswordForUser,
     deleteShiftsOlderThan,
     addUnsuccessfulLoginAttempt,

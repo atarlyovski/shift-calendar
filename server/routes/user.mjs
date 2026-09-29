@@ -91,6 +91,7 @@ router.post('/logout', async ctx => {
     }
 
     if (!ctx.headerSent) {
+        ctx.set('Clear-Site-Data', '"cache"');
         ctx.body = ({ success: true });
     }
 });
@@ -125,6 +126,48 @@ router.post('/setTargetUserID', async ctx => {
             .setTargetUserID(ctx.state.user.id, roomID, targetUserID);
             
         ctx.body = userData;
+    } catch (err) {
+        console.error(err);
+        ctx.throw(500);
+    }
+});
+
+router.post('/setActiveRoom', async ctx => {
+    if (!ctx.state.user) {
+        return ctx.throw(401);
+    }
+
+    let { roomID } = ctx.request.body;
+    roomID = parseInt(roomID);
+
+    if (isNaN(roomID)) {
+        return ctx.throw(400);
+    }
+
+    try {
+        ctx.body = await userController.setActiveRoom(ctx.state.user.id, roomID);
+    } catch (err) {
+        console.error(err);
+        ctx.throw(500);
+    }
+});
+
+router.post('/setRoomSync', async ctx => {
+    if (!ctx.state.user) {
+        return ctx.throw(401);
+    }
+
+    let { roomID1, roomID2, isSynced } = ctx.request.body;
+    roomID1 = parseInt(roomID1);
+    roomID2 = parseInt(roomID2);
+    isSynced = Boolean(isSynced);
+
+    if (isNaN(roomID1) || isNaN(roomID2)) {
+        return ctx.throw(400);
+    }
+
+    try {
+        ctx.body = await userController.setRoomSync(ctx.state.user.id, roomID1, roomID2, isSynced);
     } catch (err) {
         console.error(err);
         ctx.throw(500);

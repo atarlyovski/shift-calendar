@@ -27,6 +27,13 @@ const defaultData = {
           "roomID": 1,
           "isActive": true,
           "viewShiftsForUserID": 1,
+          "syncWithRooms": [2]
+        },
+        {
+          "roomID": 2,
+          "isActive": false,
+          "viewShiftsForUserID": 1,
+          "syncWithRooms": [1]
         }
       ],
       "allowedShifts": [

@@ -7,6 +7,7 @@ import { UserStoreContext } from '../../../mobx/userStore';
 import DbStateSetter from './DbStateSetter';
 import SettingsNavItem from './SettingsNavItem';
 import SettingsPage from './SettingsPage';
+import Rooms from './Rooms';
 
 const buildDate = __BUILD_DATE__;
 
@@ -37,6 +38,7 @@ const Settings = observer(() => {
 
             if (response.ok) {
                 userStore.user = null;
+                window.location.reload();
             } else {
                 console.error(response);
                 alert(t("error"));
@@ -157,7 +159,7 @@ const Settings = observer(() => {
             );
         }
 
-        const getRoomsPage = () => <div>Rooms</div>
+        const getRoomsPage = () => <Rooms />
 
         const getDbStatePage = () => <DbStateSetter />
     

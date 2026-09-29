@@ -20,6 +20,9 @@ export default observer(function ViewContainer() {
     let availableUsers =
         ((userStore.userShiftData &&
             userStore.userShiftData.rooms.find(r => r.isActive)) || {}).availableUsers;
+
+    let activeRoom = (userStore.userShiftData && userStore.userShiftData.rooms.find(r => r.isActive)) || null;
+    let availableRooms = (userStore.userShiftData && userStore.userShiftData.rooms) || [];
     
     const [targetUserID, setTargetUserID] = useState(
         () => 
@@ -83,6 +86,36 @@ export default observer(function ViewContainer() {
         }
     }
 
+    const changeActiveRoom = async (e) => {
+        const roomID = parseInt(e.target.value, 10);
+
+        if (!roomID || !userStore.userShiftData || !userStore.userShiftData.rooms.length) {
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/user/setActiveRoom', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'roomID=' + encodeURIComponent(roomID)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                userStore.userShiftData = result;
+            } else {
+                console.error(response);
+                alert(t('error'));
+            }
+        } catch (err) {
+            console.error(err);
+            alert(t('error'));
+        }
+    };
+
     let isShiftSettingDisabled = true;
     const viewsWithUserDropdown = ["day", "month"];
     let isUserDropdownVisible = viewsWithUserDropdown.includes(viewStore.activePage);
@@ -117,6 +150,24 @@ export default observer(function ViewContainer() {
                         </div>
                     </div>
                 </div>
+                {availableRooms.length > 1 ? (
+                    <div className="ViewContainer-roomSelect-container column is-narrow">
+                        <div className="field">
+                            <div className="select is-fullwidth">
+                                <select
+                                    onChange={changeActiveRoom}
+                                    value={activeRoom ? activeRoom.roomID : ""}
+                                >
+                                    {availableRooms.map(room => (
+                                        <option key={room.roomID} value={room.roomID}>
+                                            {room.name || `${t('room')} ${room.roomID}`}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                ) : null}
             </div>
             <ShiftSetter
                 date={viewStore.activeDate || new Date()}

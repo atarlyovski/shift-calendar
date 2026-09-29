@@ -39,6 +39,28 @@ async function setTargetUserID(userID, roomID, targetUserID) {
     return preferences;
 };
 
+async function setActiveRoom(userID, roomID) {
+    if (await userModel.hasAccessToRoom(userID, roomID) === false) {
+        throw new Error(`User ID = ${userID} has no access to roomID = ${roomID}`);
+    }
+
+    await userModel.setActiveRoom(userID, roomID);
+    return getUserPreferences(userID);
+}
+
+async function setRoomSync(userID, roomID1, roomID2, isSynced) {
+    if (roomID1 === roomID2) {
+        return getUserPreferences(userID);
+    }
+
+    if (await userModel.hasAccessToRoom(userID, roomID1) === false || await userModel.hasAccessToRoom(userID, roomID2) === false) {
+        throw new Error(`User ID = ${userID} has no access to one of the target rooms.`);
+    }
+
+    await userModel.setRoomSync(userID, roomID1, roomID2, isSynced);
+    return getUserPreferences(userID);
+}
+
 async function changePassword(userID, oldPassword, oldHash, newPassword) {
     const minLength = 8;
 
@@ -121,6 +143,8 @@ function processUserData(userData = {}) {
 export default {
     getUserPreferences,
     setTargetUserID,
+    setActiveRoom,
+    setRoomSync,
     changePassword,
     addUnsuccessfulLoginAttempt,
     hasTooManyUnsuccessfulLoginAttempts,
