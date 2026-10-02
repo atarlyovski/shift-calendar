@@ -23,7 +23,10 @@ const getDbState = async () => {
 const setDbState = async state => {
     let dbInstance = await db;
 
-    await dbInstance.update(() => state);
+    await dbInstance.update(data => {
+        Object.keys(data).forEach(key => delete data[key]);
+        Object.assign(data, state);
+    });
 }
 
 export default {
